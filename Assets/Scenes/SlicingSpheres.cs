@@ -39,9 +39,10 @@ namespace Valve.VR.InteractionSystem
         // private double unitNormalParallelToZ = new double{0f, 0f, 0f, 1f};
         // private double reflectionParallelToZ = new double{0f, 0f, 0f, -1f};
         
-        public float d = 1f;
+        public float d = 1f; //d = distance of hyperplane from origin
 
-        public float r = 1f;
+        public float r = 1f; //r = radius of balls (some commented out code for accessing in script for potential differing radii
+        //or to view for how to access vars from other scripts/objects)
 
 
         /////////////////
@@ -56,7 +57,7 @@ namespace Valve.VR.InteractionSystem
 
         public Transform planePF;
         //private Transform xyRotT, yzRotT, zxRotT, ywRotT, xwRotT, zwRotT;
-        private float xyRot, yzRot, zxRot, ywRot, xwRot, zwRot;
+        //private float xyRot, yzRot, zxRot, ywRot, xwRot, zwRot;
 
         Matrix4x4 xyRotMat = new Matrix4x4();
         Matrix4x4 yzRotMat = new Matrix4x4();
@@ -80,6 +81,19 @@ namespace Valve.VR.InteractionSystem
 
         public Vector3 startingPosition;
         public Transform startingPositionPublicObject;
+
+        public float XYrot;
+        float currentXYrot;
+        public float XZrot;
+        float currentXZrot;
+        public float XWrot;
+        float currentXWrot;
+        public float YZrot;
+        float currentYZrot;
+        public float YWrot;
+        float currentYWrot;
+        public float ZWrot;
+        float currentZWrot;
 
         void Awake()
         {
@@ -185,9 +199,38 @@ namespace Valve.VR.InteractionSystem
         // Update is called once per frame
         void Update()
         {
-
+            if (currentXYrot!= XYrot)
+            {
+                currentXYrot = XYrot;
+                rotateXY(XYrot);
+            }
+            if (currentXZrot != XZrot)
+            {
+                currentXZrot = XZrot;
+                rotateXZ(XZrot);
+            }
+            if (currentXWrot != XWrot)
+            {
+                currentXWrot = XWrot;
+                rotateXW(XWrot);
+            }
+            if (currentYZrot != YZrot)
+            {
+                currentYZrot = YZrot;
+                rotateYZ(YZrot);
+            }
+            if (currentYWrot != YWrot)
+            {
+                currentYWrot = YWrot;
+                rotateYW(YWrot);
+            }
+            if (currentZWrot != ZWrot)
+            {
+                currentZWrot = ZWrot;
+                rotateZW(ZWrot);
+            }
             //Debug.Log("HI Lab Room Coordinates UPDATE: " + player.trackingOriginTransform.position);
-            Debug.Log("HI Lab Room Feet Coordinates UPDATE: " + player.feetPositionGuess);
+            //Debug.Log("HI Lab Room Feet Coordinates UPDATE: " + player.feetPositionGuess);
 
             //update linear mapping from slider, current range: -2,2
             if (currentLinearMapping != linearMapping.value)
@@ -195,16 +238,21 @@ namespace Valve.VR.InteractionSystem
                 currentLinearMapping = linearMapping.value;
                 d = (currentLinearMapping - 0.5f) * 4f;
 
-            }   
+            }
+
+            Debug.Log("unitNormal=" + unitNormal);
              ///////////////////////////////////////////////////
             for (int i = 0; i < numberOfSpheres; i++)
             {
+                //Info sphereInfo = spheres[i].GetComponent<Info>();
+                //float r = spheres[i].GetComponent<Info>().radius; //Debug.Log("r = " + r);
                 Vector4 c = spheres[i].GetComponent<Info>().Get4DCoords();
                 float minDis = calcMinDistance(unitNormal, d, c); //this projects c onto n (n.c) and
                 //caluclates min distance between this and the hyperplane
 
                 //if min distance is within r of circle, some of sphere c intersects hyperplane  
                 //if is in inntersection, get centreOfSlice and sliceRadius:
+                Debug.Log("minDis = " + minDis);
                 if (-r <= minDis && minDis <= r)
                 {
                     //calculate sliceCentre (4D)
@@ -217,12 +265,13 @@ namespace Valve.VR.InteractionSystem
                     {
                         rotated4D = rotateParallelToW(sliceCentre4D, n);
                     }
-                    else rotated4D = sliceCentre4D;
-                    Debug.Log(i + ": " + rotated4D);
+                    else { rotated4D = sliceCentre4D; }
+                   // Debug.Log(i + ": " + rotated4D);
 
 
                     //calcualte radius (perpendicular to n)
                     float sliceRadius = Mathf.Sqrt(r * r - minDis * minDis);
+                    Debug.Log(i + " slice radius = " + sliceRadius);
                     
 
                     //the z coord is now constant for all slice coords so can place in 3d vr space
@@ -252,14 +301,15 @@ namespace Valve.VR.InteractionSystem
                
                // testBall.transform.localScale =controllerPoseL.GetVelocity();
 
-                xyRot =  controllerPoseL.GetVelocity().z; 
-                yzRot =  controllerPoseL.GetVelocity().x; 
-                zxRot =  controllerPoseL.GetVelocity().y;          
+                //this works to get velcoty:
+                //xyRot =  controllerPoseL.GetVelocity().z; 
+                //yzRot =  controllerPoseL.GetVelocity().x; 
+                //zxRot =  controllerPoseL.GetVelocity().y;          
 
                 dragVector = controllerPoseL.GetVelocity();
 
                 //update Unit Normal:
-                Debug.Log("velocity is: " + controllerPoseL.transform.position);
+                //Debug.Log("velocity is: " + controllerPoseL.transform.position);
                // updateUnitNormal(controllerPoseL.GetVelocity());
             
               
@@ -274,9 +324,10 @@ namespace Valve.VR.InteractionSystem
                 // ywRot = controllerPoseR.transform.eulerAngles.y * Mathf.Deg2Rad;
                 // zwRot = controllerPoseR.transform.eulerAngles.x * Mathf.Deg2Rad;  
 
-                xyRot =  controllerPoseR.GetVelocity().z; 
-                ywRot =  controllerPoseR.GetVelocity().x; 
-                zwRot =  controllerPoseR.GetVelocity().y;      
+                //this works to get velocity
+                //xyRot =  controllerPoseR.GetVelocity().z; 
+                //ywRot =  controllerPoseR.GetVelocity().x; 
+                //zwRot =  controllerPoseR.GetVelocity().y;      
 
                 dragVector = controllerPoseR.GetVelocity(); 
                // updateUnitNormal(controllerPoseR.GetVelocity());                                                                                                                                             
@@ -287,7 +338,7 @@ namespace Valve.VR.InteractionSystem
             //unitNormal = rotateRollingBall();
 
 
-            rotateUnitNormal2();
+            //rotateUnitNormal2();
 
             // //need to fix clicked-grabgrip
             // if (clicked.GetLastStateDown(leftHand)){
@@ -410,6 +461,7 @@ namespace Valve.VR.InteractionSystem
         //     return newVec;
         // }
         
+        //vT*M
         Vector4 multiplyVectorMatrix(Vector4 v, float[,] mat){
             Vector4 newVec = Vector4.zero;
             for (int i = 0; i< numberOfDimensions; i++){
@@ -436,82 +488,82 @@ namespace Valve.VR.InteractionSystem
 
         //updatesTheUnitNormal based on Rolling ball technique
         void updateUnitNormal(Vector3 velocity){
-            Debug.Log("rolling ball updating normal with reflection method");
+            //Debug.Log("rolling ball updating normal with reflection method");
             dragVector = velocity;
             //rotate with rolling ball
             Vector4 vecTo = rotateRollingBall();
             //vecFrom = v0; vecTo = vector output from rolling ball
-            Debug.Log("vecTO = " + vecTo);
+            //Debug.Log("vecTO = " + vecTo);
 
             //get rotation matrix from vecFrom to vecTo
             float[,] rotationMatrixToUpdateNormal = getRotationMatrixFromV1toV2(v0, vecTo );
-            Debug.Log("rotation matrix is + " +rotationMatrixToUpdateNormal);
+            //Debug.Log("rotation matrix is + " +rotationMatrixToUpdateNormal);
             
             unitNormal = multiplyMatrixVector(rotationMatrixToUpdateNormal, unitNormal);
-            Debug.Log("unit normal is now "+ unitNormal + " is it normal? 1 =?" + unitNormal.magnitude );
+            //Debug.Log("unit normal is now "+ unitNormal + " is it normal? 1 =?" + unitNormal.magnitude );
         }
         
         private float roughlyIncreaseRange(float a){
             return a*7; //makes numbers cover whole 3sphere more easily
         }
-        private void rotateUnitNormal()
-        {
-            Debug.Log("rotating Unit Normal 1");
-            //////////////////////////////////////////////////////TO DO!
-            //xy:
-            float cos = Mathf.Cos(xyRot);
-            float sin = Mathf.Sin(xyRot);
-            xyRotMat.SetRow(0, new Vector4(cos, sin, 0, 0));
-            xyRotMat.SetRow(1, new Vector4(-sin, cos, 0, 0));
-            xyRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
-            xyRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
+        //private void rotateUnitNormal()
+        //{
+        //    Debug.Log("rotating Unit Normal 1");
+        //    //////////////////////////////////////////////////////TO DO!
+        //    //xy:
+        //    float cos = Mathf.Cos(xyRot);
+        //    float sin = Mathf.Sin(xyRot);
+        //    xyRotMat.SetRow(0, new Vector4(cos, sin, 0, 0));
+        //    xyRotMat.SetRow(1, new Vector4(-sin, cos, 0, 0));
+        //    xyRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
+        //    xyRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
 
-            //yz:
-            cos = Mathf.Cos(yzRot);
-            sin = Mathf.Sin(yzRot);
-            yzRotMat.SetRow(0, new Vector4(1, 0, 0, 0));
-            yzRotMat.SetRow(1, new Vector4( 0, cos, sin, 0));
-            yzRotMat.SetRow(2, new Vector4( 0, -sin, cos, 0));
-            yzRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
+        //    //yz:
+        //    cos = Mathf.Cos(yzRot);
+        //    sin = Mathf.Sin(yzRot);
+        //    yzRotMat.SetRow(0, new Vector4(1, 0, 0, 0));
+        //    yzRotMat.SetRow(1, new Vector4( 0, cos, sin, 0));
+        //    yzRotMat.SetRow(2, new Vector4( 0, -sin, cos, 0));
+        //    yzRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
 
 
-            //zx:
-            cos = Mathf.Cos(zxRot);
-            sin = Mathf.Sin(zxRot);
-            zxRotMat.SetRow(0, new Vector4(cos, 0, -sin, 0));
-            zxRotMat.SetRow(1, new Vector4(0, 1, 0, 0));
-            zxRotMat.SetRow(2, new Vector4(sin, 0, cos, 0));
-            zxRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
+        //    //zx:
+        //    cos = Mathf.Cos(zxRot);
+        //    sin = Mathf.Sin(zxRot);
+        //    zxRotMat.SetRow(0, new Vector4(cos, 0, -sin, 0));
+        //    zxRotMat.SetRow(1, new Vector4(0, 1, 0, 0));
+        //    zxRotMat.SetRow(2, new Vector4(sin, 0, cos, 0));
+        //    zxRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
 
-            //xw:
-            cos = Mathf.Cos(xwRot);
-            sin = Mathf.Sin(xwRot);
-            xwRotMat.SetRow(0, new Vector4(cos,0, 0, sin));
-            xwRotMat.SetRow(1, new Vector4(0, 1,0, 0));
-            xwRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
-            xwRotMat.SetRow(3, new Vector4(-sin, 0, 0, cos));
+        //    //xw:
+        //    cos = Mathf.Cos(xwRot);
+        //    sin = Mathf.Sin(xwRot);
+        //    xwRotMat.SetRow(0, new Vector4(cos,0, 0, sin));
+        //    xwRotMat.SetRow(1, new Vector4(0, 1,0, 0));
+        //    xwRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
+        //    xwRotMat.SetRow(3, new Vector4(-sin, 0, 0, cos));
 
-            //yw:
-            cos = Mathf.Cos(ywRot);
-            sin = Mathf.Sin(ywRot);
-            ywRotMat.SetRow(0, new Vector4(1,0,0,0));
-            ywRotMat.SetRow(1, new Vector4(0, cos, 0, -sin));
-            ywRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
-            ywRotMat.SetRow(3, new Vector4(0, sin, 0, cos));
+        //    //yw:
+        //    cos = Mathf.Cos(ywRot);
+        //    sin = Mathf.Sin(ywRot);
+        //    ywRotMat.SetRow(0, new Vector4(1,0,0,0));
+        //    ywRotMat.SetRow(1, new Vector4(0, cos, 0, -sin));
+        //    ywRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
+        //    ywRotMat.SetRow(3, new Vector4(0, sin, 0, cos));
 
-            //zw:
-            cos = Mathf.Cos(zwRot);
-            sin = Mathf.Sin(zwRot);
-            zwRotMat.SetRow(0, new Vector4(1,0,0,0));
-            zwRotMat.SetRow(1, new Vector4(0, 1,0, 0));
-            zwRotMat.SetRow(2, new Vector4(0, 0, cos, -sin));
-            zwRotMat.SetRow(3, new Vector4(0, 0, sin, cos));
+        //    //zw:
+        //    cos = Mathf.Cos(zwRot);
+        //    sin = Mathf.Sin(zwRot);
+        //    zwRotMat.SetRow(0, new Vector4(1,0,0,0));
+        //    zwRotMat.SetRow(1, new Vector4(0, 1,0, 0));
+        //    zwRotMat.SetRow(2, new Vector4(0, 0, cos, -sin));
+        //    zwRotMat.SetRow(3, new Vector4(0, 0, sin, cos));
 
-            unitNormal = (xyRotMat * yzRotMat * zxRotMat * xwRotMat * ywRotMat * zwRotMat).MultiplyVector(unitNormal);
-           // unitNormal.Normalize(); //quick fix for now
-         //   Debug.Log("unit normal is now: " + unitNormal + " , it is unitary? " + unitNormal.magnitude );
+        //    unitNormal = (xyRotMat * yzRotMat * zxRotMat * xwRotMat * ywRotMat * zwRotMat).MultiplyVector(unitNormal);
+        //   // unitNormal.Normalize(); //quick fix for now
+        // //   Debug.Log("unit normal is now: " + unitNormal + " , it is unitary? " + unitNormal.magnitude );
 
-        }
+        //}
 
         private void rotateUnitNormal2(){
             Debug.Log("rotating Unit Normal 2");
@@ -538,66 +590,154 @@ namespace Valve.VR.InteractionSystem
             Debug.Log("unit normal is now: " + unitNormal + " , it is unitary? " + unitNormal.magnitude );
         }
 
-        private void rotateUnitNormal3(Vector4 v)
-        {
-            Debug.Log("rotating Unit Normal 3");
+  //      private void rotateUnitNormal3(Vector4 v)
+  //      {
+  //          Debug.Log("rotating Unit Normal 3");
 
-            Debug.Log("original v "+ v + " , angle xy: "+xyRot + ", yz: "+ yzRot + ", zx:"+ zxRot + ", xw: "+ xwRot+ ", yw: "+ywRot+ ", zw: "+zwRot);
-            //////////////////////////////////////////////////////TO DO!
-            //xy:
+  //          Debug.Log("original v "+ v + " , angle xy: "+xyRot + ", yz: "+ yzRot + ", zx:"+ zxRot + ", xw: "+ xwRot+ ", yw: "+ywRot+ ", zw: "+zwRot);
+  //          //////////////////////////////////////////////////////TO DO!
+  //          //xy:
+  //          float cos = Mathf.Cos(xyRot);
+  //          float sin = Mathf.Sin(xyRot);
+            
+  //          v.x = (cos*v.x) + (sin*v.y);
+  //          v.y = (-sin*v.x) + (cos*v.y);
+
+
+  //          //yz:
+  //          cos = Mathf.Cos(yzRot);
+  //          sin = Mathf.Sin(yzRot);
+            
+  //          v.y = (cos*v.y) + (sin*v.z);
+  //          v.z = (-sin*v.y) + (cos*v.z);
+
+
+  //          //zx:
+  //          cos = Mathf.Cos(zxRot);
+  //          sin = Mathf.Sin(zxRot);
+            
+  //          v.z = (cos*v.z) + (sin*v.x);
+  //          v.x = (-sin*v.z) + (cos*v.x);
+
+  //          //xw:
+  //          cos = Mathf.Cos(xwRot);
+  //          sin = Mathf.Sin(xwRot);
+            
+  //          v.x = (cos*v.x) + sin*v.w;
+  //          v.w = cos*v.w - sin*v.x;
+
+  //          //yw:
+  //          cos = Mathf.Cos(ywRot);
+  //          sin = Mathf.Sin(ywRot);
+            
+  //          v.y = cos*v.y - sin*v.w;
+  //          v.w = sin*v.y + cos*v.w;
+
+  //          //zw:
+  //          cos = Mathf.Cos(zwRot);
+  //          sin = Mathf.Sin(zwRot);
+            
+  //          v.z = cos*v.z - sin*v.w;
+  //          v.w = cos*v.w + sin*v.z;
+
+  //         //Debug.Log("Final v: " + v);
+  //         // unitNormal.Normalize(); //quick fix for now
+  //          unitNormal = v;
+  //// unitNormal.Normalize();
+
+  //          Debug.Log("unit normal is now: " + unitNormal + " , it is unitary? " + unitNormal.magnitude );
+
+  //      }
+        
+        private void rotateXY(float xyRot)
+        {
             float cos = Mathf.Cos(xyRot);
             float sin = Mathf.Sin(xyRot);
+            //xyRotMat.SetRow(0, new Vector4(cos, sin, 0, 0));
+            //xyRotMat.SetRow(1, new Vector4(-sin, cos, 0, 0));
+            //xyRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
+            //xyRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
+
+            unitNormal.x = (cos * unitNormal.x) + (sin * unitNormal.y);
+            unitNormal.y = (-sin * unitNormal.x) + (cos * unitNormal.y);
+
+            Debug.Log("unitNormal after" + unitNormal);
             
-            v.x = (cos*v.x) + (sin*v.y);
-            v.y = (-sin*v.x) + (cos*v.y);
-
-
-            //yz:
-            cos = Mathf.Cos(yzRot);
-            sin = Mathf.Sin(yzRot);
+            //unitNormal = xyRotMat.MultiplyVector(unitNormal); //terrible returns vector0
             
-            v.y = (cos*v.y) + (sin*v.z);
-            v.z = (-sin*v.y) + (cos*v.z);
 
-
-            //zx:
-            cos = Mathf.Cos(zxRot);
-            sin = Mathf.Sin(zxRot);
             
-            v.z = (cos*v.z) + (sin*v.x);
-            v.x = (-sin*v.z) + (cos*v.x);
+        }
 
-            //xw:
-            cos = Mathf.Cos(xwRot);
-            sin = Mathf.Sin(xwRot);
+        private void rotateYZ(float yzRot)
+        {
+            float cos = Mathf.Cos(yzRot);
+            float sin = Mathf.Sin(yzRot);
+            //yzRotMat.SetRow(0, new Vector4(1, 0, 0, 0));
+            //yzRotMat.SetRow(1, new Vector4(0, cos, sin, 0));
+            //yzRotMat.SetRow(2, new Vector4(0, -sin, cos, 0));
+            //yzRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
+            //unitNormal = yzRotMat.MultiplyVector(unitNormal);
             
-            v.x = (cos*v.x) + sin*v.w;
-            v.w = cos*v.w - sin*v.x;
+                      unitNormal.y = (cos*unitNormal.y) + (sin*unitNormal.z);
+                      unitNormal.z = (-sin*unitNormal.y) + (cos*unitNormal.z);
+            Debug.Log("unitNormal after" + unitNormal);
+        }
 
-            //yw:
-            cos = Mathf.Cos(ywRot);
-            sin = Mathf.Sin(ywRot);
-            
-            v.y = cos*v.y - sin*v.w;
-            v.w = sin*v.y + cos*v.w;
-
-            //zw:
-            cos = Mathf.Cos(zwRot);
-            sin = Mathf.Sin(zwRot);
-            
-            v.z = cos*v.z - sin*v.w;
-            v.w = cos*v.w + sin*v.z;
-
-           //Debug.Log("Final v: " + v);
-           // unitNormal.Normalize(); //quick fix for now
-            unitNormal = v;
-  // unitNormal.Normalize();
-
-            Debug.Log("unit normal is now: " + unitNormal + " , it is unitary? " + unitNormal.magnitude );
+        private void rotateXZ(float xzRot)
+        {
+            float cos = Mathf.Cos(xzRot);
+            float sin = Mathf.Sin(xzRot);
+            //zxRotMat.SetRow(0, new Vector4(cos, 0, -sin, 0));
+            //zxRotMat.SetRow(1, new Vector4(0, 1, 0, 0));
+            //zxRotMat.SetRow(2, new Vector4(sin, 0, cos, 0));
+            //zxRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
+            //unitNormal = zxRotMat.MultiplyVector(unitNormal);
+            unitNormal.z = (cos * unitNormal.z) + (sin * unitNormal.x);
+            unitNormal.x = (-sin*unitNormal.z) + (cos*unitNormal.x);
+            Debug.Log("unitNormal after" + unitNormal);
+        }
+        private void rotateXW(float xwRot)
+        {
+            float cos = Mathf.Cos(xwRot);
+            float sin = Mathf.Sin(xwRot);
+            //xwRotMat.SetRow(0, new Vector4(cos, 0, 0, sin));
+            //xwRotMat.SetRow(1, new Vector4(0, 1, 0, 0));
+            //xwRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
+            //xwRotMat.SetRow(3, new Vector4(-sin, 0, 0, cos));
+            //unitNormal = xwRotMat.MultiplyVector(unitNormal);
+            unitNormal.x = (cos * unitNormal.x) + sin * unitNormal.w;
+            unitNormal.w = cos*unitNormal.w - sin*unitNormal.x;
+            Debug.Log("unitNormal after" + unitNormal);
+        }
+        private void rotateYW(float ywRot)
+        {
+            float cos = Mathf.Cos(ywRot);
+            float sin = Mathf.Sin(ywRot);
+            //ywRotMat.SetRow(0, new Vector4(1, 0, 0, 0));
+            //ywRotMat.SetRow(1, new Vector4(0, cos, 0, -sin));
+            //ywRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
+            //ywRotMat.SetRow(3, new Vector4(0, sin, 0, cos));
+            //unitNormal = ywRotMat.MultiplyVector(unitNormal);
+            unitNormal.y = cos * unitNormal.y - sin * unitNormal.w;
+            unitNormal.w = sin*unitNormal.y + cos*unitNormal.w;
+            Debug.Log("unitNormal after" + unitNormal);
+        }
+        private void rotateZW(float zwRot)
+        {
+            float cos = Mathf.Cos(zwRot);
+            float sin = Mathf.Sin(zwRot);
+            //zwRotMat.SetRow(0, new Vector4(1, 0, 0, 0));
+            //zwRotMat.SetRow(1, new Vector4(0, 1, 0, 0));
+            //zwRotMat.SetRow(2, new Vector4(0, 0, cos, -sin));
+            //zwRotMat.SetRow(3, new Vector4(0, 0, sin, cos));
+            //unitNormal = zwRotMat.MultiplyVector(unitNormal);
+            unitNormal.z = cos * unitNormal.z - sin * unitNormal.w;
+            unitNormal.w = cos*unitNormal.w + sin*unitNormal.z;
+            Debug.Log("unitNormal after" + unitNormal);
 
         }
-        
-        
+
         Vector4 getCoords(GameObject s)
         {
             return s.GetComponent<Info>().Get4DCoords();
@@ -717,77 +857,77 @@ namespace Valve.VR.InteractionSystem
 
         public void TriggerUpL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
-            Debug.Log("Trigger is up L  "+ fromAction +" "+fromSource);
+          //  Debug.Log("Trigger is up L  "+ fromAction +" "+fromSource);
             triggeredL = false;
             
         }
         public void TriggerDownL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
-            Debug.Log("Trigger is down L");
+           // Debug.Log("Trigger is down L");
             triggeredL = true;
         }
         public void TriggerUpR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
-            Debug.Log("Trigger is up Y");
+          //  Debug.Log("Trigger is up Y");
             triggeredR = false;
         }
         public void TriggerDownR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
-            Debug.Log("Trigger is down R");
+           // Debug.Log("Trigger is down R");
             triggeredR = true;
 
         }
         // private void TriggerPressed(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource){}
 
-        public void testRotor(Vector4 v){
-            // float xyRotH = xyRot/2;
-            // float zxRotH = zxRot/2;
-            // float yzRotH = yzRot/2;
-            // float xwRotH = xwRot/2;
-            // float ywRotH = ywRot/2;
-            // float zwRotH = zwRot/2;
+        //public void testRotor(Vector4 v){
+        //    // float xyRotH = xyRot/2;
+        //    // float zxRotH = zxRot/2;
+        //    // float yzRotH = yzRot/2;
+        //    // float xwRotH = xwRot/2;
+        //    // float ywRotH = ywRot/2;
+        //    // float zwRotH = zwRot/2;
 
-            // float A12 = Mathf.Cos(xyRotH);
-            // float B12 = Mathf.Sin(xyRotH);
+        //    // float A12 = Mathf.Cos(xyRotH);
+        //    // float B12 = Mathf.Sin(xyRotH);
 
-            // float A13 = Mathf.Cos(zxRotH);
-            // float B13 = Mathf.Sin(zxRotH);
+        //    // float A13 = Mathf.Cos(zxRotH);
+        //    // float B13 = Mathf.Sin(zxRotH);
 
-            // float A23 = Mathf.Cos(yzRotH);
-            // float B23 = Mathf.Sin(yzRotH);
+        //    // float A23 = Mathf.Cos(yzRotH);
+        //    // float B23 = Mathf.Sin(yzRotH);
 
-            // float A14 = Mathf.Cos(xwRotH);
-            // float B14 = Mathf.Sin(xwRotH);
+        //    // float A14 = Mathf.Cos(xwRotH);
+        //    // float B14 = Mathf.Sin(xwRotH);
 
-            // float A24 = Mathf.Cos(ywRotH);
-            // float B24 = Mathf.Sin(ywRotH);
+        //    // float A24 = Mathf.Cos(ywRotH);
+        //    // float B24 = Mathf.Sin(ywRotH);
 
-            // float A34 = Mathf.Cos(zwRotH);
-            // float B34 = Mathf.Sin(zwRotH);
-
-            
-
-            float A12 = Mathf.Cos(xyRot);
-            float B12 = Mathf.Sin(xyRot);
-
-            float A13 = Mathf.Cos(zxRot);
-            float B13 = Mathf.Sin(zxRot);
-
-            float A23 = Mathf.Cos(yzRot);
-            float B23 = Mathf.Sin(yzRot);
-
-            float A14 = Mathf.Cos(xwRot);
-            float B14 = Mathf.Sin(xwRot);
-
-            float A24 = Mathf.Cos(ywRot);
-            float B24 = Mathf.Sin(ywRot);
-
-            float A34 = Mathf.Cos(zwRot);
-            float B34 = Mathf.Sin(zwRot);
+        //    // float A34 = Mathf.Cos(zwRotH);
+        //    // float B34 = Mathf.Sin(zwRotH);
 
             
 
-        }
+        //    float A12 = Mathf.Cos(xyRot);
+        //    float B12 = Mathf.Sin(xyRot);
+
+        //    float A13 = Mathf.Cos(zxRot);
+        //    float B13 = Mathf.Sin(zxRot);
+
+        //    float A23 = Mathf.Cos(yzRot);
+        //    float B23 = Mathf.Sin(yzRot);
+
+        //    float A14 = Mathf.Cos(xwRot);
+        //    float B14 = Mathf.Sin(xwRot);
+
+        //    float A24 = Mathf.Cos(ywRot);
+        //    float B24 = Mathf.Sin(ywRot);
+
+        //    float A34 = Mathf.Cos(zwRot);
+        //    float B34 = Mathf.Sin(zwRot);
+
+            
+
+        //}
 
         private float[,] createIdentityMatrix(int numberOfDimensions){
             float[,] identityMat = new float[numberOfDimensions,numberOfDimensions];

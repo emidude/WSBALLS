@@ -8,7 +8,7 @@ public class Info : MonoBehaviour {
 
     Vector3 centre3D; //keep this in float land
 
-    float radius;
+    public float radius;// = 1f; cannot set value here! => radius = 0;
 
     public int totalNumberOfSpheres;
     int uniqueBallIdentifier;
@@ -31,11 +31,12 @@ public class Info : MonoBehaviour {
 
     private void Start()
     {
-        Debug.Log("setting shader param");
+        //setting shader colors:
         //Fetch the Renderer from the GameObject
         Renderer rend = GetComponent<Renderer>();
-
         rend.material.SetVector("_FourDCoordinatesAtStart", coords4D);
         rend.material.SetFloat("_BallColorID", uniqueColorIdentifier);
+
+        radius = 1f;
     }
 }
