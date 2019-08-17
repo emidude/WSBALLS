@@ -32,14 +32,14 @@ namespace Valve.VR.InteractionSystem
         ///////////////////////////////////
         //private float[] unitNormal = new float[4];
         //private Vector4 unitNormal = new Vector4(0.5f,0.5f,0.5f,0.5f);
-        private Vector4 unitNormal = new Vector4(0f, 0f, 0f, 1f);
+        private Vector4 unitNormal = new Vector4(1f, 0f, 0f, 0f);
         private Vector4 unitNormalParallelToZ = new Vector4(0f, 0f, 0f, 1f);
         private Vector4 reflectionParallelToZ = new Vector4(0f, 0f, 0f, -1f);
         // private double unitNormal = new double{0f, 1f, 0f, 0f};
         // private double unitNormalParallelToZ = new double{0f, 0f, 0f, 1f};
         // private double reflectionParallelToZ = new double{0f, 0f, 0f, -1f};
         
-        public float d = 1f; //d = distance of hyperplane from origin
+        public float d = -1f; //d = distance of hyperplane from origin
 
         public float r = 1f; //r = radius of balls (some commented out code for accessing in script for potential differing radii
         //or to view for how to access vars from other scripts/objects)
@@ -69,6 +69,7 @@ namespace Valve.VR.InteractionSystem
 
         //public Transform testBall;
         public Transform pm;
+        private const float PI = Mathf.PI;
         private const float halfPi = Mathf.PI/2;
        
         Vector3 dragVector = new Vector3(0f,0f,0f); //dragging direction for rolling ball matrix
@@ -115,7 +116,9 @@ namespace Valve.VR.InteractionSystem
             //id mat used in rotation formula between vectors
             identityMatrix = createIdentityMatrix(numberOfDimensions);
 
-           
+            float[,] test1 = new float[4, 2] { { 1, 0 }, { 0, 1 }, { 1, 0 }, { 0, 1 } };
+            float[,] output = Aguilera_Perez(test1, PI / 4);
+            Debug.Log("output from Aguilera-Perez = " + output);
 
         }
 
@@ -192,53 +195,59 @@ namespace Valve.VR.InteractionSystem
             //startingPositionPublicObject.transform.position = startingPosition;
             Debug.Log("starting position = " + startingPosition);
 
-            
 
+            //TEST ROTATE = 
+            XYrot = PI / 4;
+            rotateXY(XYrot);
         }
 
+        
         // Update is called once per frame
         void Update()
         {
-            if (currentXYrot!= XYrot)
-            {
-                currentXYrot = XYrot;
-                rotateXY(XYrot);
-            }
-            if (currentXZrot != XZrot)
-            {
-                currentXZrot = XZrot;
-                rotateXZ(XZrot);
-            }
-            if (currentXWrot != XWrot)
-            {
-                currentXWrot = XWrot;
-                rotateXW(XWrot);
-            }
-            if (currentYZrot != YZrot)
-            {
-                currentYZrot = YZrot;
-                rotateYZ(YZrot);
-            }
-            if (currentYWrot != YWrot)
-            {
-                currentYWrot = YWrot;
-                rotateYW(YWrot);
-            }
-            if (currentZWrot != ZWrot)
-            {
-                currentZWrot = ZWrot;
-                rotateZW(ZWrot);
-            }
+            //////////////////////////////////////////////////////////////PUT ME BACK AFFTER TESTING!
+            //if (currentXYrot!= XYrot)
+            //{
+            //    currentXYrot = XYrot;
+            //    rotateXY(XYrot);
+            //}
+            //if (currentXZrot != XZrot)
+            //{
+            //    currentXZrot = XZrot;
+            //    rotateXZ(XZrot);
+            //}
+            //if (currentXWrot != XWrot)
+            //{
+            //    currentXWrot = XWrot;
+            //    rotateXW(XWrot);
+            //}
+            //if (currentYZrot != YZrot)
+            //{
+            //    currentYZrot = YZrot;
+            //    rotateYZ(YZrot);
+            //}
+            //if (currentYWrot != YWrot)
+            //{
+            //    currentYWrot = YWrot;
+            //    rotateYW(YWrot);
+            //}
+            //if (currentZWrot != ZWrot)
+            //{
+            //    currentZWrot = ZWrot;
+            //    rotateZW(ZWrot);
+            //}
             //Debug.Log("HI Lab Room Coordinates UPDATE: " + player.trackingOriginTransform.position);
             //Debug.Log("HI Lab Room Feet Coordinates UPDATE: " + player.feetPositionGuess);
 
-            //update linear mapping from slider, current range: -2,2
-            if (currentLinearMapping != linearMapping.value)
-            {
-                currentLinearMapping = linearMapping.value;
-                d = (currentLinearMapping - 0.5f) * 4f;
 
-            }
+            ////update linear mapping from slider, current range: -2,2
+            //if (currentLinearMapping != linearMapping.value)
+            //{
+            //    currentLinearMapping = linearMapping.value;
+            //    d = (currentLinearMapping - 0.5f) * 4f;
+            //}
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
 
             Debug.Log("unitNormal=" + unitNormal);
              ///////////////////////////////////////////////////
@@ -252,7 +261,7 @@ namespace Valve.VR.InteractionSystem
 
                 //if min distance is within r of circle, some of sphere c intersects hyperplane  
                 //if is in inntersection, get centreOfSlice and sliceRadius:
-                Debug.Log("minDis = " + minDis);
+                Debug.Log("c = "+ c+ " d= "+ d + " minDis = " + minDis + "unitNormal = " +unitNormal + "radius = " + r);
                 if (-r <= minDis && minDis <= r)
                 {
                     //calculate sliceCentre (4D)
@@ -306,7 +315,7 @@ namespace Valve.VR.InteractionSystem
                 //yzRot =  controllerPoseL.GetVelocity().x; 
                 //zxRot =  controllerPoseL.GetVelocity().y;          
 
-                dragVector = controllerPoseL.GetVelocity();
+            //    dragVector = controllerPoseL.GetVelocity();
 
                 //update Unit Normal:
                 //Debug.Log("velocity is: " + controllerPoseL.transform.position);
@@ -329,7 +338,7 @@ namespace Valve.VR.InteractionSystem
                 //ywRot =  controllerPoseR.GetVelocity().x; 
                 //zwRot =  controllerPoseR.GetVelocity().y;      
 
-                dragVector = controllerPoseR.GetVelocity(); 
+            //    dragVector = controllerPoseR.GetVelocity(); 
                // updateUnitNormal(controllerPoseR.GetVelocity());                                                                                                                                             
             }
 
@@ -658,16 +667,70 @@ namespace Valve.VR.InteractionSystem
             //xyRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
             //xyRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
 
-            unitNormal.x = (cos * unitNormal.x) + (sin * unitNormal.y);
-            unitNormal.y = (-sin * unitNormal.x) + (cos * unitNormal.y);
+            Vector4 oldUnitNormal = unitNormal;
+            unitNormal.x = (cos * unitNormal.x) + (-sin * unitNormal.y); //does not work because y below is updated with already updated x, should be previous x
+            unitNormal.y = (sin * oldUnitNormal.x) + (cos * oldUnitNormal.y);
 
-            Debug.Log("unitNormal after" + unitNormal);
+            Debug.Log("unitNormal before" + unitNormal);
             
             //unitNormal = xyRotMat.MultiplyVector(unitNormal); //terrible returns vector0
-            
 
-            
+            Debug.Log("unitNormal after" + unitNormal);
+
         }
+
+//% Implementation of the Aguilera-Perez Algorithm.
+//% Aguilera, Antonio, and Ricardo Pérez-Aguila. "General n-dimensional rotations." (2004).
+//function M = rotmnd(v, theta)
+//    n = size(v,1);
+//        M = eye(n);
+//    for c = 1:(n-2)
+//        for r = n:-1:(c+1)
+//            t = atan2(v(r, c), v(r-1, c));
+//            R = eye(n);
+//        R([r r-1], [r r-1]) = [cos(t) -sin(t); sin(t) cos(t)];
+//            v = R* v;
+//        M = R* M;
+//        end
+//    end
+//    R = eye(n);
+//        R([n-1 n], [n-1 n]) = [cos(theta) -sin(theta); sin(theta) cos(theta)];
+//    M = M\R* M;
+    
+       float[,] Aguilera_Perez(float[,] v, float theta) {
+            //v = axis plane of rotation? v is n-2 subbasis of n
+            int n = numberOfDimensions;
+            float[,] M = identityMatrix;
+            for (int c = 0; c < (n - 2); c++)
+            {
+                for(int r = n-1; r>= (c+1); r--)
+                {
+                    float t = Mathf.Atan2(v[r, c], v[r - 1, c]);
+                    float[, ] R = identityMatrix;
+                    R[r, r] = Mathf.Cos(t);
+                    R[r, r - 1] = -Mathf.Sin(t);
+                    R[r - 1, r] = Mathf.Sin(t);
+                    R[r - 1, r - 1] = Mathf.Cos(t);
+                    v = matrixMultiply(R, v);
+                    M = matrixMultiply(R, M);
+                }
+            }
+            float[,] R2 = identityMatrix;
+            R2[n-1, n-1] = Mathf.Cos(theta);
+            R2[n-1, n] = -Mathf.Sin(theta);
+            R2[n, n-1] = Mathf.Sin(theta);
+            R2[n, n] = Mathf.Cos(theta);
+
+            //convert to Matrix4x4 to compute inverse
+            Matrix4x4 R3 = turnFloatArrayIntoMatrix4x4(R2);
+            Matrix4x4 R4 = R3.inverse;
+            float[,] Rinv = turnMatrixIntoFloatArrray(R4);
+            //M = M\R* M;
+            M = matrixMultiply(R2, M);
+            M = matrixMultiply(Rinv, M);
+            return M;
+        }
+
 
         private void rotateYZ(float yzRot)
         {
@@ -841,6 +904,7 @@ namespace Valve.VR.InteractionSystem
         float calcMinDistance(Vector4 n, float d, Vector4 c)
         {
             float minDist = Vector4.Dot(c, n) - d;
+            Debug.Log("Vector4.Dot(c, n) = " + Vector4.Dot(c, n));
             return minDist;
         }
 
@@ -854,6 +918,17 @@ namespace Valve.VR.InteractionSystem
             ///////////////////////////////////////////////////////////// 
             return rotatedCoords4D;
         }
+
+        //Vector4 rotateParallelToVector(Vector4 coords4D, Vector4 n)
+        //{
+        //    float dots = Vector4.Dot(coords4D, n) / Vector4.Dot(n, n);
+        //    Vector4 rotatedCoords4D = coords4D - (2 * dots * n);
+        //    //TEST!! REMOVE IF BREAKS - FINAL REFLECTION REQUIRES MULTIPLICATION
+        //    //WITH DIAG D, WITH -1 WHERE FOR W COMPONENT (AS PREVIOUSLY FLIPPED)
+        //    rotatedCoords4D.w = -rotatedCoords4D.w;
+        //    ///////////////////////////////////////////////////////////// 
+        //    return rotatedCoords4D;
+        //}
 
         public void TriggerUpL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
@@ -963,6 +1038,53 @@ namespace Valve.VR.InteractionSystem
                 }
             }
             return newMat;
+        }
+        float[,] matrixMultiply(float[,] m1, float[,] m2)
+        {
+            Debug.Log("m1 size: " + m1.GetLength(0) + " " + m1.GetLength(1) + "m2 size: " + m2.GetLength(0) + m2.GetLength(1));
+            if(m1.GetLength(1) != m2.GetLength(0)){
+                Debug.Log("Arrays wrong length! m1(1) = " + m1.GetLength(1) + " , m2(0) = " + m2.GetLength(0));
+            }
+            float[,] multipliedMatrix =  new float[m1.GetLength(0), m1.GetLength(1)];
+            for(int i = 1; i < numberOfDimensions; i++)
+            {
+                for (int j = 0; j < numberOfDimensions; j++)
+                {
+                    for(int k =0;k < numberOfDimensions; k++)
+                    {
+                        //IndexOutOfRangeException: Index was outside the bounds of the array.
+                        multipliedMatrix[i, j] += m1[i, k] * m2[k, j];
+                    }
+                
+                }
+               
+            }
+            return multipliedMatrix;
+        }
+
+        Matrix4x4 turnFloatArrayIntoMatrix4x4(float[,] floatArr) {
+            Matrix4x4 mat = Matrix4x4.zero;
+            for(int i = 0; i< 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    mat[i, j] = floatArr[i, j];
+                }
+            }
+            return mat;
+        }
+
+        float[,] turnMatrixIntoFloatArrray(Matrix4x4 mat)
+        {
+            float[,] floatArr = new float[4,4];
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    floatArr[i, j]= mat[i, j] ;
+                }
+            }
+            return floatArr;
         }
     }
 
