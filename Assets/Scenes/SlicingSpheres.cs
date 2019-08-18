@@ -116,9 +116,14 @@ namespace Valve.VR.InteractionSystem
             //id mat used in rotation formula between vectors
             identityMatrix = createIdentityMatrix(numberOfDimensions);
 
-            float[,] test1 = new float[4, 2] { { 1, 0 }, { 0, 1 }, { 1, 0 }, { 0, 1 } };
+            float[,] test1 = new float[4, 2] { { 1, 0 }, { 0, 1 }, { 0, 0 }, { 0, 0 } };
+            //float[,] test1 = new float[2, 4] { { 1, 0, 0,0 }, { 0, 1, 0,0 }};
             float[,] output = Aguilera_Perez(test1, PI / 4);
-            Debug.Log("output from Aguilera-Perez = " + output);
+            Debug.Log("size" + output.GetLength(0) + " "+ output.GetLength(1));
+            Debug.Log("output from Aguilera-Perez = " + output[0,0]+" "+ output[0, 1]+" " + output[0, 2]+" " + output[0, 3]);
+            Debug.Log("output from Aguilera-Perez = " + output[1, 0] + " " + output[1, 1] + " " + output[1, 2] + " " + output[1, 3]);
+            Debug.Log("output from Aguilera-Perez = " + output[2, 0] + " " + output[2, 1] + " " + output[2, 2] + " " + output[2, 3]);
+            Debug.Log("output from Aguilera-Perez = " + output[3, 0] + " " + output[3, 1] + " " + output[3, 2] + " " + output[3, 3]);
 
         }
 
@@ -699,12 +704,15 @@ namespace Valve.VR.InteractionSystem
     
        float[,] Aguilera_Perez(float[,] v, float theta) {
             //v = axis plane of rotation? v is n-2 subbasis of n
+
+            //need to change all index entires to be -1 what they currently are - switch from matlab to c# array
             int n = numberOfDimensions;
             float[,] M = identityMatrix;
             for (int c = 0; c < (n - 2); c++)
             {
                 for(int r = n-1; r>= (c+1); r--)
                 {
+                    Debug.Log("r:c:v: " + r + " " + c + " " + v);
                     float t = Mathf.Atan2(v[r, c], v[r - 1, c]);
                     float[, ] R = identityMatrix;
                     R[r, r] = Mathf.Cos(t);
@@ -716,10 +724,12 @@ namespace Valve.VR.InteractionSystem
                 }
             }
             float[,] R2 = identityMatrix;
+            Debug.Log("R length " + R2.GetLength(0) + " " + R2.GetLength(1));
+            Debug.Log("n = " + n);
+            R2[(n-2) , (n-2 )] = Mathf.Cos(theta);
+            R2[(n-2), n-1] = -(Mathf.Sin(theta));
+            R2[n-1, (n-2)] = Mathf.Sin(theta);
             R2[n-1, n-1] = Mathf.Cos(theta);
-            R2[n-1, n] = -Mathf.Sin(theta);
-            R2[n, n-1] = Mathf.Sin(theta);
-            R2[n, n] = Mathf.Cos(theta);
 
             //convert to Matrix4x4 to compute inverse
             Matrix4x4 R3 = turnFloatArrayIntoMatrix4x4(R2);
@@ -1039,20 +1049,25 @@ namespace Valve.VR.InteractionSystem
             }
             return newMat;
         }
-        float[,] matrixMultiply(float[,] m1, float[,] m2)
+        float[,] matrixMultiply(float[,] m1, float[,] m2) //M1*M2
         {
+            int m1Rows = m1.GetLength(0);
+            int m1Columns = m1.GetLength(1);
+            int m2Rows = m2.GetLength(0);
+            int m2Columns = m2.GetLength(1);
             Debug.Log("m1 size: " + m1.GetLength(0) + " " + m1.GetLength(1) + "m2 size: " + m2.GetLength(0) + m2.GetLength(1));
             if(m1.GetLength(1) != m2.GetLength(0)){
                 Debug.Log("Arrays wrong length! m1(1) = " + m1.GetLength(1) + " , m2(0) = " + m2.GetLength(0));
             }
-            float[,] multipliedMatrix =  new float[m1.GetLength(0), m1.GetLength(1)];
-            for(int i = 1; i < numberOfDimensions; i++)
+            float[,] multipliedMatrix =  new float[m1Rows, m2Columns];
+            for(int i = 1; i < m1Rows; i++)
             {
-                for (int j = 0; j < numberOfDimensions; j++)
+                for (int j = 0; j < m2Columns; j++)
                 {
-                    for(int k =0;k < numberOfDimensions; k++)
+                    for(int k =0;k < m1Columns; k++)
                     {
-                        //IndexOutOfRangeException: Index was outside the bounds of the array.
+                        //IndexOutOfRangeException: Index was outside the bounds of the array.
+
                         multipliedMatrix[i, j] += m1[i, k] * m2[k, j];
                     }
                 
