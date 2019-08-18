@@ -116,14 +116,14 @@ namespace Valve.VR.InteractionSystem
             //id mat used in rotation formula between vectors
             identityMatrix = createIdentityMatrix(numberOfDimensions);
 
-            float[,] test1 = new float[4, 2] { { 1, 0 }, { 0, 1 }, { 0, 0 }, { 0, 0 } };
-            //float[,] test1 = new float[2, 4] { { 1, 0, 0,0 }, { 0, 1, 0,0 }};
-            float[,] output = Aguilera_Perez(test1, PI / 4);
-            Debug.Log("size" + output.GetLength(0) + " "+ output.GetLength(1));
-            Debug.Log("output from Aguilera-Perez = " + output[0,0]+" "+ output[0, 1]+" " + output[0, 2]+" " + output[0, 3]);
-            Debug.Log("output from Aguilera-Perez = " + output[1, 0] + " " + output[1, 1] + " " + output[1, 2] + " " + output[1, 3]);
-            Debug.Log("output from Aguilera-Perez = " + output[2, 0] + " " + output[2, 1] + " " + output[2, 2] + " " + output[2, 3]);
-            Debug.Log("output from Aguilera-Perez = " + output[3, 0] + " " + output[3, 1] + " " + output[3, 2] + " " + output[3, 3]);
+            //float[,] test1 = new float[4, 2] { { 1, 0 }, { 0, 1 }, { 0, 0 }, { 0, 0 } };
+            ////float[,] test1 = new float[2, 4] { { 1, 0, 0,0 }, { 0, 1, 0,0 }};
+            //float[,] output = Aguilera_Perez(test1, PI / 4);
+            //Debug.Log("size" + output.GetLength(0) + " "+ output.GetLength(1));
+            //Debug.Log("output from Aguilera-Perez = " + output[0,0]+" "+ output[0, 1]+" " + output[0, 2]+" " + output[0, 3]);
+            //Debug.Log("output from Aguilera-Perez = " + output[1, 0] + " " + output[1, 1] + " " + output[1, 2] + " " + output[1, 3]);
+            //Debug.Log("output from Aguilera-Perez = " + output[2, 0] + " " + output[2, 1] + " " + output[2, 2] + " " + output[2, 3]);
+            //Debug.Log("output from Aguilera-Perez = " + output[3, 0] + " " + output[3, 1] + " " + output[3, 2] + " " + output[3, 3]);
 
         }
 
@@ -198,12 +198,13 @@ namespace Valve.VR.InteractionSystem
             //maybe also remove this!
             //startingPosition = player.transform.position;
             //startingPositionPublicObject.transform.position = startingPosition;
-            Debug.Log("starting position = " + startingPosition);
+            //Debug.Log("starting position = " + startingPosition);
 
 
             //TEST ROTATE = 
-            XYrot = PI / 4;
-            rotateXY(XYrot);
+            //XYrot = PI / 4;
+            //rotateXY(XYrot); //working!:)
+
         }
 
         
@@ -211,48 +212,55 @@ namespace Valve.VR.InteractionSystem
         void Update()
         {
             //////////////////////////////////////////////////////////////PUT ME BACK AFFTER TESTING!
-            //if (currentXYrot!= XYrot)
-            //{
-            //    currentXYrot = XYrot;
-            //    rotateXY(XYrot);
-            //}
-            //if (currentXZrot != XZrot)
-            //{
-            //    currentXZrot = XZrot;
-            //    rotateXZ(XZrot);
-            //}
-            //if (currentXWrot != XWrot)
-            //{
-            //    currentXWrot = XWrot;
-            //    rotateXW(XWrot);
-            //}
-            //if (currentYZrot != YZrot)
-            //{
-            //    currentYZrot = YZrot;
-            //    rotateYZ(YZrot);
-            //}
-            //if (currentYWrot != YWrot)
-            //{
-            //    currentYWrot = YWrot;
-            //    rotateYW(YWrot);
-            //}
-            //if (currentZWrot != ZWrot)
-            //{
-            //    currentZWrot = ZWrot;
-            //    rotateZW(ZWrot);
-            //}
+            if (currentXYrot!= XYrot)
+            {
+                Debug.Log(XYrot);
+                float increment = currentXYrot - XYrot;
+                currentXYrot = XYrot;
+                rotateXY(increment);
+            }
+            if (currentXZrot != XZrot)
+            {
+                float increment = currentXZrot - XZrot;
+                currentXZrot = XZrot;
+                rotateXZ(increment);
+            }
+            if (currentXWrot != XWrot)
+            {
+                float increment = currentXWrot - XWrot;
+                currentXWrot = XWrot;
+                rotateXW(increment);
+            }
+            if (currentYZrot != YZrot)
+            {
+                float increment = currentYZrot - YZrot;
+                currentYZrot = YZrot;
+                rotateYZ(increment);
+            }
+            if (currentYWrot != YWrot)
+            {
+                float increment = currentYWrot - YWrot;
+                currentYWrot = YWrot;
+                rotateYW(increment);
+            }
+            if (currentZWrot != ZWrot)
+            {
+                float increment = currentZWrot - ZWrot;
+                currentZWrot = ZWrot;
+                rotateZW(ZWrot);
+            }
             //Debug.Log("HI Lab Room Coordinates UPDATE: " + player.trackingOriginTransform.position);
             //Debug.Log("HI Lab Room Feet Coordinates UPDATE: " + player.feetPositionGuess);
 
 
-            ////update linear mapping from slider, current range: -2,2
-            //if (currentLinearMapping != linearMapping.value)
-            //{
-            //    currentLinearMapping = linearMapping.value;
-            //    d = (currentLinearMapping - 0.5f) * 4f;
-            //}
+            //update linear mapping from slider, current range: -2,2
+            if (currentLinearMapping != linearMapping.value)
+            {
+                currentLinearMapping = linearMapping.value;
+                d = (currentLinearMapping - 0.5f) * 4f;
+            }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            
+
 
             Debug.Log("unitNormal=" + unitNormal);
              ///////////////////////////////////////////////////
@@ -673,8 +681,8 @@ namespace Valve.VR.InteractionSystem
             //xyRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
 
             Vector4 oldUnitNormal = unitNormal;
-            unitNormal.x = (cos * unitNormal.x) + (-sin * unitNormal.y); //does not work because y below is updated with already updated x, should be previous x
-            unitNormal.y = (sin * oldUnitNormal.x) + (cos * oldUnitNormal.y);
+            unitNormal.x = (cos * unitNormal.x) + (sin * unitNormal.y); //does not work because y below is updated with already updated x, should be previous x
+            unitNormal.y = (-sin * oldUnitNormal.x) + (cos * oldUnitNormal.y);
 
             Debug.Log("unitNormal before" + unitNormal);
             
