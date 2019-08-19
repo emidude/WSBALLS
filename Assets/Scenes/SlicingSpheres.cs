@@ -52,8 +52,8 @@ namespace Valve.VR.InteractionSystem
         public SteamVR_Behaviour_Pose controllerPoseR;
         public SteamVR_Action_Boolean trigger;
         public SteamVR_Action_Boolean clicked;
-        private bool triggeredL;
-        private bool triggeredR;
+        private bool triggeredL = false;
+        private bool triggeredR = false;
 
         public Transform planePF;
         //private Transform xyRotT, yzRotT, zxRotT, ywRotT, xwRotT, zwRotT;
@@ -96,6 +96,9 @@ namespace Valve.VR.InteractionSystem
         public float ZWrot;
         float currentZWrot;
 
+        bool needToResetPositionL = true; //reset position when let go of trigger
+        bool needToResetPositionR = true;
+ 
         void Awake()
         {
             spheres = new List<GameObject>();
@@ -154,13 +157,13 @@ namespace Valve.VR.InteractionSystem
 
 
 
-           
-            trigger.AddOnStateDownListener(TriggerDownR, rightHand);
-            trigger.AddOnStateUpListener(TriggerUpR, rightHand);
-            //SteamVR_Actions.default_GrabPinch.AddOnStateDownListener(TriggerPressed, SteamVR_Input_Sources.Any);
-            trigger.AddOnStateDownListener(TriggerDownL, leftHand);
-            trigger.AddOnStateUpListener(TriggerUpL, leftHand);
-
+           ////////////////////////////////////////////////////////////////////////////////////////////////
+            //trigger.AddOnStateDownListener(TriggerDownR, rightHand);
+            //trigger.AddOnStateUpListener(TriggerUpR, rightHand);
+            ////SteamVR_Actions.default_GrabPinch.AddOnStateDownListener(TriggerPressed, SteamVR_Input_Sources.Any);
+            //trigger.AddOnStateDownListener(TriggerDownL, leftHand);
+            //trigger.AddOnStateUpListener(TriggerUpL, leftHand);
+            ///////////////////////////////////////////////////////////////////////////////////////////////
          
              //GameObject pm = Instantiate(positionMarker);
             testVec4 = new Vector4(1f,0f,0f,0f);
@@ -212,7 +215,7 @@ namespace Valve.VR.InteractionSystem
         void Update()
         {
             //////////////////////////////////////////////////////////////PUT ME BACK AFFTER TESTING!
-            if (currentXYrot!= XYrot)
+            if (currentXYrot != XYrot)
             {
                 Debug.Log(XYrot);
                 float increment = currentXYrot - XYrot;
@@ -247,7 +250,7 @@ namespace Valve.VR.InteractionSystem
             {
                 float increment = currentZWrot - ZWrot;
                 currentZWrot = ZWrot;
-                rotateZW(ZWrot);
+                rotateZW(increment);
             }
             //Debug.Log("HI Lab Room Coordinates UPDATE: " + player.trackingOriginTransform.position);
             //Debug.Log("HI Lab Room Feet Coordinates UPDATE: " + player.feetPositionGuess);
@@ -262,7 +265,7 @@ namespace Valve.VR.InteractionSystem
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-            Debug.Log("unitNormal=" + unitNormal);
+            //Debug.Log("unitNormal=" + unitNormal);
              ///////////////////////////////////////////////////
             for (int i = 0; i < numberOfSpheres; i++)
             {
@@ -270,15 +273,24 @@ namespace Valve.VR.InteractionSystem
                 //float r = spheres[i].GetComponent<Info>().radius; //Debug.Log("r = " + r);
                 Vector4 c = spheres[i].GetComponent<Info>().Get4DCoords();
                 float minDis = calcMinDistance(unitNormal, d, c); //this projects c onto n (n.c) and
-                //caluclates min distance between this and the hyperplane
+                                                                  //caluclates min distance between this and the hyperplane
 
                 //if min distance is within r of circle, some of sphere c intersects hyperplane  
                 //if is in inntersection, get centreOfSlice and sliceRadius:
-                Debug.Log("c = "+ c+ " d= "+ d + " minDis = " + minDis + "unitNormal = " +unitNormal + "radius = " + r);
+
                 if (-r <= minDis && minDis <= r)
                 {
                     //calculate sliceCentre (4D)
-                    Vector4 sliceCentre4D = c - minDis * unitNormal;
+                    Vector4 sliceCentre4D = c + minDis * unitNormal;
+                    //testing - check if this lies on the hyperplane:
+                    if (!isOnHyperPlane(sliceCentre4D, unitNormal, d))
+                    {
+                        Debug.Log("NOT ON HYPERPLANE!" + " c = " + c + "slice centre:" + sliceCentre4D + " d= " + d + " minDis = " + minDis + "unitNormal = " + unitNormal);
+                    }
+                    else
+                    {
+                        Debug.Log("ON HYPERPLANE!");
+                    }
                     
                     Vector4 n = reflectionParallelToZ - unitNormal;
                     Vector4 rotated4D;
@@ -293,7 +305,7 @@ namespace Valve.VR.InteractionSystem
 
                     //calcualte radius (perpendicular to n)
                     float sliceRadius = Mathf.Sqrt(r * r - minDis * minDis);
-                    Debug.Log(i + " slice radius = " + sliceRadius);
+                    //Debug.Log(i + " slice radius = " + sliceRadius);
                     
 
                     //the z coord is now constant for all slice coords so can place in 3d vr space
@@ -320,22 +332,24 @@ namespace Valve.VR.InteractionSystem
                 //  xyRot = controllerPoseL.transform.eulerAngles.z * Mathf.Deg2Rad;
                 // zxRot = controllerPoseL.transform.eulerAngles.y * Mathf.Deg2Rad;
                 // yzRot = controllerPoseL.transform.eulerAngles.x * Mathf.Deg2Rad;
-               
-               // testBall.transform.localScale =controllerPoseL.GetVelocity();
+
+                // testBall.transform.localScale =controllerPoseL.GetVelocity();
 
                 //this works to get velcoty:
-                //xyRot =  controllerPoseL.GetVelocity().z; 
+                //xyRot =  controllerPoseL.transform.position.z; 
                 //yzRot =  controllerPoseL.GetVelocity().x; 
                 //zxRot =  controllerPoseL.GetVelocity().y;          
 
-            //    dragVector = controllerPoseL.GetVelocity();
+                //    dragVector = controllerPoseL.GetVelocity();
 
                 //update Unit Normal:
                 //Debug.Log("velocity is: " + controllerPoseL.transform.position);
-               // updateUnitNormal(controllerPoseL.GetVelocity());
-            
-              
-    
+                // updateUnitNormal(controllerPoseL.GetVelocity());
+
+                XYrot =  controllerPoseL.transform.position.z; 
+                YZrot =  controllerPoseL.transform.position.x; 
+                XZrot =  controllerPoseL.transform.position.y;          
+
             }
             if (triggeredR)
             {
@@ -351,8 +365,13 @@ namespace Valve.VR.InteractionSystem
                 //ywRot =  controllerPoseR.GetVelocity().x; 
                 //zwRot =  controllerPoseR.GetVelocity().y;      
 
-            //    dragVector = controllerPoseR.GetVelocity(); 
-               // updateUnitNormal(controllerPoseR.GetVelocity());                                                                                                                                             
+                //    dragVector = controllerPoseR.GetVelocity(); 
+                // updateUnitNormal(controllerPoseR.GetVelocity());      
+
+                YWrot = controllerPoseR.transform.position.z;
+                XWrot = controllerPoseR.transform.position.y;
+                ZWrot = controllerPoseR.transform.position.x;
+
             }
 
             //UPDATE UNIT NORMAL:
@@ -369,9 +388,10 @@ namespace Valve.VR.InteractionSystem
 
             //Debug.Log("pm transform = "+ pm.position );
             //rotateUnitNormal3(unitNormal);
-            //rotateUnitNormal2();
+           // rotateUnitNormal2();
 
-            
+
+           
 
         }
 
@@ -684,11 +704,12 @@ namespace Valve.VR.InteractionSystem
             unitNormal.x = (cos * unitNormal.x) + (sin * unitNormal.y); //does not work because y below is updated with already updated x, should be previous x
             unitNormal.y = (-sin * oldUnitNormal.x) + (cos * oldUnitNormal.y);
 
-            Debug.Log("unitNormal before" + unitNormal);
+            //Debug.Log("unitNormal before" + unitNormal);
             
             //unitNormal = xyRotMat.MultiplyVector(unitNormal); //terrible returns vector0
 
-            Debug.Log("unitNormal after" + unitNormal);
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.Normalize();
 
         }
 
@@ -762,7 +783,8 @@ namespace Valve.VR.InteractionSystem
             
                       unitNormal.y = (cos*unitNormal.y) + (sin*unitNormal.z);
                       unitNormal.z = (-sin*unitNormal.y) + (cos*unitNormal.z);
-            Debug.Log("unitNormal after" + unitNormal);
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.Normalize();
         }
 
         private void rotateXZ(float xzRot)
@@ -776,7 +798,8 @@ namespace Valve.VR.InteractionSystem
             //unitNormal = zxRotMat.MultiplyVector(unitNormal);
             unitNormal.z = (cos * unitNormal.z) + (sin * unitNormal.x);
             unitNormal.x = (-sin*unitNormal.z) + (cos*unitNormal.x);
-            Debug.Log("unitNormal after" + unitNormal);
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.Normalize();
         }
         private void rotateXW(float xwRot)
         {
@@ -789,7 +812,8 @@ namespace Valve.VR.InteractionSystem
             //unitNormal = xwRotMat.MultiplyVector(unitNormal);
             unitNormal.x = (cos * unitNormal.x) + sin * unitNormal.w;
             unitNormal.w = cos*unitNormal.w - sin*unitNormal.x;
-            Debug.Log("unitNormal after" + unitNormal);
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.Normalize();
         }
         private void rotateYW(float ywRot)
         {
@@ -802,7 +826,8 @@ namespace Valve.VR.InteractionSystem
             //unitNormal = ywRotMat.MultiplyVector(unitNormal);
             unitNormal.y = cos * unitNormal.y - sin * unitNormal.w;
             unitNormal.w = sin*unitNormal.y + cos*unitNormal.w;
-            Debug.Log("unitNormal after" + unitNormal);
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.Normalize();
         }
         private void rotateZW(float zwRot)
         {
@@ -815,7 +840,8 @@ namespace Valve.VR.InteractionSystem
             //unitNormal = zwRotMat.MultiplyVector(unitNormal);
             unitNormal.z = cos * unitNormal.z - sin * unitNormal.w;
             unitNormal.w = cos*unitNormal.w + sin*unitNormal.z;
-            Debug.Log("unitNormal after" + unitNormal);
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.Normalize();
 
         }
 
@@ -921,9 +947,10 @@ namespace Valve.VR.InteractionSystem
         
         float calcMinDistance(Vector4 n, float d, Vector4 c)
         {
-            float minDist = Vector4.Dot(c, n) - d;
-            Debug.Log("Vector4.Dot(c, n) = " + Vector4.Dot(c, n));
-            return minDist;
+            float cDotn = Vector4.Dot(c, n);
+            float minDist = cDotn - d;
+            Debug.Log("Vector4.Dot(c, n) = " + cDotn);
+            return minDist;            
         }
 
         Vector4 rotateParallelToW(Vector4 coords4D, Vector4 n)
@@ -948,28 +975,49 @@ namespace Valve.VR.InteractionSystem
         //    return rotatedCoords4D;
         //}
 
-        public void TriggerUpL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        {
-          //  Debug.Log("Trigger is up L  "+ fromAction +" "+fromSource);
-            triggeredL = false;
-            
-        }
-        public void TriggerDownL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        {
-           // Debug.Log("Trigger is down L");
-            triggeredL = true;
-        }
-        public void TriggerUpR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        {
-          //  Debug.Log("Trigger is up Y");
-            triggeredR = false;
-        }
-        public void TriggerDownR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        {
-           // Debug.Log("Trigger is down R");
-            triggeredR = true;
+        //public void TriggerUpL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        //{
+        //  //  Debug.Log("Trigger is up L  "+ fromAction +" "+fromSource);
+        //    triggeredL = false;
+        //    needToResetPositionL = true;
+        //}
 
-        }
+        //public void TriggerDownL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        //{
+        //    // Debug.Log("Trigger is down L");
+        //    if (needToResetPositionL)
+        //    {
+        //        currentXYrot = controllerPoseL.transform.position.z;
+        //        currentYZrot = controllerPoseL.transform.position.x;
+        //        currentXZrot = controllerPoseL.transform.position.y;
+        //        needToResetPositionL = false;
+        //    }
+        //    triggeredL = true;
+        //}
+        //public void TriggerUpR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        //{
+        //    //  Debug.Log("Trigger is up Y");
+        //    triggeredR = false;
+        //    needToResetPositionR = true;
+
+        //}
+        //public void TriggerDownR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        //{
+        //    // Debug.Log("Trigger is down R");
+        //    if (needToResetPositionR)
+        //    {
+        //        YWrot = controllerPoseR.transform.position.z;
+        //        XWrot = controllerPoseR.transform.position.y;
+        //        ZWrot = controllerPoseR.transform.position.x;
+        //        needToResetPositionR = false;
+        //    }
+        //    triggeredR = true;
+
+        //}
+
+
+        ///
+
         // private void TriggerPressed(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource){}
 
         //public void testRotor(Vector4 v){
@@ -998,7 +1046,7 @@ namespace Valve.VR.InteractionSystem
         //    // float A34 = Mathf.Cos(zwRotH);
         //    // float B34 = Mathf.Sin(zwRotH);
 
-            
+
 
         //    float A12 = Mathf.Cos(xyRot);
         //    float B12 = Mathf.Sin(xyRot);
@@ -1018,7 +1066,7 @@ namespace Valve.VR.InteractionSystem
         //    float A34 = Mathf.Cos(zwRot);
         //    float B34 = Mathf.Sin(zwRot);
 
-            
+
 
         //}
 
@@ -1108,6 +1156,21 @@ namespace Valve.VR.InteractionSystem
                 }
             }
             return floatArr;
+        }
+
+        bool isOnHyperPlane(Vector4 sliceCentre4D, Vector4 unitNormal, float d)
+        {
+            //equation of hyperplane for unitNormal = (a,b,c,e) is ax + by + cz + ew = d
+            float hypeEquation = (unitNormal.x * sliceCentre4D.x ) + (unitNormal.y * sliceCentre4D.y) + (unitNormal.z * sliceCentre4D.z )+ (unitNormal.w * sliceCentre4D.w);
+            if (hypeEquation == d)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 
