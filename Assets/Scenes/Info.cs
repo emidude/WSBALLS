@@ -14,7 +14,17 @@ public class Info : MonoBehaviour {
     int uniqueBallIdentifier;
     float uniqueColorIdentifier;
 
- 	
+    int numberOfDs;
+    Vector4[] sliceCentres;
+    Vector4[] sliceRadii;
+    float minDistanceBetween;
+
+    public GameObject sliceOfD;
+    public List<GameObject> slicesOfD;
+
+
+
+
     public void setCoords4D(Vector4 c4d){
         coords4D = c4d;
     }
@@ -29,6 +39,20 @@ public class Info : MonoBehaviour {
         uniqueColorIdentifier = i/ (float)totalNumberOfSpheres; 
     }
 
+    public void setSliceCentresAndRadiusArrays(int numberOfDs)
+    {
+        this.numberOfDs = numberOfDs;
+        sliceCentres = new Vector4[numberOfDs];
+        sliceRadii = new Vector4[numberOfDs];
+    }
+
+    public void createSlices()
+    {
+        GameObject slice = Instantiate(sliceOfD);
+        slice.transform.localScale = new Vector3(1, 1, 1);
+        slicesOfD.Add(slice);
+    }
+
     private void Start()
     {
         //setting shader colors:
@@ -38,5 +62,7 @@ public class Info : MonoBehaviour {
         rend.material.SetFloat("_BallColorID", uniqueColorIdentifier);
 
         radius = 1f;
+
+        
     }
 }
