@@ -8,6 +8,7 @@ TagManager:
   - FxTemporaire
   - pm
   - slice
+  - SLIDEY-SLICE
   layers:
   - Default
   - TransparentFX

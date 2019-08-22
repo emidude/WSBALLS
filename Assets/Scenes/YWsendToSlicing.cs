@@ -13,7 +13,7 @@ public class YWsendToSlicing : MonoBehaviour
     private const float TwoPi = PI * 2;
 
     GameObject referenceObject;
-    SlicingSpheres slicingScript;
+    SLIDERS_Slicing slicingScript;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,8 +22,8 @@ public class YWsendToSlicing : MonoBehaviour
             linearMapping = GetComponent<LinearMapping>();
         }
 
-        referenceObject = GameObject.FindWithTag("slice");
-        slicingScript = referenceObject.GetComponent<SlicingSpheres>();
+        referenceObject = GameObject.FindWithTag("SLIDEY-SLICE");
+        slicingScript = referenceObject.GetComponent<SLIDERS_Slicing>();
 
     }
 

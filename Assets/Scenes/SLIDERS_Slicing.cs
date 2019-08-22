@@ -5,22 +5,15 @@ using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
-    public class SlicingSpheres : MonoBehaviour
+    public class SLIDERS_Slicing : MonoBehaviour
     {
         private int numberOfDimensions = 4;
-
         public GameObject sphere;
-
         public List<Vector3> locatons;
-
         public int numberOfSpheres = 16;
-
         public List<GameObject> spheres;
-
         public List<Vector4> all4Dcoords;
-
         public float wSlice;
-
         public Vector4 testVec4;
 
 
@@ -38,7 +31,7 @@ namespace Valve.VR.InteractionSystem
         // private double unitNormal = new double{0f, 1f, 0f, 0f};
         // private double unitNormalParallelToZ = new double{0f, 0f, 0f, 1f};
         // private double reflectionParallelToZ = new double{0f, 0f, 0f, -1f};
-        
+
         public float d = -1f; //d = distance of hyperplane from origin
 
         public float r = 1f; //r = radius of balls (some commented out code for accessing in script for potential differing radii
@@ -70,12 +63,12 @@ namespace Valve.VR.InteractionSystem
         //public Transform testBall;
         public Transform pm;
         private const float PI = Mathf.PI;
-        private const float halfPi = Mathf.PI/2;
-       
-        Vector3 dragVector = new Vector3(0f,0f,0f); //dragging direction for rolling ball matrix
+        private const float halfPi = Mathf.PI / 2;
 
-        private Vector4 v0 = new Vector4(0f,0f,0f,1f); //to multiply with rolling ball matrix
-       
+        Vector3 dragVector = new Vector3(0f, 0f, 0f); //dragging direction for rolling ball matrix
+
+        private Vector4 v0 = new Vector4(0f, 0f, 0f, 1f); //to multiply with rolling ball matrix
+
         float[,] identityMatrix;
 
         private Player player = null;
@@ -98,7 +91,7 @@ namespace Valve.VR.InteractionSystem
 
         bool needToResetPositionL = true; //reset position when let go of trigger
         bool needToResetPositionR = true;
- 
+
         void Awake()
         {
             spheres = new List<GameObject>();
@@ -157,28 +150,28 @@ namespace Valve.VR.InteractionSystem
 
 
 
-           ////////////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////////////
             //trigger.AddOnStateDownListener(TriggerDownR, rightHand);
             //trigger.AddOnStateUpListener(TriggerUpR, rightHand);
             ////SteamVR_Actions.default_GrabPinch.AddOnStateDownListener(TriggerPressed, SteamVR_Input_Sources.Any);
             //trigger.AddOnStateDownListener(TriggerDownL, leftHand);
             //trigger.AddOnStateUpListener(TriggerUpL, leftHand);
             ///////////////////////////////////////////////////////////////////////////////////////////////
-         
-             //GameObject pm = Instantiate(positionMarker);
-            testVec4 = new Vector4(1f,0f,0f,0f);
+
+            //GameObject pm = Instantiate(positionMarker);
+            testVec4 = new Vector4(1f, 0f, 0f, 0f);
             //testRotor(testVec4);
 
             player = InteractionSystem.Player.instance;
-            if ( player == null )
-			{
-				Debug.LogError("<b>[SteamVR Interaction]</b> Slicing: No Player instance found in map.");
-				Destroy( this.gameObject );
-				return;
-			}
+            if (player == null)
+            {
+                Debug.LogError("<b>[SteamVR Interaction]</b> Slicing: No Player instance found in map.");
+                Destroy(this.gameObject);
+                return;
+            }
 
             // Vector3 playerFeetOffset = player.trackingOriginTransform.position - player.feetPositionGuess;
-			// player.trackingOriginTransform.position = teleportPosition + playerFeetOffset;
+            // player.trackingOriginTransform.position = teleportPosition + playerFeetOffset;
 
             //Debug.Log("HI Lab Room Coordinates START: " + player.feetPositionGuess);
             //Move player position to centre of VR space no matter where you start from:
@@ -186,16 +179,16 @@ namespace Valve.VR.InteractionSystem
             // Vector3 playerFeetOffset = player.trackingOriginTransform.position;
             // playerFeetOffset = player.feetPositionGuess -player.feetPositionGuess;
             // player.transform.position = playerFeetOffset;
-            
-				//player.trackingOriginTransform.position = teleportPosition + playerFeetOffset;
 
-              
+            //player.trackingOriginTransform.position = teleportPosition + playerFeetOffset;
+
+
             //each of these options makes new postiion = zero where sitting but does not work well - spheres all intersecting
             //  player.trackingOriginTransform.position -= player.feetPositionGuess;
             //  player.transform.position = player.trackingOriginTransform.position;
             //  player.trackingOriginTransform.position = player.transform.position;
             // Debug.Log("player position LALALAL =" + player.transform.position);
-            
+
             // Debug.Log("player trackingOrging LALALAL =" + player.trackingOriginTransform.position);
 
             //maybe also remove this!
@@ -210,7 +203,7 @@ namespace Valve.VR.InteractionSystem
 
         }
 
-        
+
         // Update is called once per frame
         void Update()
         {
@@ -254,7 +247,7 @@ namespace Valve.VR.InteractionSystem
             }
             //Debug.Log("HI Lab Room Coordinates UPDATE: " + player.trackingOriginTransform.position);
             //Debug.Log("HI Lab Room Feet Coordinates UPDATE: " + player.feetPositionGuess);
-           
+
 
             //update linear mapping from slider, current range: -2,2
             if (currentLinearMapping != linearMapping.value)
@@ -266,7 +259,7 @@ namespace Valve.VR.InteractionSystem
 
 
             //Debug.Log("unitNormal=" + unitNormal);
-             ///////////////////////////////////////////////////
+            ///////////////////////////////////////////////////
             for (int i = 0; i < numberOfSpheres; i++)
             {
                 //Info sphereInfo = spheres[i].GetComponent<Info>();
@@ -290,7 +283,7 @@ namespace Valve.VR.InteractionSystem
                     {
                         Debug.Log("ON HYPERPLANE!");
                     }
-                    
+
                     Vector4 n = reflectionParallelToZ - unitNormal;
                     Vector4 rotated4D;
 
@@ -299,25 +292,25 @@ namespace Valve.VR.InteractionSystem
                         rotated4D = rotateParallelToW(sliceCentre4D, n);
                     }
                     else { rotated4D = sliceCentre4D; }
-                   // Debug.Log(i + ": " + rotated4D);
+                    // Debug.Log(i + ": " + rotated4D);
 
 
                     //calcualte radius (perpendicular to n)
                     float sliceRadius = Mathf.Sqrt(r * r - minDis * minDis);
                     Debug.Log(i + " slice radius = " + sliceRadius);
-                    
+
 
                     //the z coord is now constant for all slice coords so can place in 3d vr space
                     spheres[i].transform.localPosition = new Vector3(rotated4D.x, rotated4D.y, rotated4D.z);
                     spheres[i].transform.localScale = Vector3.one * sliceRadius * 2;
-                    }
-                    //else sliceradius = 0;
-                else { spheres[i].transform.localScale = Vector3.zero; }
                 }
+                //else sliceradius = 0;
+                else { spheres[i].transform.localScale = Vector3.zero; }
+            }
 
 
 
-            
+
 
             if (triggeredL)
             {
@@ -345,9 +338,9 @@ namespace Valve.VR.InteractionSystem
                 //Debug.Log("velocity is: " + controllerPoseL.transform.position);
                 // updateUnitNormal(controllerPoseL.GetVelocity());
 
-                XYrot =  controllerPoseL.transform.position.z; 
-                YZrot =  controllerPoseL.transform.position.x; 
-                XZrot =  controllerPoseL.transform.position.y;          
+                XYrot = controllerPoseL.transform.position.z;
+                YZrot = controllerPoseL.transform.position.x;
+                XZrot = controllerPoseL.transform.position.y;
 
             }
             if (triggeredR)
@@ -387,34 +380,36 @@ namespace Valve.VR.InteractionSystem
 
             //Debug.Log("pm transform = "+ pm.position );
             //rotateUnitNormal3(unitNormal);
-           // rotateUnitNormal2();
+            // rotateUnitNormal2();
 
 
-           
+
 
         }
 
         //Matrix4x4 rotateRollingBallMatrix;
-        float[,] rotateRollingBallMatrix = new float[4,4];
-        private Vector4 rotateRollingBall(){
+        float[,] rotateRollingBallMatrix = new float[4, 4];
+        private Vector4 rotateRollingBall()
+        {
             float R = 1; //rolling ball radius = 1
             float rDrag = dragVector.magnitude; //amount of drag
-            
-            float D = Mathf.Sqrt((R*R)+(rDrag*rDrag)); //hypotenuse between r and R
+
+            float D = Mathf.Sqrt((R * R) + (rDrag * rDrag)); //hypotenuse between r and R
             //cos = R/hpotenuseD, sin = r/D
 
-            if(D ==0){
+            if (D == 0)
+            {
                 Debug.Log("D = 0, something went wrong");
                 return Vector4.zero;
             }
-            
-                float cos = R/D;
-                float sin = rDrag/D;
-                float oneMinusCos = 1- cos;
+
+            float cos = R / D;
+            float sin = rDrag / D;
+            float oneMinusCos = 1 - cos;
             //Debug.Log("cos = " + cos );
 
             Vector3 dragNormal = dragVector.normalized;
-            
+
             //Debug.Log("rDrag = " + rDrag);
             // Debug.Log("test dragNormal =1? :" + (dragNormal.x*dragNormal.x + dragNormal.y*dragNormal.y + dragNormal.z*dragNormal.z));
             // Debug.Log("x = r*n_x " + rDrag*dragNormal.x + "= " + dragVector.x);
@@ -423,45 +418,46 @@ namespace Valve.VR.InteractionSystem
             float nx = dragNormal.x;
             float ny = dragNormal.y;
             float nz = dragNormal.z;
-          
+
             // rotateRollingBallMatrix.SetRow(0, new Vector4(
             //     (1 - (nx*nx*oneMinusCos)), (-oneMinusCos*nx*ny),(-oneMinusCos*nx*nz), sin*nx));
-			// rotateRollingBallMatrix.SetRow(1, new Vector4(
+            // rotateRollingBallMatrix.SetRow(1, new Vector4(
             //     (-oneMinusCos*nx*ny), (1 - (ny*ny*oneMinusCos)), (-oneMinusCos*ny*nz),sin*ny));
-			// rotateRollingBallMatrix.SetRow(2, new Vector4(
+            // rotateRollingBallMatrix.SetRow(2, new Vector4(
             //     (-oneMinusCos*nx*nz), (-oneMinusCos*ny*nz), (1-(nz*nz*oneMinusCos)), sin*nz));
-			// rotateRollingBallMatrix.SetRow(3, new Vector4(-sin*nx, -sin*ny, -sin*nz, cos));
+            // rotateRollingBallMatrix.SetRow(3, new Vector4(-sin*nx, -sin*ny, -sin*nz, cos));
 
-            rotateRollingBallMatrix[0,0] = 1 - (nx*nx*oneMinusCos);
-            rotateRollingBallMatrix[0,1] = -oneMinusCos*nx*ny;
-            rotateRollingBallMatrix[0,2] = -oneMinusCos*nx*nz;
-            rotateRollingBallMatrix[0,3] = sin*nx;
+            rotateRollingBallMatrix[0, 0] = 1 - (nx * nx * oneMinusCos);
+            rotateRollingBallMatrix[0, 1] = -oneMinusCos * nx * ny;
+            rotateRollingBallMatrix[0, 2] = -oneMinusCos * nx * nz;
+            rotateRollingBallMatrix[0, 3] = sin * nx;
 
-            rotateRollingBallMatrix[1,0] = -oneMinusCos*nx*ny;
-            rotateRollingBallMatrix[1,1] = 1 - (ny*ny*oneMinusCos);
-            rotateRollingBallMatrix[1,2] = -oneMinusCos*ny*nz;
-            rotateRollingBallMatrix[1,3] = sin*ny;
+            rotateRollingBallMatrix[1, 0] = -oneMinusCos * nx * ny;
+            rotateRollingBallMatrix[1, 1] = 1 - (ny * ny * oneMinusCos);
+            rotateRollingBallMatrix[1, 2] = -oneMinusCos * ny * nz;
+            rotateRollingBallMatrix[1, 3] = sin * ny;
 
-            rotateRollingBallMatrix[2,0] = -oneMinusCos*nx*nz;
-            rotateRollingBallMatrix[2,1] = -oneMinusCos*ny*nz;
-            rotateRollingBallMatrix[2,2] = 1-(nz*nz*oneMinusCos);
-            rotateRollingBallMatrix[2,3] = sin*nz;
+            rotateRollingBallMatrix[2, 0] = -oneMinusCos * nx * nz;
+            rotateRollingBallMatrix[2, 1] = -oneMinusCos * ny * nz;
+            rotateRollingBallMatrix[2, 2] = 1 - (nz * nz * oneMinusCos);
+            rotateRollingBallMatrix[2, 3] = sin * nz;
 
-            rotateRollingBallMatrix[3,0] = -sin*nx;
-            rotateRollingBallMatrix[3,1] = -sin*ny;
-            rotateRollingBallMatrix[3,2] = -sin*nz;
-            rotateRollingBallMatrix[3,3] = cos;
+            rotateRollingBallMatrix[3, 0] = -sin * nx;
+            rotateRollingBallMatrix[3, 1] = -sin * ny;
+            rotateRollingBallMatrix[3, 2] = -sin * nz;
+            rotateRollingBallMatrix[3, 3] = cos;
 
-             Vector4 newV = multiplyMatrixVector (rotateRollingBallMatrix, v0);    
+            Vector4 newV = multiplyMatrixVector(rotateRollingBallMatrix, v0);
             //Vector4 newV = multiplyMatrixVector (rotateRollingBallMatrix, unitNormal); 
-             return newV;
+            return newV;
             //Debug.Log("test rolling Mv = newV = " + newV + "norm? " + newV.magnitude);
 
 
 
         }
-              
-        private float[,] getRotationMatrixFromV1toV2(Vector4 v1, Vector4 v2){
+
+        private float[,] getRotationMatrixFromV1toV2(Vector4 v1, Vector4 v2)
+        {
             //using method from here: https://math.stackexchange.com/questions/180418/calculate-rotation-matrix-to-align-vector-a-to-vector-b-in-3d/2161631#2161631
             //background: https://math.stackexchange.com/questions/432057/how-can-i-calculate-a-4-times-4-rotation-matrix-to-match-a-4d-direction-vector/2161406#2161406
             //v1, v2 must be same length
@@ -471,22 +467,23 @@ namespace Valve.VR.InteractionSystem
             //N = length(u); gets number of dims of vector. 
             //Here we know it is numberOfDims = 4 and using identityMatrix created in Awake
 
-            float[,] S = reflectMatrix(identityMatrix, v1+v2);
+            float[,] S = reflectMatrix(identityMatrix, v1 + v2);
             return reflectMatrix(S, v2);
         }
 
         //reflect u on hyperplane h:
-        float[,] reflectMatrix(float[,] u, Vector4 h ){
+        float[,] reflectMatrix(float[,] u, Vector4 h)
+        {
 
-            Vector4 hTu = multiplyVectorMatrix(h,u) ;
+            Vector4 hTu = multiplyVectorMatrix(h, u);
             hTu *= 2;
-            if(h ==Vector4.zero){Debug.Log("h = v1 + v2 = 0!!");}
-            hTu /= Vector4.Dot(h,h);
+            if (h == Vector4.zero) { Debug.Log("h = v1 + v2 = 0!!"); }
+            hTu /= Vector4.Dot(h, h);
 
-            return matrixSubtract(u ,  outerProduct(h, hTu));
+            return matrixSubtract(u, outerProduct(h, hTu));
 
         }
-        
+
         // double[] multiplyMatrixVector(double[,] mat, double[] vec){
         //     double[] newVec = new double[4]{0,0,0,0};
         //     if (mat.GetLength(1) != vec.Length){
@@ -501,26 +498,33 @@ namespace Valve.VR.InteractionSystem
         //     Debug.Log("is the new vector unit -shouldbe: "+ newVec.magnitude)
         //     return newVec;
         // }
-        
+
         //vT*M
-        Vector4 multiplyVectorMatrix(Vector4 v, float[,] mat){
+        Vector4 multiplyVectorMatrix(Vector4 v, float[,] mat)
+        {
             Vector4 newVec = Vector4.zero;
-            for (int i = 0; i< numberOfDimensions; i++){
-                for(int j = 0; j < numberOfDimensions; j++){
-                    newVec[i] += v[j] * mat[j,i];
+            for (int i = 0; i < numberOfDimensions; i++)
+            {
+                for (int j = 0; j < numberOfDimensions; j++)
+                {
+                    newVec[i] += v[j] * mat[j, i];
                 }
             }
             return newVec;
         }
-        Vector4 multiplyMatrixVector(float[,] mat, Vector4 vec){
-            Vector4 newVec = new Vector4(0f,0f,0f,0f);
-            if (mat.GetLength(1) != 4){
+        Vector4 multiplyMatrixVector(float[,] mat, Vector4 vec)
+        {
+            Vector4 newVec = new Vector4(0f, 0f, 0f, 0f);
+            if (mat.GetLength(1) != 4)
+            {
                 Debug.Log("matrix and vector lengths do not add up to multiply!");
-                return newVec; 
+                return newVec;
             }
-            for(int i = 0 ;i< numberOfDimensions; i++){
-                for(int j = 0; j < numberOfDimensions; j++){
-                    newVec[i] += (float)mat[i,j]*vec[j];
+            for (int i = 0; i < numberOfDimensions; i++)
+            {
+                for (int j = 0; j < numberOfDimensions; j++)
+                {
+                    newVec[i] += (float)mat[i, j] * vec[j];
                 }
             }
             //Debug.Log("is the new vector = magOfOriginalVector =1 ?="+ newVec.magnitude);
@@ -528,7 +532,8 @@ namespace Valve.VR.InteractionSystem
         }
 
         //updatesTheUnitNormal based on Rolling ball technique
-        void updateUnitNormal(Vector3 velocity){
+        void updateUnitNormal(Vector3 velocity)
+        {
             //Debug.Log("rolling ball updating normal with reflection method");
             dragVector = velocity;
             //rotate with rolling ball
@@ -537,15 +542,16 @@ namespace Valve.VR.InteractionSystem
             //Debug.Log("vecTO = " + vecTo);
 
             //get rotation matrix from vecFrom to vecTo
-            float[,] rotationMatrixToUpdateNormal = getRotationMatrixFromV1toV2(v0, vecTo );
+            float[,] rotationMatrixToUpdateNormal = getRotationMatrixFromV1toV2(v0, vecTo);
             //Debug.Log("rotation matrix is + " +rotationMatrixToUpdateNormal);
-            
+
             unitNormal = multiplyMatrixVector(rotationMatrixToUpdateNormal, unitNormal);
             //Debug.Log("unit normal is now "+ unitNormal + " is it normal? 1 =?" + unitNormal.magnitude );
         }
-        
-        private float roughlyIncreaseRange(float a){
-            return a*7; //makes numbers cover whole 3sphere more easily
+
+        private float roughlyIncreaseRange(float a)
+        {
+            return a * 7; //makes numbers cover whole 3sphere more easily
         }
         //private void rotateUnitNormal()
         //{
@@ -606,7 +612,8 @@ namespace Valve.VR.InteractionSystem
 
         //}
 
-        private void rotateUnitNormal2(){
+        private void rotateUnitNormal2()
+        {
             Debug.Log("rotating Unit Normal 2");
             float a = roughlyIncreaseRange(pm.position.x);
             float b = roughlyIncreaseRange(pm.position.y);
@@ -622,74 +629,74 @@ namespace Valve.VR.InteractionSystem
             // }
             // THIS DOES NOT WORK
 
-            unitNormal.x = Mathf.Cos(a)*Mathf.Sin(b);
-            unitNormal.y = Mathf.Sin(a)*Mathf.Sin(b);
-            unitNormal.z = Mathf.Cos(c)*Mathf.Cos(b);
-            unitNormal.w = Mathf.Sin(c)*Mathf.Sin(b);
-            
+            unitNormal.x = Mathf.Cos(a) * Mathf.Sin(b);
+            unitNormal.y = Mathf.Sin(a) * Mathf.Sin(b);
+            unitNormal.z = Mathf.Cos(c) * Mathf.Cos(b);
+            unitNormal.w = Mathf.Sin(c) * Mathf.Sin(b);
+
             //unitNormal.Normalize();
-            Debug.Log("unit normal is now: " + unitNormal + " , it is unitary? " + unitNormal.magnitude );
+            Debug.Log("unit normal is now: " + unitNormal + " , it is unitary? " + unitNormal.magnitude);
         }
 
-  //      private void rotateUnitNormal3(Vector4 v)
-  //      {
-  //          Debug.Log("rotating Unit Normal 3");
+        //      private void rotateUnitNormal3(Vector4 v)
+        //      {
+        //          Debug.Log("rotating Unit Normal 3");
 
-  //          Debug.Log("original v "+ v + " , angle xy: "+xyRot + ", yz: "+ yzRot + ", zx:"+ zxRot + ", xw: "+ xwRot+ ", yw: "+ywRot+ ", zw: "+zwRot);
-  //          //////////////////////////////////////////////////////TO DO!
-  //          //xy:
-  //          float cos = Mathf.Cos(xyRot);
-  //          float sin = Mathf.Sin(xyRot);
-            
-  //          v.x = (cos*v.x) + (sin*v.y);
-  //          v.y = (-sin*v.x) + (cos*v.y);
+        //          Debug.Log("original v "+ v + " , angle xy: "+xyRot + ", yz: "+ yzRot + ", zx:"+ zxRot + ", xw: "+ xwRot+ ", yw: "+ywRot+ ", zw: "+zwRot);
+        //          //////////////////////////////////////////////////////TO DO!
+        //          //xy:
+        //          float cos = Mathf.Cos(xyRot);
+        //          float sin = Mathf.Sin(xyRot);
 
-
-  //          //yz:
-  //          cos = Mathf.Cos(yzRot);
-  //          sin = Mathf.Sin(yzRot);
-            
-  //          v.y = (cos*v.y) + (sin*v.z);
-  //          v.z = (-sin*v.y) + (cos*v.z);
+        //          v.x = (cos*v.x) + (sin*v.y);
+        //          v.y = (-sin*v.x) + (cos*v.y);
 
 
-  //          //zx:
-  //          cos = Mathf.Cos(zxRot);
-  //          sin = Mathf.Sin(zxRot);
-            
-  //          v.z = (cos*v.z) + (sin*v.x);
-  //          v.x = (-sin*v.z) + (cos*v.x);
+        //          //yz:
+        //          cos = Mathf.Cos(yzRot);
+        //          sin = Mathf.Sin(yzRot);
 
-  //          //xw:
-  //          cos = Mathf.Cos(xwRot);
-  //          sin = Mathf.Sin(xwRot);
-            
-  //          v.x = (cos*v.x) + sin*v.w;
-  //          v.w = cos*v.w - sin*v.x;
+        //          v.y = (cos*v.y) + (sin*v.z);
+        //          v.z = (-sin*v.y) + (cos*v.z);
 
-  //          //yw:
-  //          cos = Mathf.Cos(ywRot);
-  //          sin = Mathf.Sin(ywRot);
-            
-  //          v.y = cos*v.y - sin*v.w;
-  //          v.w = sin*v.y + cos*v.w;
 
-  //          //zw:
-  //          cos = Mathf.Cos(zwRot);
-  //          sin = Mathf.Sin(zwRot);
-            
-  //          v.z = cos*v.z - sin*v.w;
-  //          v.w = cos*v.w + sin*v.z;
+        //          //zx:
+        //          cos = Mathf.Cos(zxRot);
+        //          sin = Mathf.Sin(zxRot);
 
-  //         //Debug.Log("Final v: " + v);
-  //         // unitNormal.Normalize(); //quick fix for now
-  //          unitNormal = v;
-  //// unitNormal.Normalize();
+        //          v.z = (cos*v.z) + (sin*v.x);
+        //          v.x = (-sin*v.z) + (cos*v.x);
 
-  //          Debug.Log("unit normal is now: " + unitNormal + " , it is unitary? " + unitNormal.magnitude );
+        //          //xw:
+        //          cos = Mathf.Cos(xwRot);
+        //          sin = Mathf.Sin(xwRot);
 
-  //      }
-        
+        //          v.x = (cos*v.x) + sin*v.w;
+        //          v.w = cos*v.w - sin*v.x;
+
+        //          //yw:
+        //          cos = Mathf.Cos(ywRot);
+        //          sin = Mathf.Sin(ywRot);
+
+        //          v.y = cos*v.y - sin*v.w;
+        //          v.w = sin*v.y + cos*v.w;
+
+        //          //zw:
+        //          cos = Mathf.Cos(zwRot);
+        //          sin = Mathf.Sin(zwRot);
+
+        //          v.z = cos*v.z - sin*v.w;
+        //          v.w = cos*v.w + sin*v.z;
+
+        //         //Debug.Log("Final v: " + v);
+        //         // unitNormal.Normalize(); //quick fix for now
+        //          unitNormal = v;
+        //// unitNormal.Normalize();
+
+        //          Debug.Log("unit normal is now: " + unitNormal + " , it is unitary? " + unitNormal.magnitude );
+
+        //      }
+
         private void rotateXY(float xyRot)
         {
             float cos = Mathf.Cos(xyRot);
@@ -704,37 +711,38 @@ namespace Valve.VR.InteractionSystem
             unitNormal.y = (-sin * oldUnitNormal.x) + (cos * oldUnitNormal.y);
 
             //Debug.Log("unitNormal before" + unitNormal);
-            
+
             //unitNormal = xyRotMat.MultiplyVector(unitNormal); //terrible returns vector0
 
             Debug.Log("XY " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
-                Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal );
+                Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
             }
             unitNormal.Normalize();
 
         }
 
-//% Implementation of the Aguilera-Perez Algorithm.
-//% Aguilera, Antonio, and Ricardo Pérez-Aguila. "General n-dimensional rotations." (2004).
-//function M = rotmnd(v, theta)
-//    n = size(v,1);
-//        M = eye(n);
-//    for c = 1:(n-2)
-//        for r = n:-1:(c+1)
-//            t = atan2(v(r, c), v(r-1, c));
-//            R = eye(n);
-//        R([r r-1], [r r-1]) = [cos(t) -sin(t); sin(t) cos(t)];
-//            v = R* v;
-//        M = R* M;
-//        end
-//    end
-//    R = eye(n);
-//        R([n-1 n], [n-1 n]) = [cos(theta) -sin(theta); sin(theta) cos(theta)];
-//    M = M\R* M;
-    
-       float[,] Aguilera_Perez(float[,] v, float theta) {
+        //% Implementation of the Aguilera-Perez Algorithm.
+        //% Aguilera, Antonio, and Ricardo Pérez-Aguila. "General n-dimensional rotations." (2004).
+        //function M = rotmnd(v, theta)
+        //    n = size(v,1);
+        //        M = eye(n);
+        //    for c = 1:(n-2)
+        //        for r = n:-1:(c+1)
+        //            t = atan2(v(r, c), v(r-1, c));
+        //            R = eye(n);
+        //        R([r r-1], [r r-1]) = [cos(t) -sin(t); sin(t) cos(t)];
+        //            v = R* v;
+        //        M = R* M;
+        //        end
+        //    end
+        //    R = eye(n);
+        //        R([n-1 n], [n-1 n]) = [cos(theta) -sin(theta); sin(theta) cos(theta)];
+        //    M = M\R* M;
+
+        float[,] Aguilera_Perez(float[,] v, float theta)
+        {
             //v = axis plane of rotation? v is n-2 subbasis of n
 
             //need to change all index entires to be -1 what they currently are - switch from matlab to c# array
@@ -742,11 +750,11 @@ namespace Valve.VR.InteractionSystem
             float[,] M = identityMatrix;
             for (int c = 0; c < (n - 2); c++)
             {
-                for(int r = n-1; r>= (c+1); r--)
+                for (int r = n - 1; r >= (c + 1); r--)
                 {
                     Debug.Log("r:c:v: " + r + " " + c + " " + v);
                     float t = Mathf.Atan2(v[r, c], v[r - 1, c]);
-                    float[, ] R = identityMatrix;
+                    float[,] R = identityMatrix;
                     R[r, r] = Mathf.Cos(t);
                     R[r, r - 1] = -Mathf.Sin(t);
                     R[r - 1, r] = Mathf.Sin(t);
@@ -758,10 +766,10 @@ namespace Valve.VR.InteractionSystem
             float[,] R2 = identityMatrix;
             Debug.Log("R length " + R2.GetLength(0) + " " + R2.GetLength(1));
             Debug.Log("n = " + n);
-            R2[(n-2) , (n-2 )] = Mathf.Cos(theta);
-            R2[(n-2), n-1] = -(Mathf.Sin(theta));
-            R2[n-1, (n-2)] = Mathf.Sin(theta);
-            R2[n-1, n-1] = Mathf.Cos(theta);
+            R2[(n - 2), (n - 2)] = Mathf.Cos(theta);
+            R2[(n - 2), n - 1] = -(Mathf.Sin(theta));
+            R2[n - 1, (n - 2)] = Mathf.Sin(theta);
+            R2[n - 1, n - 1] = Mathf.Cos(theta);
 
             //convert to Matrix4x4 to compute inverse
             Matrix4x4 R3 = turnFloatArrayIntoMatrix4x4(R2);
@@ -784,10 +792,10 @@ namespace Valve.VR.InteractionSystem
             //yzRotMat.SetRow(2, new Vector4(0, -sin, cos, 0));
             //yzRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
             //unitNormal = yzRotMat.MultiplyVector(unitNormal);
-            
-            unitNormal.y = (cos*oldUnitNormal.y) + (sin* oldUnitNormal.z);
-            unitNormal.z = (-sin* oldUnitNormal.y) + (cos* oldUnitNormal.z);
-            Debug.Log("YZ " +"unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+
+            unitNormal.y = (cos * oldUnitNormal.y) + (sin * oldUnitNormal.z);
+            unitNormal.z = (-sin * oldUnitNormal.y) + (cos * oldUnitNormal.z);
+            Debug.Log("YZ " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
                 Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
@@ -806,7 +814,7 @@ namespace Valve.VR.InteractionSystem
             //zxRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
             //unitNormal = zxRotMat.MultiplyVector(unitNormal);
             unitNormal.z = (cos * oldUnitNormal.z) + (sin * oldUnitNormal.x);
-            unitNormal.x = (-sin* oldUnitNormal.z) + (cos* oldUnitNormal.x);
+            unitNormal.x = (-sin * oldUnitNormal.z) + (cos * oldUnitNormal.x);
             Debug.Log("XZ " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
@@ -825,8 +833,8 @@ namespace Valve.VR.InteractionSystem
             //xwRotMat.SetRow(3, new Vector4(-sin, 0, 0, cos));
             //unitNormal = xwRotMat.MultiplyVector(unitNormal);
             unitNormal.x = (cos * oldUnitNormal.x) + sin * oldUnitNormal.w;
-            unitNormal.w = cos* oldUnitNormal.w - sin* oldUnitNormal.x;
-            Debug.Log("XW "+"unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.w = cos * oldUnitNormal.w - sin * oldUnitNormal.x;
+            Debug.Log("XW " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
                 Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
@@ -844,14 +852,14 @@ namespace Valve.VR.InteractionSystem
             //ywRotMat.SetRow(3, new Vector4(0, sin, 0, cos));
             //unitNormal = ywRotMat.MultiplyVector(unitNormal);
             unitNormal.y = cos * oldUnitNormal.y - sin * oldUnitNormal.w;
-            unitNormal.w = sin* oldUnitNormal.y + cos* oldUnitNormal.w;
-            Debug.Log("YW "+"unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.w = sin * oldUnitNormal.y + cos * oldUnitNormal.w;
+            Debug.Log("YW " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
                 Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
                 unitNormal.Normalize();
             }
-            
+
         }
         private void rotateZW(float zwRot)
         {
@@ -864,14 +872,14 @@ namespace Valve.VR.InteractionSystem
             //zwRotMat.SetRow(3, new Vector4(0, 0, sin, cos));
             //unitNormal = zwRotMat.MultiplyVector(unitNormal);
             unitNormal.z = cos * oldUnitNormal.z - sin * oldUnitNormal.w;
-            unitNormal.w = cos* oldUnitNormal.w + sin* oldUnitNormal.z;
-            Debug.Log("ZW"+ " unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.w = cos * oldUnitNormal.w + sin * oldUnitNormal.z;
+            Debug.Log("ZW" + " unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
                 Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
                 unitNormal.Normalize();
             }
-            
+
 
         }
 
@@ -892,8 +900,8 @@ namespace Valve.VR.InteractionSystem
             sphereInfo.setCoords4D(coords);
             sphereInfo.totalNumberOfSpheres = numberOfSpheres;
             sphereInfo.setUniqueColorIdentifier(which);
-            
-            
+
+
 
             //s.transform.localPosition = new Vector3(coords.x, coords.y, coords.z);
             //s.transform.localScale = Vector3.one *2;
@@ -974,13 +982,13 @@ namespace Valve.VR.InteractionSystem
 
         }
         ///end////////////////////////////////////////////////////////////////////////
-        
+
         float calcMinDistance(Vector4 n, float d, Vector4 c)
         {
             float cDotn = Vector4.Dot(c, n);
             float minDist = cDotn - d;
-            Debug.Log("c="+c+", n=" +n+ ", Vector4.Dot(c, n) = " + cDotn);
-            return minDist;            
+            Debug.Log("c=" + c + ", n=" + n + ", Vector4.Dot(c, n) = " + cDotn);
+            return minDist;
         }
 
         Vector4 rotateParallelToW(Vector4 coords4D, Vector4 n)
@@ -1100,37 +1108,48 @@ namespace Valve.VR.InteractionSystem
 
         //}
 
-        private float[,] createIdentityMatrix(int numberOfDimensions){
-            float[,] identityMat = new float[numberOfDimensions,numberOfDimensions];
-            for(int i = 0 ; i< numberOfDimensions; i++){
-                for(int j = 0 ; j < numberOfDimensions ; j++){
-                    if(i==j){
-                        identityMat[i,j] = 1f;
+        private float[,] createIdentityMatrix(int numberOfDimensions)
+        {
+            float[,] identityMat = new float[numberOfDimensions, numberOfDimensions];
+            for (int i = 0; i < numberOfDimensions; i++)
+            {
+                for (int j = 0; j < numberOfDimensions; j++)
+                {
+                    if (i == j)
+                    {
+                        identityMat[i, j] = 1f;
                     }
-                    else{
-                        identityMat[i,j] = 0f;
+                    else
+                    {
+                        identityMat[i, j] = 0f;
                     }
                 }
             }
             return identityMat;
         }
-    
-        private float[,] outerProduct(Vector4 u, Vector4 v){
-            float[,] outerProductMatrix = new float[numberOfDimensions,numberOfDimensions];
-            for(int i = 0; i < numberOfDimensions; i++){
-                for(int j = 0 ; j < numberOfDimensions; j++){
-                    outerProductMatrix[i,j] = u[i]*v[j];
+
+        private float[,] outerProduct(Vector4 u, Vector4 v)
+        {
+            float[,] outerProductMatrix = new float[numberOfDimensions, numberOfDimensions];
+            for (int i = 0; i < numberOfDimensions; i++)
+            {
+                for (int j = 0; j < numberOfDimensions; j++)
+                {
+                    outerProductMatrix[i, j] = u[i] * v[j];
                 }
             }
             return outerProductMatrix;
         }
 
         //below, big = subtracted from, little = thing subtracting
-        private float[,] matrixSubtract(float[,] mBig, float[,] mLittle){
-            float[,] newMat = new float[numberOfDimensions,numberOfDimensions];
-            for(int i = 0 ; i < numberOfDimensions; i++){
-                for(int j = 0 ; j < numberOfDimensions ; j++){
-                    newMat[i,j] = mBig[i,j] - mLittle[i,j];
+        private float[,] matrixSubtract(float[,] mBig, float[,] mLittle)
+        {
+            float[,] newMat = new float[numberOfDimensions, numberOfDimensions];
+            for (int i = 0; i < numberOfDimensions; i++)
+            {
+                for (int j = 0; j < numberOfDimensions; j++)
+                {
+                    newMat[i, j] = mBig[i, j] - mLittle[i, j];
                 }
             }
             return newMat;
@@ -1142,30 +1161,32 @@ namespace Valve.VR.InteractionSystem
             int m2Rows = m2.GetLength(0);
             int m2Columns = m2.GetLength(1);
             Debug.Log("m1 size: " + m1.GetLength(0) + " " + m1.GetLength(1) + "m2 size: " + m2.GetLength(0) + m2.GetLength(1));
-            if(m1.GetLength(1) != m2.GetLength(0)){
+            if (m1.GetLength(1) != m2.GetLength(0))
+            {
                 Debug.Log("Arrays wrong length! m1(1) = " + m1.GetLength(1) + " , m2(0) = " + m2.GetLength(0));
             }
-            float[,] multipliedMatrix =  new float[m1Rows, m2Columns];
-            for(int i = 1; i < m1Rows; i++)
+            float[,] multipliedMatrix = new float[m1Rows, m2Columns];
+            for (int i = 1; i < m1Rows; i++)
             {
                 for (int j = 0; j < m2Columns; j++)
                 {
-                    for(int k =0;k < m1Columns; k++)
+                    for (int k = 0; k < m1Columns; k++)
                     {
                         //IndexOutOfRangeException: Index was outside the bounds of the array.
 
                         multipliedMatrix[i, j] += m1[i, k] * m2[k, j];
                     }
-                
+
                 }
-               
+
             }
             return multipliedMatrix;
         }
 
-        Matrix4x4 turnFloatArrayIntoMatrix4x4(float[,] floatArr) {
+        Matrix4x4 turnFloatArrayIntoMatrix4x4(float[,] floatArr)
+        {
             Matrix4x4 mat = Matrix4x4.zero;
-            for(int i = 0; i< 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
@@ -1177,12 +1198,12 @@ namespace Valve.VR.InteractionSystem
 
         float[,] turnMatrixIntoFloatArrray(Matrix4x4 mat)
         {
-            float[,] floatArr = new float[4,4];
+            float[,] floatArr = new float[4, 4];
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    floatArr[i, j]= mat[i, j] ;
+                    floatArr[i, j] = mat[i, j];
                 }
             }
             return floatArr;
@@ -1191,7 +1212,7 @@ namespace Valve.VR.InteractionSystem
         bool isOnHyperPlane(Vector4 sliceCentre4D, Vector4 unitNormal, float d)
         {
             //equation of hyperplane for unitNormal = (a,b,c,e) is ax + by + cz + ew = d
-            float hypeEquation = (unitNormal.x * sliceCentre4D.x ) + (unitNormal.y * sliceCentre4D.y) + (unitNormal.z * sliceCentre4D.z )+ (unitNormal.w * sliceCentre4D.w);
+            float hypeEquation = (unitNormal.x * sliceCentre4D.x) + (unitNormal.y * sliceCentre4D.y) + (unitNormal.z * sliceCentre4D.z) + (unitNormal.w * sliceCentre4D.w);
             if (hypeEquation <= d + 0.0000001 &&
                 hypeEquation >= d - 0.0000001)
             {
