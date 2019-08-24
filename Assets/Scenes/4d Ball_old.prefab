@@ -49,7 +49,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1297244721400112859}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -107,5 +107,5 @@ MonoBehaviour:
   coords4D: {x: 0, y: 0, z: 0, w: 0}
   radius: 0
   totalNumberOfSpheres: 0
-  sliceOfD: {fileID: 1297244721400112859}
+  sliceOfD: {fileID: 658873016705023256, guid: f301983951490274da2961754f63a570, type: 3}
   slicesOfD: []

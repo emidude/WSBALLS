@@ -82,10 +82,11 @@ namespace Valve.VR.InteractionSystem
         public float ZWrot;
         float currentZWrot;
 
-        public int numberOfDSlices = 10;
+        public int numberOfDSlices =1;
         float[] slicesOfD;
         float closestD;
-        public float furthestD = 10;
+        public float furthestD = 3f;
+        float dIncrememt;
         
 
         void Awake()
@@ -106,7 +107,8 @@ namespace Valve.VR.InteractionSystem
             identityMatrix = createIdentityMatrix(numberOfDimensions);
 
             slicesOfD = new float[numberOfDSlices];
-            closestD = d;
+            closestD = -2; // = d;
+            dIncrememt = (furthestD - closestD) / numberOfDSlices;
 
         }
 
@@ -135,8 +137,87 @@ namespace Valve.VR.InteractionSystem
         // Update is called once per frame
         void Update()
         {
-            
-            //////////////////////////////////////////////////////////////PUT ME BACK AFFTER TESTING!
+
+            rotateUnitNormal();
+
+            update_d();
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //updateSlicesOfD(d);////////////////MAYBE JUST NEED INCREMENT AMOUNT NOT ACTUAL DS
+
+            updateSlices();
+
+         
+        }
+
+        private void updateSlices() {
+               //Debug.Log("unitNormal=" + unitNormal);
+            ///////////////////////////////////////////////////
+            for (int i = 0; i < numberOfSpheres; i++)
+            {
+                //Info sphereInfo = spheres[i].GetComponent<Info>();
+                //float r = spheres[i].GetComponent<Info>().radius; //Debug.Log("r = " + r);
+                Vector4 c = spheres[i].GetComponent<Info>().Get4DCoords();
+               
+
+                for (int j = 0; j < numberOfDSlices; j++)
+                {
+                    GameObject slice = spheres[i].GetComponent<Info>().slicesOfD[j];
+                    float currentD = d + j * dIncrememt;
+
+                    float minDis = calcMinDistance(unitNormal, currentD, c); //this projects c onto n (n.c) and
+                                                                      //caluclates min distance between this and the hyperplane
+
+                    //if min distance (c.n - d ) is within radius r of sphere, some of sphere c intersects hyperplane  
+                    //if is in inntersection, get centreOfSlice and sliceRadius:
+                    if (-r <= minDis && minDis <= r)
+                    {
+                        //calculate sliceCentre (4D)
+                        Vector4 sliceCentre4D = c - minDis * unitNormal;
+                        //testing - check if this lies on the hyperplane:
+                        if (!isOnHyperPlane(sliceCentre4D, unitNormal, currentD))
+                        {
+                            Debug.Log("NOT ON HYPERPLANE!" + " c = " + c + "slice centre:" + sliceCentre4D + " d= " + currentD + " minDis = " + minDis + "unitNormal = " + unitNormal);
+                        }
+                        else
+                        {
+                            Debug.Log("ON HYPERPLANE!");
+                        }
+
+                        Vector4 n = reflectionParallelToZ - unitNormal;
+                        Vector4 rotated4D;
+
+                        if (n != Vector4.zero)
+                        {
+                            rotated4D = rotateParallelToW(sliceCentre4D, n);
+                        }
+                        else { rotated4D = sliceCentre4D; }
+                         Debug.Log("sphere: " + i + ", slice: " + j + " : " + rotated4D);
+
+
+                        //calcualte radius (perpendicular to n)
+                        float sliceRadius = Mathf.Sqrt(r * r - minDis * minDis);
+                        Debug.Log(i + " slice radius = " + sliceRadius);
+
+
+                        //the z coord is now constant for all slice coords so can place in 3d vr space
+                        //spheres[i].transform.localPosition = new Vector3(rotated4D.x, rotated4D.y, rotated4D.z);
+                        //spheres[i].transform.localScale = Vector3.one * sliceRadius * 2;
+                        spheres[i].GetComponent<Info>().slicesOfD[j].transform.localPosition = new Vector3(rotated4D.x, rotated4D.y, rotated4D.z);
+                        spheres[i].GetComponent<Info>().slicesOfD[j].transform.localScale = Vector3.one * sliceRadius * 2;
+                    }
+                    //else sliceradius = 0;
+                    else { spheres[i].GetComponent<Info>().slicesOfD[j].transform.localScale = Vector3.zero; }
+                }
+
+               
+                
+            }
+        }
+
+        private void rotateUnitNormal()
+        {
             if (currentXYrot != XYrot)
             {
                 Debug.Log(XYrot);
@@ -174,71 +255,9 @@ namespace Valve.VR.InteractionSystem
                 currentZWrot = ZWrot;
                 rotateZW(increment);
             }
-            
 
-            //update linear mapping from slider, current range: -2,2
-            if (currentLinearMapping != linearMapping.value)
-            {
-                currentLinearMapping = linearMapping.value;
-                d = (currentLinearMapping - 0.5f) * 4f;
-            }
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            updateSlicesOfD(d);////////////////MAYBE JUST NEED INCREMENT AMOUNT NOT ACTUAL DS
-
-
-
-            //Debug.Log("unitNormal=" + unitNormal);
-            ///////////////////////////////////////////////////
-            for (int i = 0; i < numberOfSpheres; i++)
-            {
-                //Info sphereInfo = spheres[i].GetComponent<Info>();
-                //float r = spheres[i].GetComponent<Info>().radius; //Debug.Log("r = " + r);
-                Vector4 c = spheres[i].GetComponent<Info>().Get4DCoords();
-                float minDis = calcMinDistance(unitNormal, d, c); //this projects c onto n (n.c) and
-                                                                  //caluclates min distance between this and the hyperplane
-
-                //if min distance (c.n - d ) is within radius r of sphere, some of sphere c intersects hyperplane  
-                //if is in inntersection, get centreOfSlice and sliceRadius:
-                if (-r <= minDis && minDis <= r)
-                {
-                    //calculate sliceCentre (4D)
-                    Vector4 sliceCentre4D = c - minDis * unitNormal;
-                    //testing - check if this lies on the hyperplane:
-                    if (!isOnHyperPlane(sliceCentre4D, unitNormal, d))
-                    {
-                        Debug.Log("NOT ON HYPERPLANE!" + " c = " + c + "slice centre:" + sliceCentre4D + " d= " + d + " minDis = " + minDis + "unitNormal = " + unitNormal);
-                    }
-                    else
-                    {
-                        Debug.Log("ON HYPERPLANE!");
-                    }
-
-                    Vector4 n = reflectionParallelToZ - unitNormal;
-                    Vector4 rotated4D;
-
-                    if (n != Vector4.zero)
-                    {
-                        rotated4D = rotateParallelToW(sliceCentre4D, n);
-                    }
-                    else { rotated4D = sliceCentre4D; }
-                    // Debug.Log(i + ": " + rotated4D);
-
-
-                    //calcualte radius (perpendicular to n)
-                    float sliceRadius = Mathf.Sqrt(r * r - minDis * minDis);
-                    Debug.Log(i + " slice radius = " + sliceRadius);
-
-
-                    //the z coord is now constant for all slice coords so can place in 3d vr space
-                    spheres[i].transform.localPosition = new Vector3(rotated4D.x, rotated4D.y, rotated4D.z);
-                    spheres[i].transform.localScale = Vector3.one * sliceRadius * 2;
-                }
-                //else sliceradius = 0;
-                else { spheres[i].transform.localScale = Vector3.zero; }
-            }
         }
 
-        
         private void rotateXY(float xyRot)
         {
             float cos = Mathf.Cos(xyRot);
@@ -364,6 +383,15 @@ namespace Valve.VR.InteractionSystem
 
         }
 
+        private void update_d() {
+            //update linear mapping from slider, current range: -2,2
+            if (currentLinearMapping != linearMapping.value)
+            {
+                currentLinearMapping = linearMapping.value;
+                d = (currentLinearMapping - 0.5f) * 4f;
+            }
+        }
+
         Vector4 getCoords(GameObject s)
         {
             return s.GetComponent<Info>().Get4DCoords();
@@ -382,16 +410,17 @@ namespace Valve.VR.InteractionSystem
             sphereInfo.totalNumberOfSpheres = numberOfSpheres;
             sphereInfo.setUniqueColorIdentifier(which);
             sphereInfo.setSliceCentresAndRadiusArrays(numberOfDSlices);
+            sphereInfo.numberOfDs = numberOfDSlices;
 
             ////////////TEST RUN HERE FOR CUBE SLICE
             sphereInfo.createSlices();
             
             //if sphere is in subDims, set postion and radius
-            if (isSphereInSubDim(s))
-            {
-                s.transform.localScale = CalculateDiameter(s);
-            }
-            else { s.transform.localScale = Vector3.zero; }
+            //if (isSphereInSubDim(s))
+            //{
+            //    s.transform.localScale = CalculateDiameter(s);
+            //}
+            //else { s.transform.localScale = Vector3.zero; }
 
             spheres.Add(s);
         }

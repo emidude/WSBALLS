@@ -21,15 +21,21 @@
          float4 color : COLOR;
      };
      void surf (Input IN, inout SurfaceOutputStandard o) {
-	 //void surf (Input IN, inout SurfaceOutput o) {
-        // o.Albedo.x = _FourDCoordinatesAtStart.x*_FourDCoordinatesAtStart.y *0.5 + 0.5;
-		// o.Albedo.y = _FourDCoordinatesAtStart.z*_FourDCoordinatesAtStart.w *0.4 + 0.5;
-		// o.Albedo.z = _FourDCoordinatesAtStart.z*_FourDCoordinatesAtStart.y *0.4 + 0.5;
+	  
+		 //if (_FourDCoordinatesAtStart.a >= 0) {
+			// o.Albedo.rgb = _FourDCoordinatesAtStart.rgb * 0.5 + 0.5;
+		 //}
+		 //else {o.Albedo.rb = _FourDCoordinatesAtStart.ga * 0.5 + 0.5;
+		 //}
 
-		o.Albedo.rgb = _FourDCoordinatesAtStart.rgb * 0.5 + 0.5;
-		o.Alpha = _FourDCoordinatesAtStart.a * 0.25 + 0.75;
 
-		// o.Alpha = 1;
+		//o.Albedo.rgb = _FourDCoordinatesAtStart.rgb * 0.5 + 0.5;
+		//o.Alpha = _FourDCoordinatesAtStart.a * 0.25 + 0.75;
+
+		 o.Albedo.r = (_FourDCoordinatesAtStart.r + _FourDCoordinatesAtStart.b)*0.25 + 0.5;
+		 o.Albedo.g = ((_FourDCoordinatesAtStart.b*0.5) + _FourDCoordinatesAtStart.g * 1.5)*0.25 + 0.5;
+		 o.Albedo.b = (_FourDCoordinatesAtStart.g*0.5 + _FourDCoordinatesAtStart.a *1.5)*0.25 + 0.5;
+		 o.Alpha = 1;
 
 		 //o.Albedo = _FourDCoordinatesAtStart * 0.5 * + 0.5; //works but gives 2 the same
 

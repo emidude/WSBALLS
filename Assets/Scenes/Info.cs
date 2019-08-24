@@ -14,7 +14,7 @@ public class Info : MonoBehaviour {
     int uniqueBallIdentifier;
     float uniqueColorIdentifier;
 
-    int numberOfDs;
+    public int numberOfDs;
     Vector4[] sliceCentres;
     Vector4[] sliceRadii;
     float minDistanceBetween;
@@ -46,20 +46,30 @@ public class Info : MonoBehaviour {
         sliceRadii = new Vector4[numberOfDs];
     }
 
-    public void createSlices()
+    public void createSlices()//////////////////////aggggggggg so bad
     {
-        GameObject slice = Instantiate(sliceOfD);
-        slice.transform.localScale = new Vector3(1, 1, 1);
-        slicesOfD.Add(slice);
+        Debug.Log("numberOfds = " + numberOfDs);
+        for(int i = 0; i < numberOfDs; i++)
+        {
+            GameObject slice = Instantiate(sliceOfD);
+            //slice.transform.localScale = new Vector3(1, 1, 1); set transform when you calc slice centres
+            setShader shaderInfo = slice.GetComponent<setShader>();
+            shaderInfo.coords4D = coords4D;
+            shaderInfo.sliceID = 1 - i / numberOfDs;
+
+            slicesOfD.Add(slice);
+        }
+        
     }
 
     private void Start()
     {
+        //REMOVED RENDERER INFO SINCE NOW DOING WITH SLICES
         //setting shader colors:
         //Fetch the Renderer from the GameObject
-        Renderer rend = GetComponent<Renderer>();
-        rend.material.SetVector("_FourDCoordinatesAtStart", coords4D);
-        rend.material.SetFloat("_BallColorID", uniqueColorIdentifier);
+        //Renderer rend = GetComponent<Renderer>();
+        //rend.material.SetVector("_FourDCoordinatesAtStart", coords4D);
+        //rend.material.SetFloat("_BallColorID", uniqueColorIdentifier);
 
         radius = 1f;
 
