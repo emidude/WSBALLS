@@ -2986,6 +2986,7 @@ Rigidbody:
   m_Constraints: 0
   m_CollisionDetection: 0
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!1 &865216506
 GameObject:
   m_ObjectHideFlags: 0
@@ -3077,6 +3078,8 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 865216506}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+=======
+>>>>>>> parent of eda1702... working sliders totally working - unit normal stays unitary and slice centre coords are actaully on hyperplane, besides small numerical errors
 =======
 >>>>>>> parent of eda1702... working sliders totally working - unit normal stays unitary and slice centre coords are actaully on hyperplane, besides small numerical errors
 --- !u!1 &885550072
@@ -5176,6 +5179,7 @@ Rigidbody:
   m_Constraints: 0
   m_CollisionDetection: 0
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!1 &1379491870
 GameObject:
   m_ObjectHideFlags: 0
@@ -5230,6 +5234,8 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 =======
 >>>>>>> parent of eda1702... working sliders totally working - unit normal stays unitary and slice centre coords are actaully on hyperplane, besides small numerical errors
+=======
+>>>>>>> parent of eda1702... working sliders totally working - unit normal stays unitary and slice centre coords are actaully on hyperplane, besides small numerical errors
 --- !u!1 &1408598042
 GameObject:
   m_ObjectHideFlags: 0
@@ -5266,6 +5272,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+<<<<<<< HEAD
 <<<<<<< HEAD
 --- !u!1 &1411099300
 GameObject:
@@ -5343,6 +5350,8 @@ MonoBehaviour:
   ZWrot: 0
   numberOfDSlices: 1
   furthestD: 1
+=======
+>>>>>>> parent of eda1702... working sliders totally working - unit normal stays unitary and slice centre coords are actaully on hyperplane, besides small numerical errors
 =======
 >>>>>>> parent of eda1702... working sliders totally working - unit normal stays unitary and slice centre coords are actaully on hyperplane, besides small numerical errors
 --- !u!1 &1441711492
@@ -5571,6 +5580,7 @@ PrefabInstance:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a135b1a2cb9c8f488d4dd00c55ab283, type: 3}
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!1 &1459805818
 GameObject:
   m_ObjectHideFlags: 0
@@ -5637,6 +5647,8 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+=======
+>>>>>>> parent of eda1702... working sliders totally working - unit normal stays unitary and slice centre coords are actaully on hyperplane, besides small numerical errors
 =======
 >>>>>>> parent of eda1702... working sliders totally working - unit normal stays unitary and slice centre coords are actaully on hyperplane, besides small numerical errors
 --- !u!1 &1460916284
