@@ -254,7 +254,7 @@ namespace Valve.VR.InteractionSystem
             }
             //Debug.Log("HI Lab Room Coordinates UPDATE: " + player.trackingOriginTransform.position);
             //Debug.Log("HI Lab Room Feet Coordinates UPDATE: " + player.feetPositionGuess);
-           
+
 
             //update linear mapping from slider, current range: -2,2
             if (currentLinearMapping != linearMapping.value)
@@ -275,12 +275,13 @@ namespace Valve.VR.InteractionSystem
                 float minDis = calcMinDistance(unitNormal, d, c); //this projects c onto n (n.c) and
                                                                   //caluclates min distance between this and the hyperplane
 
-                //if min distance (c.n - d ) is within radius r of sphere, some of sphere c intersects hyperplane  
+                //if min distance is within r of circle, some of sphere c intersects hyperplane  
                 //if is in inntersection, get centreOfSlice and sliceRadius:
+
                 if (-r <= minDis && minDis <= r)
                 {
                     //calculate sliceCentre (4D)
-                    Vector4 sliceCentre4D = c - minDis * unitNormal;
+                    Vector4 sliceCentre4D = c + minDis * unitNormal;
                     //testing - check if this lies on the hyperplane:
                     if (!isOnHyperPlane(sliceCentre4D, unitNormal, d))
                     {
@@ -304,7 +305,7 @@ namespace Valve.VR.InteractionSystem
 
                     //calcualte radius (perpendicular to n)
                     float sliceRadius = Mathf.Sqrt(r * r - minDis * minDis);
-                    Debug.Log(i + " slice radius = " + sliceRadius);
+                    //Debug.Log(i + " slice radius = " + sliceRadius);
                     
 
                     //the z coord is now constant for all slice coords so can place in 3d vr space
@@ -700,18 +701,14 @@ namespace Valve.VR.InteractionSystem
             //xyRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
 
             Vector4 oldUnitNormal = unitNormal;
-            unitNormal.x = (cos * oldUnitNormal.x) + (sin * oldUnitNormal.y); //does not work because y below is updated with already updated x, should be previous x
+            unitNormal.x = (cos * unitNormal.x) + (sin * unitNormal.y); //does not work because y below is updated with already updated x, should be previous x
             unitNormal.y = (-sin * oldUnitNormal.x) + (cos * oldUnitNormal.y);
 
             //Debug.Log("unitNormal before" + unitNormal);
             
             //unitNormal = xyRotMat.MultiplyVector(unitNormal); //terrible returns vector0
 
-            Debug.Log("XY " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
-            if (!isUnitNormalUNITARY(unitNormal))
-            {
-                Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal );
-            }
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             unitNormal.Normalize();
 
         }
@@ -776,7 +773,6 @@ namespace Valve.VR.InteractionSystem
 
         private void rotateYZ(float yzRot)
         {
-            Vector4 oldUnitNormal = unitNormal;
             float cos = Mathf.Cos(yzRot);
             float sin = Mathf.Sin(yzRot);
             //yzRotMat.SetRow(0, new Vector4(1, 0, 0, 0));
@@ -785,19 +781,14 @@ namespace Valve.VR.InteractionSystem
             //yzRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
             //unitNormal = yzRotMat.MultiplyVector(unitNormal);
             
-            unitNormal.y = (cos*oldUnitNormal.y) + (sin* oldUnitNormal.z);
-            unitNormal.z = (-sin* oldUnitNormal.y) + (cos* oldUnitNormal.z);
-            Debug.Log("YZ " +"unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
-            if (!isUnitNormalUNITARY(unitNormal))
-            {
-                Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
-            }
+                      unitNormal.y = (cos*unitNormal.y) + (sin*unitNormal.z);
+                      unitNormal.z = (-sin*unitNormal.y) + (cos*unitNormal.z);
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             unitNormal.Normalize();
         }
 
         private void rotateXZ(float xzRot)
         {
-            Vector4 oldUnitNormal = unitNormal;
             float cos = Mathf.Cos(xzRot);
             float sin = Mathf.Sin(xzRot);
             //zxRotMat.SetRow(0, new Vector4(cos, 0, -sin, 0));
@@ -805,18 +796,13 @@ namespace Valve.VR.InteractionSystem
             //zxRotMat.SetRow(2, new Vector4(sin, 0, cos, 0));
             //zxRotMat.SetRow(3, new Vector4(0, 0, 0, 1));
             //unitNormal = zxRotMat.MultiplyVector(unitNormal);
-            unitNormal.z = (cos * oldUnitNormal.z) + (sin * oldUnitNormal.x);
-            unitNormal.x = (-sin* oldUnitNormal.z) + (cos* oldUnitNormal.x);
-            Debug.Log("XZ " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
-            if (!isUnitNormalUNITARY(unitNormal))
-            {
-                Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
-            }
+            unitNormal.z = (cos * unitNormal.z) + (sin * unitNormal.x);
+            unitNormal.x = (-sin*unitNormal.z) + (cos*unitNormal.x);
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             unitNormal.Normalize();
         }
         private void rotateXW(float xwRot)
         {
-            Vector4 oldUnitNormal = unitNormal;
             float cos = Mathf.Cos(xwRot);
             float sin = Mathf.Sin(xwRot);
             //xwRotMat.SetRow(0, new Vector4(cos, 0, 0, sin));
@@ -824,18 +810,13 @@ namespace Valve.VR.InteractionSystem
             //xwRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
             //xwRotMat.SetRow(3, new Vector4(-sin, 0, 0, cos));
             //unitNormal = xwRotMat.MultiplyVector(unitNormal);
-            unitNormal.x = (cos * oldUnitNormal.x) + sin * oldUnitNormal.w;
-            unitNormal.w = cos* oldUnitNormal.w - sin* oldUnitNormal.x;
-            Debug.Log("XW "+"unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
-            if (!isUnitNormalUNITARY(unitNormal))
-            {
-                Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
-            }
+            unitNormal.x = (cos * unitNormal.x) + sin * unitNormal.w;
+            unitNormal.w = cos*unitNormal.w - sin*unitNormal.x;
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             unitNormal.Normalize();
         }
         private void rotateYW(float ywRot)
         {
-            Vector4 oldUnitNormal = unitNormal;
             float cos = Mathf.Cos(ywRot);
             float sin = Mathf.Sin(ywRot);
             //ywRotMat.SetRow(0, new Vector4(1, 0, 0, 0));
@@ -843,19 +824,13 @@ namespace Valve.VR.InteractionSystem
             //ywRotMat.SetRow(2, new Vector4(0, 0, 1, 0));
             //ywRotMat.SetRow(3, new Vector4(0, sin, 0, cos));
             //unitNormal = ywRotMat.MultiplyVector(unitNormal);
-            unitNormal.y = cos * oldUnitNormal.y - sin * oldUnitNormal.w;
-            unitNormal.w = sin* oldUnitNormal.y + cos* oldUnitNormal.w;
-            Debug.Log("YW "+"unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
-            if (!isUnitNormalUNITARY(unitNormal))
-            {
-                Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
-                unitNormal.Normalize();
-            }
-            
+            unitNormal.y = cos * unitNormal.y - sin * unitNormal.w;
+            unitNormal.w = sin*unitNormal.y + cos*unitNormal.w;
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.Normalize();
         }
         private void rotateZW(float zwRot)
         {
-            Vector4 oldUnitNormal = unitNormal;
             float cos = Mathf.Cos(zwRot);
             float sin = Mathf.Sin(zwRot);
             //zwRotMat.SetRow(0, new Vector4(1, 0, 0, 0));
@@ -863,15 +838,10 @@ namespace Valve.VR.InteractionSystem
             //zwRotMat.SetRow(2, new Vector4(0, 0, cos, -sin));
             //zwRotMat.SetRow(3, new Vector4(0, 0, sin, cos));
             //unitNormal = zwRotMat.MultiplyVector(unitNormal);
-            unitNormal.z = cos * oldUnitNormal.z - sin * oldUnitNormal.w;
-            unitNormal.w = cos* oldUnitNormal.w + sin* oldUnitNormal.z;
-            Debug.Log("ZW"+ " unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
-            if (!isUnitNormalUNITARY(unitNormal))
-            {
-                Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
-                unitNormal.Normalize();
-            }
-            
+            unitNormal.z = cos * unitNormal.z - sin * unitNormal.w;
+            unitNormal.w = cos*unitNormal.w + sin*unitNormal.z;
+            Debug.Log("unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            unitNormal.Normalize();
 
         }
 
@@ -979,7 +949,7 @@ namespace Valve.VR.InteractionSystem
         {
             float cDotn = Vector4.Dot(c, n);
             float minDist = cDotn - d;
-            Debug.Log("c="+c+", n=" +n+ ", Vector4.Dot(c, n) = " + cDotn);
+            Debug.Log("Vector4.Dot(c, n) = " + cDotn);
             return minDist;            
         }
 
@@ -1192,27 +1162,15 @@ namespace Valve.VR.InteractionSystem
         {
             //equation of hyperplane for unitNormal = (a,b,c,e) is ax + by + cz + ew = d
             float hypeEquation = (unitNormal.x * sliceCentre4D.x ) + (unitNormal.y * sliceCentre4D.y) + (unitNormal.z * sliceCentre4D.z )+ (unitNormal.w * sliceCentre4D.w);
-            if (hypeEquation <= d + 0.0000001 &&
-                hypeEquation >= d - 0.0000001)
+            if (hypeEquation == d)
             {
                 return true;
             }
             else
             {
-                Debug.Log("hypeEquation=" + hypeEquation + ", d=" + d);
                 return false;
             }
 
-        }
-
-        bool isUnitNormalUNITARY(Vector4 unitNormal)
-        {
-            if (unitNormal.magnitude <= 1 + 0.0000005 &&
-                unitNormal.magnitude >= 1 - 0.0000005)
-            {
-                return true;
-            }
-            else return false;
         }
     }
 
