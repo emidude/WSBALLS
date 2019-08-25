@@ -89,8 +89,14 @@ namespace Valve.VR.InteractionSystem
         public float ZWrot;
         float currentZWrot;
 
-        bool needToResetPositionL = true; //reset position when let go of trigger
-        bool needToResetPositionR = true;
+        //bool needToResetPositionL = true; //reset position when let go of trigger
+        //bool needToResetPositionR = true;
+
+        public int numberOfDs = 2;
+        float dIncrement = 0.2f; //can change this later
+        //public GameObject sliceOfD;
+        //public List<GameObject> slicesOfD;
+        float fakeEyeDistance = 3f;
 
         void Awake()
         {
@@ -111,16 +117,8 @@ namespace Valve.VR.InteractionSystem
 
             //id mat used in rotation formula between vectors
             identityMatrix = createIdentityMatrix(numberOfDimensions);
-
-            //float[,] test1 = new float[4, 2] { { 1, 0 }, { 0, 1 }, { 0, 0 }, { 0, 0 } };
-            ////float[,] test1 = new float[2, 4] { { 1, 0, 0,0 }, { 0, 1, 0,0 }};
-            //float[,] output = Aguilera_Perez(test1, PI / 4);
-            //Debug.Log("size" + output.GetLength(0) + " "+ output.GetLength(1));
-            //Debug.Log("output from Aguilera-Perez = " + output[0,0]+" "+ output[0, 1]+" " + output[0, 2]+" " + output[0, 3]);
-            //Debug.Log("output from Aguilera-Perez = " + output[1, 0] + " " + output[1, 1] + " " + output[1, 2] + " " + output[1, 3]);
-            //Debug.Log("output from Aguilera-Perez = " + output[2, 0] + " " + output[2, 1] + " " + output[2, 2] + " " + output[2, 3]);
-            //Debug.Log("output from Aguilera-Perez = " + output[3, 0] + " " + output[3, 1] + " " + output[3, 2] + " " + output[3, 3]);
-
+            numberOfDs = 2;
+            
         }
 
         // Use this for initialization
@@ -131,25 +129,7 @@ namespace Valve.VR.InteractionSystem
                 CreateSpheres(i);
             }
 
-            // for (int i = 0; i < numberOfSpheres; i++)
-            // {
-            //     Debug.Log("sphere " + i + spheres[i].GetComponent<Info>().Get4DCoords());
-            // }
-
-            /////////////////test rotations from contoller(s)
-            // //instantiate prefab
-            // xyRotT = Instantiate(planePF, new Vector3(0, 1.5f, 1), Quaternion.identity);
-            // // xArrow.SetParent(transform, false);
-            // yzRotT = Instantiate(planePF, new Vector3(0.5f, 1.5f, 1), Quaternion.identity);
-            // //  yArrow.SetParent(transform);
-            // zxRotT = Instantiate(planePF, new Vector3(1, 1.5f, 1), Quaternion.identity);
-            // //  zArrow.SetParent(transform);
-            // ywRotT = Instantiate(planePF, new Vector3(0, 0.5f, 1), Quaternion.identity);
-            // xwRotT = Instantiate(planePF, new Vector3(0.5f, 0.5f, 1), Quaternion.identity);
-            // zwRotT = Instantiate(planePF, new Vector3(1, 0.5f, 1), Quaternion.identity);
-
-
-
+      
             ////////////////////////////////////////////////////////////////////////////////////////////////
             //trigger.AddOnStateDownListener(TriggerDownR, rightHand);
             //trigger.AddOnStateUpListener(TriggerUpR, rightHand);
@@ -170,142 +150,93 @@ namespace Valve.VR.InteractionSystem
                 return;
             }
 
-            // Vector3 playerFeetOffset = player.trackingOriginTransform.position - player.feetPositionGuess;
-            // player.trackingOriginTransform.position = teleportPosition + playerFeetOffset;
-
-            //Debug.Log("HI Lab Room Coordinates START: " + player.feetPositionGuess);
-            //Move player position to centre of VR space no matter where you start from:
-            //Vector3 playerFeetOffset = player.trackingOriginTransform.position - player.feetPositionGuess;
-            // Vector3 playerFeetOffset = player.trackingOriginTransform.position;
-            // playerFeetOffset = player.feetPositionGuess -player.feetPositionGuess;
-            // player.transform.position = playerFeetOffset;
-
-            //player.trackingOriginTransform.position = teleportPosition + playerFeetOffset;
-
-
-            //each of these options makes new postiion = zero where sitting but does not work well - spheres all intersecting
-            //  player.trackingOriginTransform.position -= player.feetPositionGuess;
-            //  player.transform.position = player.trackingOriginTransform.position;
-            //  player.trackingOriginTransform.position = player.transform.position;
-            // Debug.Log("player position LALALAL =" + player.transform.position);
-
-            // Debug.Log("player trackingOrging LALALAL =" + player.trackingOriginTransform.position);
-
-            //maybe also remove this!
-            //startingPosition = player.transform.position;
-            //startingPositionPublicObject.transform.position = startingPosition;
-            //Debug.Log("starting position = " + startingPosition);
-
-
-            //TEST ROTATE = 
-            //XYrot = PI / 4;
-            //rotateXY(XYrot); //working!:)
-
+          
         }
 
 
         // Update is called once per frame
         void Update()
         {
-            //////////////////////////////////////////////////////////////PUT ME BACK AFFTER TESTING!
-            if (currentXYrot != XYrot)
-            {
-                Debug.Log(XYrot);
-                float increment = currentXYrot - XYrot;
-                currentXYrot = XYrot;
-                rotateXY(increment);
-            }
-            if (currentXZrot != XZrot)
-            {
-                float increment = currentXZrot - XZrot;
-                currentXZrot = XZrot;
-                rotateXZ(increment);
-            }
-            if (currentXWrot != XWrot)
-            {
-                float increment = currentXWrot - XWrot;
-                currentXWrot = XWrot;
-                rotateXW(increment);
-            }
-            if (currentYZrot != YZrot)
-            {
-                float increment = currentYZrot - YZrot;
-                currentYZrot = YZrot;
-                rotateYZ(increment);
-            }
-            if (currentYWrot != YWrot)
-            {
-                float increment = currentYWrot - YWrot;
-                currentYWrot = YWrot;
-                rotateYW(increment);
-            }
-            if (currentZWrot != ZWrot)
-            {
-                float increment = currentZWrot - ZWrot;
-                currentZWrot = ZWrot;
-                rotateZW(increment);
-            }
-            //Debug.Log("HI Lab Room Coordinates UPDATE: " + player.trackingOriginTransform.position);
-            //Debug.Log("HI Lab Room Feet Coordinates UPDATE: " + player.feetPositionGuess);
+            //////////////////////////////////////////////////////////////
+            updateRotations();
+            
+            updateD();
 
 
-            //update linear mapping from slider, current range: -2,2
-            if (currentLinearMapping != linearMapping.value)
-            {
-                currentLinearMapping = linearMapping.value;
-                d = (currentLinearMapping - 0.5f) * 4f;
-            }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
             //Debug.Log("unitNormal=" + unitNormal);
             ///////////////////////////////////////////////////
+
+            Vector4 n = reflectionParallelToZ - unitNormal; //this is used in the following (nested) loop to map 4d points on plane
+                                                            //to plane rotated parallel to z (actually w) axis
             for (int i = 0; i < numberOfSpheres; i++)
             {
                 //Info sphereInfo = spheres[i].GetComponent<Info>();
                 //float r = spheres[i].GetComponent<Info>().radius; //Debug.Log("r = " + r);
                 Vector4 c = spheres[i].GetComponent<Info>().Get4DCoords();
-                float minDis = calcMinDistance(unitNormal, d, c); //this projects c onto n (n.c) and
-                                                                  //caluclates min distance between this and the hyperplane
 
-                //if min distance (c.n - d ) is within radius r of sphere, some of sphere c intersects hyperplane  
-                //if is in inntersection, get centreOfSlice and sliceRadius:
-                if (-r <= minDis && minDis <= r)
+                for  (int j = 0; j < numberOfDs; j++)
                 {
-                    //calculate sliceCentre (4D)
-                    Vector4 sliceCentre4D = c - minDis * unitNormal;
-                    //testing - check if this lies on the hyperplane:
-                    if (!isOnHyperPlane(sliceCentre4D, unitNormal, d))
+                    float dSlice = d + (j * dIncrement);
+                    Debug.Log("dSlice = " + dSlice);
+                    float minDis = calcMinDistance(unitNormal, dSlice, c); //this projects c onto n (n.c) and
+                                                                      //caluclates min distance between this and the hyperplane
+
+                    //if min distance (c.n - d ) is within radius r of sphere, some of sphere c intersects hyperplane  
+                    //if is in inntersection, get centreOfSlice and sliceRadius:
+                    if (-r <= minDis && minDis <= r)
                     {
-                        Debug.Log("NOT ON HYPERPLANE!" + " c = " + c + "slice centre:" + sliceCentre4D + " d= " + d + " minDis = " + minDis + "unitNormal = " + unitNormal);
+                        //calculate sliceCentre (4D)
+                        Vector4 sliceCentre4D = c - minDis * unitNormal;
+                        //testing - check if this lies on the hyperplane:
+                        if (!isOnHyperPlane(sliceCentre4D, unitNormal, dSlice))
+                        {
+                            Debug.Log("NOT ON HYPERPLANE!" + " c = " + c + "slice centre:" + sliceCentre4D + " dSlice= " + dSlice + " minDis = " + minDis + "unitNormal = " + unitNormal);
+                        }
+                        else
+                        {
+                            Debug.Log("ON HYPERPLANE!");
+                        }
+
+                        
+                        Vector4 rotated4D;
+
+                        if (n != Vector4.zero)
+                        {
+                            rotated4D = rotateParallelToW(sliceCentre4D, n);
+                        }
+                        else { rotated4D = sliceCentre4D; }
+                        // Debug.Log(i + ": " + rotated4D);
+
+
+                        //calcualte radius (perpendicular to n)
+                        float sliceRadius = Mathf.Sqrt(r * r - minDis * minDis);
+                        //Debug.Log(i + " slice radius = " + sliceRadius);
+
+
+                        //the z coord is now constant for all slice coords so can place in 3d vr space
+                        //spheres[i].transform.localPosition = new Vector3(rotated4D.x, rotated4D.y, rotated4D.z);
+                        //spheres[i].transform.localScale = Vector3.one * sliceRadius * 2;
+
+                        //adjust further out slices as projected smaller
+                        Debug.Log("sphre " + i + ", slice " + j + " : " + rotated4D);
+                        float dividingAmount = 1 / (fakeEyeDistance + dSlice); //this makes many intersecting balls for d /= -2
+                        //float dividingAmount = d / dSlice; //terrible  -end up dividing by 0;
+                        rotated4D.x *= dividingAmount;
+                        rotated4D.y *= dividingAmount;
+                        rotated4D.z *= dividingAmount;
+
+                        spheres[i].GetComponent<Info>().slicesOfD[j].transform.localPosition = new Vector3(rotated4D.x, rotated4D.y, rotated4D.z);
+                        spheres[i].GetComponent<Info>().slicesOfD[j].transform.localScale = Vector3.one * sliceRadius * 2 * dividingAmount;
+
                     }
-                    else
-                    {
-                        Debug.Log("ON HYPERPLANE!");
+                    //else sliceradius = 0;
+                    else { //spheres[i].transform.localScale = Vector3.zero; 
+                        spheres[i].GetComponent<Info>().slicesOfD[j].transform.localScale = Vector3.zero;
                     }
-
-                    Vector4 n = reflectionParallelToZ - unitNormal;
-                    Vector4 rotated4D;
-
-                    if (n != Vector4.zero)
-                    {
-                        rotated4D = rotateParallelToW(sliceCentre4D, n);
-                    }
-                    else { rotated4D = sliceCentre4D; }
-                    // Debug.Log(i + ": " + rotated4D);
-
-
-                    //calcualte radius (perpendicular to n)
-                    float sliceRadius = Mathf.Sqrt(r * r - minDis * minDis);
-                    Debug.Log(i + " slice radius = " + sliceRadius);
-
-
-                    //the z coord is now constant for all slice coords so can place in 3d vr space
-                    spheres[i].transform.localPosition = new Vector3(rotated4D.x, rotated4D.y, rotated4D.z);
-                    spheres[i].transform.localScale = Vector3.one * sliceRadius * 2;
                 }
-                //else sliceradius = 0;
-                else { spheres[i].transform.localScale = Vector3.zero; }
             }
 
 
@@ -387,6 +318,54 @@ namespace Valve.VR.InteractionSystem
 
         }
 
+        void updateRotations() {
+            if (currentXYrot != XYrot)
+            {
+                Debug.Log(XYrot);
+                float increment = currentXYrot - XYrot;
+                currentXYrot = XYrot;
+                rotateXY(increment);
+            }
+            if (currentXZrot != XZrot)
+            {
+                float increment = currentXZrot - XZrot;
+                currentXZrot = XZrot;
+                rotateXZ(increment);
+            }
+            if (currentXWrot != XWrot)
+            {
+                float increment = currentXWrot - XWrot;
+                currentXWrot = XWrot;
+                rotateXW(increment);
+            }
+            if (currentYZrot != YZrot)
+            {
+                float increment = currentYZrot - YZrot;
+                currentYZrot = YZrot;
+                rotateYZ(increment);
+            }
+            if (currentYWrot != YWrot)
+            {
+                float increment = currentYWrot - YWrot;
+                currentYWrot = YWrot;
+                rotateYW(increment);
+            }
+            if (currentZWrot != ZWrot)
+            {
+                float increment = currentZWrot - ZWrot;
+                currentZWrot = ZWrot;
+                rotateZW(increment);
+            }
+        }
+        void updateD() {
+            //update linear mapping from slider, current range: -2,2
+            if (currentLinearMapping != linearMapping.value)
+            {
+                currentLinearMapping = linearMapping.value;
+                d = (currentLinearMapping - 0.5f) * 4f;
+            }
+        }
+        
         //Matrix4x4 rotateRollingBallMatrix;
         float[,] rotateRollingBallMatrix = new float[4, 4];
         private Vector4 rotateRollingBall()
@@ -714,7 +693,7 @@ namespace Valve.VR.InteractionSystem
 
             //unitNormal = xyRotMat.MultiplyVector(unitNormal); //terrible returns vector0
 
-            Debug.Log("XY " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            //Debug.Log("XY " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
                 Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
@@ -795,7 +774,7 @@ namespace Valve.VR.InteractionSystem
 
             unitNormal.y = (cos * oldUnitNormal.y) + (sin * oldUnitNormal.z);
             unitNormal.z = (-sin * oldUnitNormal.y) + (cos * oldUnitNormal.z);
-            Debug.Log("YZ " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            //Debug.Log("YZ " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
                 Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
@@ -815,7 +794,7 @@ namespace Valve.VR.InteractionSystem
             //unitNormal = zxRotMat.MultiplyVector(unitNormal);
             unitNormal.z = (cos * oldUnitNormal.z) + (sin * oldUnitNormal.x);
             unitNormal.x = (-sin * oldUnitNormal.z) + (cos * oldUnitNormal.x);
-            Debug.Log("XZ " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            //Debug.Log("XZ " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
                 Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
@@ -834,7 +813,7 @@ namespace Valve.VR.InteractionSystem
             //unitNormal = xwRotMat.MultiplyVector(unitNormal);
             unitNormal.x = (cos * oldUnitNormal.x) + sin * oldUnitNormal.w;
             unitNormal.w = cos * oldUnitNormal.w - sin * oldUnitNormal.x;
-            Debug.Log("XW " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            //Debug.Log("XW " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
                 Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
@@ -853,7 +832,7 @@ namespace Valve.VR.InteractionSystem
             //unitNormal = ywRotMat.MultiplyVector(unitNormal);
             unitNormal.y = cos * oldUnitNormal.y - sin * oldUnitNormal.w;
             unitNormal.w = sin * oldUnitNormal.y + cos * oldUnitNormal.w;
-            Debug.Log("YW " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            //Debug.Log("YW " + "unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
                 Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
@@ -873,7 +852,7 @@ namespace Valve.VR.InteractionSystem
             //unitNormal = zwRotMat.MultiplyVector(unitNormal);
             unitNormal.z = cos * oldUnitNormal.z - sin * oldUnitNormal.w;
             unitNormal.w = cos * oldUnitNormal.w + sin * oldUnitNormal.z;
-            Debug.Log("ZW" + " unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
+            //Debug.Log("ZW" + " unitNormal " + unitNormal + "is unit?: " + unitNormal.magnitude);
             if (!isUnitNormalUNITARY(unitNormal))
             {
                 Debug.Log("HERE IS BAD: " + oldUnitNormal + " TO " + unitNormal);
@@ -900,6 +879,8 @@ namespace Valve.VR.InteractionSystem
             sphereInfo.setCoords4D(coords);
             sphereInfo.totalNumberOfSpheres = numberOfSpheres;
             sphereInfo.setUniqueColorIdentifier(which);
+            sphereInfo.numberOfDs = numberOfDs;
+            sphereInfo.createSlices();
 
 
 
@@ -919,7 +900,23 @@ namespace Valve.VR.InteractionSystem
 
             spheres.Add(s);
         }
+        //public void createSlices(Vector4 c4D)//////////////////////aggggggggg so bad
+        //{
+        //    Debug.Log("numberOfds = " + numberOfDs);
+        //    for (int i = 0; i < numberOfDs; i++)
+        //    {
+        //        GameObject thisSlice = Instantiate(sliceOfD);
+        //        //slice.transform.localScale = new Vector3(1, 1, 1); set transform when you calc slice centres
+        //        setShader shaderInfo = thisSlice.GetComponent<setShader>();
+        //        shaderInfo.coords4D = c4D;
+        //        shaderInfo.sliceID = 1 - i / numberOfDs;
+        //        //testing:
+        //        thisSlice.transform.localScale = new Vector3(1, 1, 1);
+        //        thisSlice.transform.localPosition = new Vector3(0, 0, 0);
+        //        slicesOfD.Add(thisSlice);
+        //    }
 
+        //}
         //only used in create spheres////////////////////////////////////////////////
         bool isSphereInSubDim(GameObject s)
         {
@@ -968,6 +965,7 @@ namespace Valve.VR.InteractionSystem
             //Debug.Log("count = " + all4Dcoords.Count);
         }
 
+        //from previous version where no rotations
         Vector3 CalculateDiameter(GameObject s)
         {
 
@@ -987,7 +985,7 @@ namespace Valve.VR.InteractionSystem
         {
             float cDotn = Vector4.Dot(c, n);
             float minDist = cDotn - d;
-            Debug.Log("c=" + c + ", n=" + n + ", Vector4.Dot(c, n) = " + cDotn);
+            //Debug.Log("c=" + c + ", n=" + n + ", Vector4.Dot(c, n) = " + cDotn);
             return minDist;
         }
 
@@ -1209,18 +1207,18 @@ namespace Valve.VR.InteractionSystem
             return floatArr;
         }
 
-        bool isOnHyperPlane(Vector4 sliceCentre4D, Vector4 unitNormal, float d)
+        bool isOnHyperPlane(Vector4 sliceCentre4D, Vector4 unitNormal, float de)
         {
             //equation of hyperplane for unitNormal = (a,b,c,e) is ax + by + cz + ew = d
             float hypeEquation = (unitNormal.x * sliceCentre4D.x) + (unitNormal.y * sliceCentre4D.y) + (unitNormal.z * sliceCentre4D.z) + (unitNormal.w * sliceCentre4D.w);
-            if (hypeEquation <= d + 0.0000001 &&
-                hypeEquation >= d - 0.0000001)
+            if (hypeEquation <= de + 0.0000001 &&
+                hypeEquation >= de- 0.0000001)
             {
                 return true;
             }
             else
             {
-                Debug.Log("hypeEquation=" + hypeEquation + ", d=" + d);
+                Debug.Log("hypeEquation=" + hypeEquation + ", dslice=" + de);
                 return false;
             }
 

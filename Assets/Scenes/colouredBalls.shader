@@ -4,7 +4,8 @@
 		_Metallic ("Metallic", Range(0,1)) = 0.0
 		_FourDCoordinatesAtStart ("FourDCoords", Vector) = (0,0,0,1)
 		//could also have for 4d position where color of sphere changes depending on updated 4d position in space
-		_BallColorID ("BallColorID" , Float) = 0.0
+		//_BallColorID ("BallColorID" , Float) = 0.0
+		_SliceID("SliceID", Float) = 0.0
 	}
 	SubShader {
      Tags {"Queue"="Transparent" "RenderType"="Transparent" }
@@ -15,7 +16,8 @@
      #pragma target 3.0
 
 	 uniform float4 _FourDCoordinatesAtStart;
-	 uniform float _BallColorID;
+	 //uniform float _BallColorID;
+	 uniform float _SliceID;
 
      struct Input {
          float4 color : COLOR;
@@ -26,8 +28,9 @@
 		// o.Albedo.y = _FourDCoordinatesAtStart.z*_FourDCoordinatesAtStart.w *0.4 + 0.5;
 		// o.Albedo.z = _FourDCoordinatesAtStart.z*_FourDCoordinatesAtStart.y *0.4 + 0.5;
 
-		o.Albedo.rgb = _FourDCoordinatesAtStart.rgb * 0.5 + 0.5;
-		o.Alpha = _FourDCoordinatesAtStart.a * 0.25 + 0.75;
+		o.Albedo.rgb = _FourDCoordinatesAtStart.rgb * 0.5 + 0.5; //fix later for unique colors (currently 2 balls with same color)
+		//o.Alpha = _FourDCoordinatesAtStart.a * 0.25 + 0.75;
+		o.Alpha = _SliceID;
 
 		// o.Alpha = 1;
 
