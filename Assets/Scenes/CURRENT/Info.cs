@@ -39,7 +39,7 @@ public class Info : MonoBehaviour {
     public void createSlices()//////////////////////aggggggggg so bad
     {
         slicesOfD = new List<GameObject>();
-        Debug.Log("numberOfds = " + numberOfDs);
+        //Debug.Log("numberOfds = " + numberOfDs);
         for (int i = 0; i < numberOfDs; i++)
         {
             GameObject thisSlice = Instantiate(sliceOfD);
@@ -87,7 +87,7 @@ public class Info : MonoBehaviour {
         if(current3Dcoords != slicesOfD[0].transform.position)
         {
              current3Dcoords = slicesOfD[0].transform.position ;
-            Debug.Log("slicesOfD[0].transform.position=" + slicesOfD[0].transform.position + ", current3Dcoords=" + current3Dcoords);
+           // Debug.Log("slicesOfD[0].transform.position=" + slicesOfD[0].transform.position + ", current3Dcoords=" + current3Dcoords);
         }
     }
 }

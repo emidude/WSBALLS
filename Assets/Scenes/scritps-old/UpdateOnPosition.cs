@@ -59,12 +59,12 @@ public class UpdateOnPosition : MonoBehaviour
         // pos.z = 1/(1+ Mathf.Exp(pos.z));
 
         if (clicked.GetLastStateDown(handType)){
-            Debug.Log("xArrow " + controllerPose.transform.position.x);
-            Debug.Log("yArrow " + controllerPose.transform.position.y);
-            Debug.Log("zArrow " + controllerPose.transform.position.z);
-            Debug.Log("xArrowtransformed " + pos.x);
-            Debug.Log("yArrowtransformed " + pos.y);
-            Debug.Log("zArrowtransformed " + pos.z);
+            //Debug.Log("xArrow " + controllerPose.transform.position.x);
+            //Debug.Log("yArrow " + controllerPose.transform.position.y);
+            //Debug.Log("zArrow " + controllerPose.transform.position.z);
+            //Debug.Log("xArrowtransformed " + pos.x);
+            //Debug.Log("yArrowtransformed " + pos.y);
+            //Debug.Log("zArrowtransformed " + pos.z);
             
         }
 

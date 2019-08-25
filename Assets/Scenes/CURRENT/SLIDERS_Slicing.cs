@@ -183,7 +183,7 @@ namespace Valve.VR.InteractionSystem
                 for  (int j = 0; j < numberOfDs; j++)
                 {
                     float dSlice = d + (j * dIncrement);
-                    Debug.Log("dSlice = " + dSlice);
+                    //Debug.Log("dSlice = " + dSlice);
                     float minDis = calcMinDistance(unitNormal, dSlice, c); //this projects c onto n (n.c) and
                                                                       //caluclates min distance between this and the hyperplane
 
@@ -200,7 +200,7 @@ namespace Valve.VR.InteractionSystem
                         }
                         else
                         {
-                            Debug.Log("ON HYPERPLANE!");
+                          //  Debug.Log("ON HYPERPLANE!");
                         }
 
                         
@@ -224,7 +224,9 @@ namespace Valve.VR.InteractionSystem
                         //spheres[i].transform.localScale = Vector3.one * sliceRadius * 2;
 
                         //adjust further out slices as projected smaller
-                        Debug.Log("sphre " + i + ", slice " + j + " : " + rotated4D);
+                       // Debug.Log("sphre " + i + ", slice " + j + " : " + rotated4D);
+                        
+                        
                         //float dividingAmount = 1 / (fakeEyeDistance + dSlice); //this makes many intersecting balls for d /= -2
                         //float dividingAmount = d / dSlice; //terrible  -end up dividing by 0;
                         //float dividingAmount = 1 / ((j +1) * dIncrement);
