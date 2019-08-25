@@ -98,6 +98,9 @@ namespace Valve.VR.InteractionSystem
         //public List<GameObject> slicesOfD;
         float fakeEyeDistance = 3f;
 
+        public Vector3 coordTransform;
+        public Vector3 currentCoordTransform;
+
         void Awake()
         {
             spheres = new List<GameObject>();
@@ -117,7 +120,7 @@ namespace Valve.VR.InteractionSystem
 
             //id mat used in rotation formula between vectors
             identityMatrix = createIdentityMatrix(numberOfDimensions);
-            numberOfDs = 2;
+            numberOfDs = 1;
             
         }
 
@@ -222,14 +225,15 @@ namespace Valve.VR.InteractionSystem
 
                         //adjust further out slices as projected smaller
                         Debug.Log("sphre " + i + ", slice " + j + " : " + rotated4D);
-                        float dividingAmount = 1 / (fakeEyeDistance + dSlice); //this makes many intersecting balls for d /= -2
+                        //float dividingAmount = 1 / (fakeEyeDistance + dSlice); //this makes many intersecting balls for d /= -2
                         //float dividingAmount = d / dSlice; //terrible  -end up dividing by 0;
-                        rotated4D.x *= dividingAmount;
-                        rotated4D.y *= dividingAmount;
-                        rotated4D.z *= dividingAmount;
+                        //float dividingAmount = 1 / ((j +1) * dIncrement);
+                        //rotated4D.x *= dividingAmount;
+                        //rotated4D.y *= dividingAmount;
+                        //rotated4D.z *= dividingAmount; //this does not work well
 
                         spheres[i].GetComponent<Info>().slicesOfD[j].transform.localPosition = new Vector3(rotated4D.x, rotated4D.y, rotated4D.z);
-                        spheres[i].GetComponent<Info>().slicesOfD[j].transform.localScale = Vector3.one * sliceRadius * 2 * dividingAmount;
+                        spheres[i].GetComponent<Info>().slicesOfD[j].transform.localScale = Vector3.one * sliceRadius * 2; // * dividingAmount;
 
                     }
                     //else sliceradius = 0;
@@ -313,10 +317,9 @@ namespace Valve.VR.InteractionSystem
             //rotateUnitNormal3(unitNormal);
             // rotateUnitNormal2();
 
-
-
-
         }
+
+       
 
         void updateRotations() {
             if (currentXYrot != XYrot)
@@ -917,7 +920,7 @@ namespace Valve.VR.InteractionSystem
         //    }
 
         //}
-        //only used in create spheres////////////////////////////////////////////////
+        //only used in create spheres - no longer actually needed////////////////////////////////////////////////
         bool isSphereInSubDim(GameObject s)
         {
             float wCoord = s.GetComponent<Info>().Get4DCoords().w;

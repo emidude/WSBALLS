@@ -51,3 +51,4 @@ MonoBehaviour:
     type: 3}
   slicesOfD:
   - {fileID: 0}
+  current3Dcoords: {x: 0, y: 0, z: 0}

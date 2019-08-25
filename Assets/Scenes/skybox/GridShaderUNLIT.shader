@@ -15,7 +15,7 @@
 
 		SubShader
 		{
-			Tags {"Queue" = "Transparent" "RenderType" = "Transparent" }
+			Tags { "RenderType" = "Background" "Queue" = "Background" }
 			LOD 100
 
 			ZWrite Off
@@ -103,9 +103,9 @@
 
 
 					//Clip transparent spots using alpha cutout
-					if (brightness == 0.0) {
-						clip(c.a - 1.0);
-					}
+					//if (brightness == 0.0) {
+					//	clip(c.a - 1.0);
+					//}
 
 
 					c = fixed4(color.x*brightness,color.y*brightness,color.z*brightness,brightness);

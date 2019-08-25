@@ -6,6 +6,7 @@
 		//could also have for 4d position where color of sphere changes depending on updated 4d position in space
 		//_BallColorID ("BallColorID" , Float) = 0.0
 		_SliceID("SliceID", Float) = 0.0
+		
 	}
 	SubShader {
      Tags {"Queue"="Transparent" "RenderType"="Transparent" }
@@ -15,9 +16,13 @@
 	 #pragma surface surf Standard fullforwardshadows alpha:fade
      #pragma target 3.0
 
+    	
+
 	 uniform float4 _FourDCoordinatesAtStart;
 	 //uniform float _BallColorID;
 	 uniform float _SliceID;
+
+	 //half _Metallic;
 
      struct Input {
          float4 color : COLOR;
@@ -30,7 +35,12 @@
 
 		o.Albedo.rgb = _FourDCoordinatesAtStart.rgb * 0.5 + 0.5; //fix later for unique colors (currently 2 balls with same color)
 		//o.Alpha = _FourDCoordinatesAtStart.a * 0.25 + 0.75;
-		o.Alpha = _SliceID;
+		//o.Alpha = _SliceID;
+		//o.Alpha = 0.5f * _SliceID;
+		o.Alpha = 0.5f;
+			//o.Albedo.rgb *= _SliceID * (1, 1, 1);
+
+			//o.Metallic = _Metallic;//when d = main slice, metalic =1, when d != mainslice, metalic = 0 - however this appears to do nothing
 
 		// o.Alpha = 1;
 
