@@ -162,65 +162,65 @@ namespace Valve.VR.InteractionSystem
             ///////////////////////////////////////////////////
 
            
-            //UpdateSlice();
+           // UpdateSlice();
 
 
 
 
 
-            if (triggeredL)
-            {
-                // xyRotT.rotation = Quaternion.Euler(0,0,controllerPoseL.transform.eulerAngles.z);
-                // yzRotT.rotation = Quaternion.Euler(controllerPoseL.transform.eulerAngles.x,0,0);
-                // zxRotT.rotation = Quaternion.Euler(0,controllerPoseL.transform.eulerAngles.y,0);
-                // xyRotT.localScale = new Vector3(0.5f,controllerPoseL.transform.eulerAngles.x/100,0.5f);
-                // zxRotT.localScale = new Vector3(0.5f,controllerPoseL.transform.eulerAngles.y/100,0.5f);
-                // yzRotT.localScale = new Vector3(0.5f,controllerPoseL.transform.eulerAngles.z/100,0.5f);
-                // 
-                //  xyRot = controllerPoseL.transform.eulerAngles.z * Mathf.Deg2Rad;
-                // zxRot = controllerPoseL.transform.eulerAngles.y * Mathf.Deg2Rad;
-                // yzRot = controllerPoseL.transform.eulerAngles.x * Mathf.Deg2Rad;
+            //if (triggeredL)
+            //{
+            //    // xyRotT.rotation = Quaternion.Euler(0,0,controllerPoseL.transform.eulerAngles.z);
+            //    // yzRotT.rotation = Quaternion.Euler(controllerPoseL.transform.eulerAngles.x,0,0);
+            //    // zxRotT.rotation = Quaternion.Euler(0,controllerPoseL.transform.eulerAngles.y,0);
+            //    // xyRotT.localScale = new Vector3(0.5f,controllerPoseL.transform.eulerAngles.x/100,0.5f);
+            //    // zxRotT.localScale = new Vector3(0.5f,controllerPoseL.transform.eulerAngles.y/100,0.5f);
+            //    // yzRotT.localScale = new Vector3(0.5f,controllerPoseL.transform.eulerAngles.z/100,0.5f);
+            //    // 
+            //    //  xyRot = controllerPoseL.transform.eulerAngles.z * Mathf.Deg2Rad;
+            //    // zxRot = controllerPoseL.transform.eulerAngles.y * Mathf.Deg2Rad;
+            //    // yzRot = controllerPoseL.transform.eulerAngles.x * Mathf.Deg2Rad;
 
-                // testBall.transform.localScale =controllerPoseL.GetVelocity();
+            //    // testBall.transform.localScale =controllerPoseL.GetVelocity();
 
-                //this works to get velcoty:
-                //xyRot =  controllerPoseL.transform.position.z; 
-                //yzRot =  controllerPoseL.GetVelocity().x; 
-                //zxRot =  controllerPoseL.GetVelocity().y;          
+            //    //this works to get velcoty:
+            //    //xyRot =  controllerPoseL.transform.position.z; 
+            //    //yzRot =  controllerPoseL.GetVelocity().x; 
+            //    //zxRot =  controllerPoseL.GetVelocity().y;          
 
-                //    dragVector = controllerPoseL.GetVelocity();
+            //    //    dragVector = controllerPoseL.GetVelocity();
 
-                //update Unit Normal:
-                //Debug.Log("velocity is: " + controllerPoseL.transform.position);
-                // updateUnitNormal(controllerPoseL.GetVelocity());
+            //    //update Unit Normal:
+            //    //Debug.Log("velocity is: " + controllerPoseL.transform.position);
+            //    // updateUnitNormal(controllerPoseL.GetVelocity());
 
-                XYrot = controllerPoseL.transform.position.z;
-                YZrot = controllerPoseL.transform.position.x;
-                XZrot = controllerPoseL.transform.position.y;
+            //    XYrot = controllerPoseL.transform.position.z;
+            //    YZrot = controllerPoseL.transform.position.x;
+            //    XZrot = controllerPoseL.transform.position.y;
 
-            }
-            if (triggeredR)
-            {
-                // ywRotT.rotation = Quaternion.Euler(0,0,controllerPoseR.transform.eulerAngles.z);
-                // xwRotT.rotation = Quaternion.Euler(controllerPoseR.transform.eulerAngles.x,0,0);
-                // zwRotT.rotation = Quaternion.Euler(0,controllerPoseR.transform.eulerAngles.y,0);
-                // xwRot = controllerPoseR.transform.eulerAngles.z * Mathf.Deg2Rad;
-                // ywRot = controllerPoseR.transform.eulerAngles.y * Mathf.Deg2Rad;
-                // zwRot = controllerPoseR.transform.eulerAngles.x * Mathf.Deg2Rad;  
+            //}
+            //if (triggeredR)
+            //{
+            //    // ywRotT.rotation = Quaternion.Euler(0,0,controllerPoseR.transform.eulerAngles.z);
+            //    // xwRotT.rotation = Quaternion.Euler(controllerPoseR.transform.eulerAngles.x,0,0);
+            //    // zwRotT.rotation = Quaternion.Euler(0,controllerPoseR.transform.eulerAngles.y,0);
+            //    // xwRot = controllerPoseR.transform.eulerAngles.z * Mathf.Deg2Rad;
+            //    // ywRot = controllerPoseR.transform.eulerAngles.y * Mathf.Deg2Rad;
+            //    // zwRot = controllerPoseR.transform.eulerAngles.x * Mathf.Deg2Rad;  
 
-                //this works to get velocity
-                //xyRot =  controllerPoseR.GetVelocity().z; 
-                //ywRot =  controllerPoseR.GetVelocity().x; 
-                //zwRot =  controllerPoseR.GetVelocity().y;      
+            //    //this works to get velocity
+            //    //xyRot =  controllerPoseR.GetVelocity().z; 
+            //    //ywRot =  controllerPoseR.GetVelocity().x; 
+            //    //zwRot =  controllerPoseR.GetVelocity().y;      
 
-                //    dragVector = controllerPoseR.GetVelocity(); 
-                // updateUnitNormal(controllerPoseR.GetVelocity());      
+            //    //    dragVector = controllerPoseR.GetVelocity(); 
+            //    // updateUnitNormal(controllerPoseR.GetVelocity());      
 
-                YWrot = controllerPoseR.transform.position.z;
-                XWrot = controllerPoseR.transform.position.y;
-                ZWrot = controllerPoseR.transform.position.x;
+            //    YWrot = controllerPoseR.transform.position.z;
+            //    XWrot = controllerPoseR.transform.position.y;
+            //    ZWrot = controllerPoseR.transform.position.x;
 
-            }
+            //}
 
             //UPDATE UNIT NORMAL:
 
@@ -319,7 +319,7 @@ namespace Valve.VR.InteractionSystem
         void updateRotations() {
             if (currentXYrot != XYrot)
             {
-                Debug.Log(XYrot);
+               // Debug.Log(XYrot);
                 float increment = currentXYrot - XYrot;
                 currentXYrot = XYrot;
                 rotateXY(increment);
@@ -868,7 +868,7 @@ namespace Valve.VR.InteractionSystem
         void CreateSpheres(int which)
         {
             GameObject s = Instantiate(sphere);
-
+            //s.transform.SetParent(this.transform, true);
             //MAYBE NOT NECESSARY: (NOT RIGHT NOW AT LEAST)
             //s.transform.parent = this.transform;
 

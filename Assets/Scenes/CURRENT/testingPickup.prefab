@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0b1f5853e1eaf04eb506a5863ca95d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 9062386874338247150, guid: 44bcc9d6ed4a1ff4b887cc20aa868afb, type: 3}
+  ball: {fileID: 0}
 --- !u!114 &89208716138491135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 89208716138491128}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b93b6a877adcbf94c89a9d6e0c0e844d, type: 3}
   m_Name: 
@@ -104,9 +104,9 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 89208716138491128}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b3ad44d01c033e469163852cca31d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pmTransform: {fileID: 89208716138491134}
+  pmTransform: {fileID: 0}

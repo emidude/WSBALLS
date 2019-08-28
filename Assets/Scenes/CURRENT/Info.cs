@@ -43,6 +43,8 @@ public class Info : MonoBehaviour {
         for (int i = 0; i < numberOfDs; i++)
         {
             GameObject thisSlice = Instantiate(sliceOfD);
+            //thisSlice.transform.SetParent(parent, true);
+            thisSlice.transform.localScale = Vector3.one;
             //slice.transform.localScale = new Vector3(1, 1, 1); set transform when you calc slice centres
             setShader shaderInfo = thisSlice.GetComponent<setShader>();
             shaderInfo.coords4D = coords4D;

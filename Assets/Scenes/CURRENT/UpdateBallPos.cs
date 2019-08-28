@@ -11,26 +11,25 @@ namespace Valve.VR.InteractionSystem.Sample
 {
     //-------------------------------------------------------------------------
     [RequireComponent(typeof(Interactable))]
-    public class UpdateSphereCoordinates : MonoBehaviour
+    public class UpdateBallPos : MonoBehaviour
     {
-       // private TextMesh generalText;
-       // private TextMesh hoveringText;
+        //private TextMesh generalText;
+        //private TextMesh hoveringText;
+        //private Vector3 oldPosition;
+        //private Quaternion oldRotation;
+
+        //private float attachTime;
+
         private Hand.AttachmentFlags attachmentFlags = Hand.defaultAttachmentFlags & (~Hand.AttachmentFlags.SnapOnAttach) & (~Hand.AttachmentFlags.DetachOthers) & (~Hand.AttachmentFlags.VelocityMovement);
 
         private Interactable interactable;
 
-        //GameObject referenceObject;
-        //public SLIDERS_Slicing slicingScript;
-
-        //GameObject referenceObject;
-        //public Info sphereInfo;
-
-        public Transform ball;
+        public Transform pmTransform;
 
         //-------------------------------------------------
         void Awake()
         {
-            //var textMeshs = GetComponentsInChildren<TextMesh>();
+            var textMeshs = GetComponentsInChildren<TextMesh>();
             //generalText = textMeshs[0];
             //hoveringText = textMeshs[1];
 
@@ -42,11 +41,6 @@ namespace Valve.VR.InteractionSystem.Sample
 
             interactable = this.GetComponent<Interactable>();
 
-            //referenceObject = GameObject.FindWithTag("SLIDEY-SLICE");
-            //slicingScript = referenceObject.GetComponent<SLIDERS_Slicing>();
-
-          //  referenceObject = gameObject.GetComponentInParent<FourD>();
-            //sphereInfo = this.GetComponentInParent<Info>();
 
         }
 
@@ -79,6 +73,10 @@ namespace Valve.VR.InteractionSystem.Sample
 
             if (interactable.attachedToHand == null && startingGrabType != GrabTypes.None)
             {
+                // Save our position/rotation so that we can restore it when we detach
+                // oldPosition = transform.position;
+                // oldRotation = transform.rotation;
+
                 // Call this to continue receiving HandHoverUpdate messages,
                 // and prevent the hand from hovering over anything else
                 hand.HoverLock(interactable);
@@ -95,10 +93,8 @@ namespace Valve.VR.InteractionSystem.Sample
                 hand.HoverUnlock(interactable);
 
                 // Restore position/rotation
-                //transform.position =  ball.position;
-                //transform.rotation = ball.rotation;
-
-
+                //transform.position = pmTransform.position;
+                //transform.rotation = pmTransform.rotation;
             }
         }
 
@@ -110,8 +106,6 @@ namespace Valve.VR.InteractionSystem.Sample
         {
             //    generalText.text = string.Format("Attached: {0}", hand.name);
             //    attachTime = Time.time;
-            
-            //ball = hand.transform;
         }
 
 
@@ -121,7 +115,7 @@ namespace Valve.VR.InteractionSystem.Sample
         //-------------------------------------------------
         private void OnDetachedFromHand(Hand hand)
         {
-            
+            //    generalText.text = string.Format("Detached: {0}", hand.name);
         }
 
 
@@ -130,17 +124,9 @@ namespace Valve.VR.InteractionSystem.Sample
         //-------------------------------------------------
         private void HandAttachedUpdate(Hand hand)
         {
-            ball = hand.transform;
-
-            
-
-            //Debug.Log("on hand attached update:");
-            //Debug.Log("this objects position = " + transform.position);
-            //Debug.Log("ball position = " + ball.position);
-            //Debug.Log("hand position = " + hand.transform.position);
-
+            pmTransform = hand.transform;
             //generalText.text = string.Format("Attached: {0} :: Time: {1:F2}", hand.name, (Time.time - attachTime));
-            //generalText.text = string.Format("Position: {0}", pmTransform.position);
+           // generalText.text = string.Format("Position: {0}", pmTransform.position);
 
         }
 
@@ -152,9 +138,6 @@ namespace Valve.VR.InteractionSystem.Sample
                 //  hoveringText.text = string.Format("Hovering: {0}", interactable.isHovering);
                 lastHovering = interactable.isHovering;
             }
-
-           
-           // Debug.Log("hand position = " + hand.transform.position);
         }
 
 
