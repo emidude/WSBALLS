@@ -25,7 +25,7 @@ namespace Valve.VR.InteractionSystem
         ///////////////////////////////////
         //private float[] unitNormal = new float[4];
         //private Vector4 unitNormal = new Vector4(0.5f,0.5f,0.5f,0.5f);
-        private Vector4 unitNormal = new Vector4( 0f, 0f, 0f, 1f);
+        public Vector4 unitNormal = new Vector4( 0f, 0f, 0f, 1f);
         private Vector4 unitNormalParallelToZ = new Vector4(0f, 0f, 0f, 1f);
         private Vector4 reflectionParallelToZ = new Vector4(0f, 0f, 0f, -1f);
         // private double unitNormal = new double{0f, 1f, 0f, 0f};
@@ -1257,6 +1257,7 @@ namespace Valve.VR.InteractionSystem
             else return false;
         }
 
+        //no longer need as making unitNormalPublic
         public Vector4 getUnitNormal() {
             return unitNormal;
         }

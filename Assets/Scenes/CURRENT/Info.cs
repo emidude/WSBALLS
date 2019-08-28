@@ -22,6 +22,9 @@ public class Info : MonoBehaviour {
     public Vector3 current3Dcoords;
     public Vector4 unity4Dcoords;
 
+    GameObject referenceObject;
+    SLIDERS_Slicing slicingScript;
+
     public void setCoords4D(Vector4 c4d){
         coords4D = c4d;
     }
@@ -87,6 +90,9 @@ public class Info : MonoBehaviour {
         radius = 1f;
 
         current3Dcoords = slicesOfD[0].transform.position;
+
+        referenceObject = GameObject.FindWithTag("SLIDEY-SLICE");
+        slicingScript = referenceObject.GetComponent<SLIDERS_Slicing>();
     }
 
     void calculateUnreflectedParalleltoWCoords(Vector4 unitNormal, Vector4 unityCoords) {
@@ -106,8 +112,12 @@ public class Info : MonoBehaviour {
             unity4Dcoords.z = current3Dcoords.z;
 
             //needs n!
-            Vector4 n = GetComponentInParent<SLIDERS_Slicing>().getUnitNormal();
+            //Vector4 n = GetComponentInParent<SLIDERS_Slicing>().getUnitNormal(); //this does not work because parent not set (becuase child scale went to zero when set)
+            Vector4 n = slicingScript.getUnitNormal();
+
+            Debug.Log("n = " + n + ", unitycoords = " + unity4Dcoords);
             calculateUnreflectedParalleltoWCoords(n, unity4Dcoords );
+            
         }
     }
 }
