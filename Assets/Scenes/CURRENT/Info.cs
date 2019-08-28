@@ -53,11 +53,14 @@ public class Info : MonoBehaviour {
 
             if (i != 0)
             {
+                
+
                 thisSlice.GetComponent<IgnoreHovering>();
                 Destroy(thisSlice.GetComponent<InteractableHoverEvents>());
-                Destroy(thisSlice.GetComponent<Interactable>());
-                Destroy(thisSlice.GetComponent<SphereCollider>());
                 //Destroy(thisSlice.GetComponent<UpdateSphereCoordinates>());
+                //Destroy(thisSlice.GetComponent<Interactable>());
+                Destroy(thisSlice.GetComponent<SphereCollider>());
+                
                 // shaderInfo.metal = 0f;
             }
             //else

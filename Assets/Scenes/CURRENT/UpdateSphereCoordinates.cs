@@ -114,6 +114,8 @@ namespace Valve.VR.InteractionSystem.Sample
             Debug.Log("this objects position = " + transform.position);
             Debug.Log("ball position = " + ball.position);
             Debug.Log("hand position = " + hand.transform.position);
+
+            ball = hand.transform;
         }
 
 

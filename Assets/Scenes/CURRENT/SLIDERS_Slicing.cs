@@ -48,16 +48,16 @@ namespace Valve.VR.InteractionSystem
         private bool triggeredL = false;
         private bool triggeredR = false;
 
-        public Transform planePF;
+        //public Transform planePF;
         //private Transform xyRotT, yzRotT, zxRotT, ywRotT, xwRotT, zwRotT;
         //private float xyRot, yzRot, zxRot, ywRot, xwRot, zwRot;
 
-        Matrix4x4 xyRotMat = new Matrix4x4();
-        Matrix4x4 yzRotMat = new Matrix4x4();
-        Matrix4x4 zxRotMat = new Matrix4x4();
-        Matrix4x4 xwRotMat = new Matrix4x4();
-        Matrix4x4 ywRotMat = new Matrix4x4();
-        Matrix4x4 zwRotMat = new Matrix4x4();
+        //Matrix4x4 xyRotMat = new Matrix4x4();
+        //Matrix4x4 yzRotMat = new Matrix4x4();
+        //Matrix4x4 zxRotMat = new Matrix4x4();
+        //Matrix4x4 xwRotMat = new Matrix4x4();
+        //Matrix4x4 ywRotMat = new Matrix4x4();
+        //Matrix4x4 zwRotMat = new Matrix4x4();
 
 
         //public Transform testBall;
@@ -92,7 +92,7 @@ namespace Valve.VR.InteractionSystem
         //bool needToResetPositionL = true; //reset position when let go of trigger
         //bool needToResetPositionR = true;
 
-        public int numberOfDs = 2;
+        public int numberOfDs = 1;
         float dIncrement = 0.2f; //can change this later
         //public GameObject sliceOfD;
         //public List<GameObject> slicesOfD;

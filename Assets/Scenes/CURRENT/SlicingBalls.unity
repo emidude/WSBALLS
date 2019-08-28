@@ -1745,7 +1745,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &325239659
 Transform:
   m_ObjectHideFlags: 0
@@ -2567,7 +2567,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 611884704}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7f830d3c82f14f448a96ca2be65b7a4, type: 3}
   m_Name: 
@@ -3524,7 +3524,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &865216507
 Transform:
   m_ObjectHideFlags: 0
@@ -5939,7 +5939,6 @@ MonoBehaviour:
   clicked:
     actionPath: /actions/default/in/Teleport
     needsReinit: 0
-  planePF: {fileID: 2727823406391114763, guid: 8c975fd970082624f991555461c9b362, type: 3}
   pm: {fileID: 700672360}
   startingPosition: {x: 0, y: 0, z: 0}
   startingPositionPublicObject: {fileID: 1718184910}
