@@ -20,7 +20,7 @@ public class Info : MonoBehaviour {
     public List<GameObject> slicesOfD;
 
     public Vector3 current3Dcoords;
-
+    public Vector4 unity4Dcoords;
 
     public void setCoords4D(Vector4 c4d){
         coords4D = c4d;
@@ -29,7 +29,9 @@ public class Info : MonoBehaviour {
     public Vector4 Get4DCoords(){
         return coords4D;
     }
-
+    public void setUnity4Dcoords(Vector4 u4dc) {
+        unity4Dcoords = u4dc; 
+    }
     public void setUniqueColorIdentifier(int i)
     {
         uniqueBallIdentifier = i;
@@ -87,12 +89,25 @@ public class Info : MonoBehaviour {
         current3Dcoords = slicesOfD[0].transform.position;
     }
 
+    void calculateUnreflectedParalleltoWCoords(Vector4 unitNormal, Vector4 unityCoords) {
+        //perform the opposite reflection to get back world coords 
+        //is this actually what you need though? - yes for calculating next reflection back for screen
+        //but for intersection calculation? probably more straightforward for this too...?
+    }
+
     private void Update()
     {
         if(current3Dcoords != slicesOfD[0].transform.position)
         {
              current3Dcoords = slicesOfD[0].transform.position ;
-           // Debug.Log("slicesOfD[0].transform.position=" + slicesOfD[0].transform.position + ", current3Dcoords=" + current3Dcoords);
+           Debug.Log("slicesOfD[0].transform.position=" + slicesOfD[0].transform.position + ", current3Dcoords=" + current3Dcoords);
+            unity4Dcoords.x = current3Dcoords.x;
+            unity4Dcoords.y = current3Dcoords.y;
+            unity4Dcoords.z = current3Dcoords.z;
+
+            //needs n!
+            Vector4 n = GetComponentInParent<SLIDERS_Slicing>().getUnitNormal();
+            calculateUnreflectedParalleltoWCoords(n, unity4Dcoords );
         }
     }
 }

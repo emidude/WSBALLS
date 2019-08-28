@@ -132,7 +132,7 @@ namespace Valve.VR.InteractionSystem.Sample
         {
             ball = hand.transform;
 
-            
+            //Info infoscript = GetComponentInParent<Info>(); //dont need updated in info!:)
 
             //Debug.Log("on hand attached update:");
             //Debug.Log("this objects position = " + transform.position);

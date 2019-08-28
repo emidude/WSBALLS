@@ -294,9 +294,9 @@ namespace Valve.VR.InteractionSystem
                             rotated4D = rotateParallelToW(sliceCentre4D, n);
                         }
                         else { rotated4D = sliceCentre4D; }
-                      //  Debug.Log(i + ": " + rotated4D);
+                        //  Debug.Log(i + ": " + rotated4D);
                         ////////////////////////////////////////////////////////////
-
+                        spheres[i].GetComponent<Info>().setUnity4Dcoords(rotated4D);
 
                         //calcualte radius (perpendicular to n)
                         float sliceRadius = Mathf.Sqrt(r * r - minDis * minDis);
@@ -1255,6 +1255,10 @@ namespace Valve.VR.InteractionSystem
                 return true;
             }
             else return false;
+        }
+
+        public Vector4 getUnitNormal() {
+            return unitNormal;
         }
     }
 
