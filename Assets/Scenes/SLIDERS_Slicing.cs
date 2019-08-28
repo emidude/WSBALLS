@@ -893,7 +893,7 @@ namespace Valve.VR.InteractionSystem
             GameObject s = Instantiate(sphere);
             //Transform newParent = this.transform;
             //s.transform.SetParent(newParent, false);
-            //s.transform.SetParent(newParent, true);
+            //s.transform.SetParent(this.transform, true);
 
             //MAYBE NOT NECESSARY: (NOT RIGHT NOW AT LEAST)
             //s.transform.parent = this.transform;
