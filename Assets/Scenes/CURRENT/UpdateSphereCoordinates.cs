@@ -110,12 +110,8 @@ namespace Valve.VR.InteractionSystem.Sample
         {
             //    generalText.text = string.Format("Attached: {0}", hand.name);
             //    attachTime = Time.time;
-            Debug.Log("on attached to hand:");
-            Debug.Log("this objects position = " + transform.position);
-            Debug.Log("ball position = " + ball.position);
-            Debug.Log("hand position = " + hand.transform.position);
-
-            ball = hand.transform;
+            
+            //ball = hand.transform;
         }
 
 
@@ -125,11 +121,7 @@ namespace Valve.VR.InteractionSystem.Sample
         //-------------------------------------------------
         private void OnDetachedFromHand(Hand hand)
         {
-            //    generalText.text = string.Format("Detached: {0}", hand.name);
-            Debug.Log("on detached from hand:");
-            Debug.Log("this objects position = " + transform.position);
-            Debug.Log("ball position = " + ball.position);
-            Debug.Log("hand position = " + hand.transform.position);
+            
         }
 
 
@@ -138,15 +130,14 @@ namespace Valve.VR.InteractionSystem.Sample
         //-------------------------------------------------
         private void HandAttachedUpdate(Hand hand)
         {
-            //slicingScript.coordTransform = hand.transform.position;
-            //  sphereInfo.current3Dcoords = hand.transform.position;
-            //ball.position = hand.transform.position;
             ball = hand.transform;
 
-            Debug.Log("on hand attached update:");
-            Debug.Log("this objects position = " + transform.position);
-            Debug.Log("ball position = " + ball.position);
-            Debug.Log("hand position = " + hand.transform.position);
+            
+
+            //Debug.Log("on hand attached update:");
+            //Debug.Log("this objects position = " + transform.position);
+            //Debug.Log("ball position = " + ball.position);
+            //Debug.Log("hand position = " + hand.transform.position);
 
             //generalText.text = string.Format("Attached: {0} :: Time: {1:F2}", hand.name, (Time.time - attachTime));
             //generalText.text = string.Format("Position: {0}", pmTransform.position);
@@ -162,9 +153,7 @@ namespace Valve.VR.InteractionSystem.Sample
                 lastHovering = interactable.isHovering;
             }
 
-            Debug.Log("normal update:");
-            Debug.Log("this objects position = " + transform.position);
-            Debug.Log("ball position = " + ball.position);
+           
            // Debug.Log("hand position = " + hand.transform.position);
         }
 

@@ -142,7 +142,7 @@ namespace Valve.VR.InteractionSystem
                 return;
             }
 
-          
+            UpdateSlice();
         }
 
 
@@ -162,7 +162,7 @@ namespace Valve.VR.InteractionSystem
             ///////////////////////////////////////////////////
 
            
-            UpdateSlice();
+            //UpdateSlice();
 
 
 
@@ -262,7 +262,7 @@ namespace Valve.VR.InteractionSystem
                     if (-r <= minDis && minDis <= r)
                     {
                         //calculate sliceCentre (4D)
-                        Vector4 sliceCentre4D = c - minDis * unitNormal;
+                        Vector4 sliceCentre4D = c - minDis * unitNormal; //should be +? check later!!!!!!!!!!!!!!!
                         //testing - check if this lies on the hyperplane:
                         if (!isOnHyperPlane(sliceCentre4D, unitNormal, dSlice))
                         {
