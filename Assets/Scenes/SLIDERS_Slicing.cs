@@ -891,6 +891,9 @@ namespace Valve.VR.InteractionSystem
         void CreateSpheres(int which)
         {
             GameObject s = Instantiate(sphere);
+            //Transform newParent = this.transform;
+            //s.transform.SetParent(newParent, false);
+            //s.transform.SetParent(newParent, true);
 
             //MAYBE NOT NECESSARY: (NOT RIGHT NOW AT LEAST)
             //s.transform.parent = this.transform;
