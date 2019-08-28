@@ -90,6 +90,11 @@ namespace Valve.VR.InteractionSystem
         public Vector3 coordTransform;
         public Vector3 currentCoordTransform;
 
+        bool rotationsChanged = false;
+        float currentD;
+        Vector4 currentUnitNormal;
+
+
         void Awake()
         {
             spheres = new List<GameObject>();
@@ -110,6 +115,8 @@ namespace Valve.VR.InteractionSystem
             //id mat used in rotation formula between vectors
             identityMatrix = createIdentityMatrix(numberOfDimensions);
             numberOfDs = 1;
+            currentD = d;
+            currentUnitNormal = unitNormal;
             
         }
 
@@ -161,8 +168,14 @@ namespace Valve.VR.InteractionSystem
             //Debug.Log("unitNormal=" + unitNormal);
             ///////////////////////////////////////////////////
 
-           
-           // UpdateSlice();
+            if (currentUnitNormal != unitNormal || rotationsChanged || currentD != d)
+            {
+                currentUnitNormal = unitNormal;
+                rotationsChanged = false;
+                currentD = d;
+                UpdateSlice();
+            }
+            
 
 
 
@@ -262,7 +275,7 @@ namespace Valve.VR.InteractionSystem
                     if (-r <= minDis && minDis <= r)
                     {
                         //calculate sliceCentre (4D)
-                        Vector4 sliceCentre4D = c - minDis * unitNormal; //should be +? check later!!!!!!!!!!!!!!!
+                        Vector4 sliceCentre4D = c + minDis * unitNormal; //should be +? check later!!!!!!!!!!!!!!!
                         //testing - check if this lies on the hyperplane:
                         if (!isOnHyperPlane(sliceCentre4D, unitNormal, dSlice))
                         {
@@ -275,13 +288,14 @@ namespace Valve.VR.InteractionSystem
 
 
                         Vector4 rotated4D;
-
+                        ////////////////////////////////////////////////////////////////
                         if (n != Vector4.zero)
                         {
                             rotated4D = rotateParallelToW(sliceCentre4D, n);
                         }
                         else { rotated4D = sliceCentre4D; }
-                        // Debug.Log(i + ": " + rotated4D);
+                      //  Debug.Log(i + ": " + rotated4D);
+                        ////////////////////////////////////////////////////////////
 
 
                         //calcualte radius (perpendicular to n)
@@ -316,6 +330,10 @@ namespace Valve.VR.InteractionSystem
                 }
             }
         }
+
+        void calculateNew4DCoords(Vector4 c) {
+
+        }
         void updateRotations() {
             if (currentXYrot != XYrot)
             {
@@ -323,36 +341,42 @@ namespace Valve.VR.InteractionSystem
                 float increment = currentXYrot - XYrot;
                 currentXYrot = XYrot;
                 rotateXY(increment);
+                rotationsChanged = true;
             }
             if (currentXZrot != XZrot)
             {
                 float increment = currentXZrot - XZrot;
                 currentXZrot = XZrot;
                 rotateXZ(increment);
+                rotationsChanged = true;
             }
             if (currentXWrot != XWrot)
             {
                 float increment = currentXWrot - XWrot;
                 currentXWrot = XWrot;
                 rotateXW(increment);
+                rotationsChanged = true;
             }
             if (currentYZrot != YZrot)
             {
                 float increment = currentYZrot - YZrot;
                 currentYZrot = YZrot;
                 rotateYZ(increment);
+                rotationsChanged = true;
             }
             if (currentYWrot != YWrot)
             {
                 float increment = currentYWrot - YWrot;
                 currentYWrot = YWrot;
                 rotateYW(increment);
+                rotationsChanged = true;
             }
             if (currentZWrot != ZWrot)
             {
                 float increment = currentZWrot - ZWrot;
                 currentZWrot = ZWrot;
                 rotateZW(increment);
+                rotationsChanged = true;
             }
         }
         void updateD() {
@@ -982,7 +1006,8 @@ namespace Valve.VR.InteractionSystem
         float calcMinDistance(Vector4 n, float d, Vector4 c)
         {
             float cDotn = Vector4.Dot(c, n);
-            float minDist = cDotn - d;
+            //float minDist = cDotn - d;
+            float minDist =  d - cDotn;
             //Debug.Log("c=" + c + ", n=" + n + ", Vector4.Dot(c, n) = " + cDotn);
             return minDist;
         }
@@ -1209,8 +1234,8 @@ namespace Valve.VR.InteractionSystem
         {
             //equation of hyperplane for unitNormal = (a,b,c,e) is ax + by + cz + ew = d
             float hypeEquation = (unitNormal.x * sliceCentre4D.x) + (unitNormal.y * sliceCentre4D.y) + (unitNormal.z * sliceCentre4D.z) + (unitNormal.w * sliceCentre4D.w);
-            if (hypeEquation <= de + 0.0000001 &&
-                hypeEquation >= de- 0.0000001)
+            if (hypeEquation <= de + 0.000001 &&
+                hypeEquation >= de- 0.000001)
             {
                 return true;
             }
