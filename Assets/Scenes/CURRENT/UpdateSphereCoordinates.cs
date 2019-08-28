@@ -95,8 +95,8 @@ namespace Valve.VR.InteractionSystem.Sample
                 hand.HoverUnlock(interactable);
 
                 // Restore position/rotation
-                transform.position =  ball.position;
-                transform.rotation = ball.rotation;
+                //transform.position =  ball.position;
+                //transform.rotation = ball.rotation;
 
 
             }
