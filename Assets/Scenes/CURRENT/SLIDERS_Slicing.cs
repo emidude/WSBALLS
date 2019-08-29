@@ -270,6 +270,13 @@ namespace Valve.VR.InteractionSystem
                     float minDis = calcMinDistance(unitNormal, dSlice, c); //this projects c onto n (n.c) and
                                                                            //caluclates min distance between this and the hyperplane
 
+                    //THIS MIGHT BE PROBLEMATIC IF MULTIPLE THINGS UPDATED AT SAME TIME:
+                    if (j == 0)
+                    {
+                        spheres[i].GetComponent<Info>().minDis = minDis;
+                    }
+
+
                     //if min distance (c.n - d ) is within radius r of sphere, some of sphere c intersects hyperplane  
                     //if is in inntersection, get centreOfSlice and sliceRadius:
                     if (-r <= minDis && minDis <= r)
@@ -296,6 +303,14 @@ namespace Valve.VR.InteractionSystem
                         else { rotated4D = sliceCentre4D; }
                         //  Debug.Log(i + ": " + rotated4D);
                         ////////////////////////////////////////////////////////////
+                        Vector4 unrotated = rotateXfromUtoV(rotated4D, unitNormalParallelToZ, unitNormal);
+                        if (unrotated != sliceCentre4D)
+                        {
+                            Debug.Log("ERROR!! unrotated != original sliceCentre4D");
+                            Debug.Log("sphere " + i + ", original sliceC=" + sliceCentre4D + ", rotated = " + rotated4D + " unrotated = " + unrotated);
+                        }
+                        
+
                         spheres[i].GetComponent<Info>().setUnity4Dcoords(rotated4D);
 
                         //calcualte radius (perpendicular to n)
@@ -327,6 +342,15 @@ namespace Valve.VR.InteractionSystem
                     { //spheres[i].transform.localScale = Vector3.zero; 
                         spheres[i].GetComponent<Info>().slicesOfD[j].transform.localScale = Vector3.zero;
                     }
+                }
+            }
+        }
+        public void checkIntersection(Vector4 movingBall, int uniqueBallIdentifier) {
+            for (int i = 0; i < numberOfSpheres; i++)
+            {
+                if (spheres[i].GetComponent<Info>().uniqueBallIdentifier != uniqueBallIdentifier)
+                {
+                    //if balls are not the same ball, check if intersects...
                 }
             }
         }
@@ -1016,24 +1040,35 @@ namespace Valve.VR.InteractionSystem
         {
             float dots = Vector4.Dot(coords4D, n) / Vector4.Dot(n, n);
             Vector4 rotatedCoords4D = coords4D - (2 * dots * n);
-            //TEST!! REMOVE IF BREAKS - FINAL REFLECTION REQUIRES MULTIPLICATION
+            //FINAL REFLECTION REQUIRES MULTIPLICATION
             //WITH DIAG D, WITH -1 WHERE FOR W COMPONENT (AS PREVIOUSLY FLIPPED)
             rotatedCoords4D.w = -rotatedCoords4D.w;
             ///////////////////////////////////////////////////////////// 
             return rotatedCoords4D;
         }
 
-        //Vector4 rotateParallelToVector(Vector4 coords4D, Vector4 n)
-        //{
-        //    float dots = Vector4.Dot(coords4D, n) / Vector4.Dot(n, n);
-        //    Vector4 rotatedCoords4D = coords4D - (2 * dots * n);
-        //    //TEST!! REMOVE IF BREAKS - FINAL REFLECTION REQUIRES MULTIPLICATION
-        //    //WITH DIAG D, WITH -1 WHERE FOR W COMPONENT (AS PREVIOUSLY FLIPPED)
-        //    rotatedCoords4D.w = -rotatedCoords4D.w;
-        //    ///////////////////////////////////////////////////////////// 
-        //    return rotatedCoords4D;
-        //}
+        Vector4 rotateXfromUtoV(Vector4 x, Vector4 u, Vector4 v)
+        {
+            Vector4 vdash = v;
+            vdash.w = -v.w;
 
+            Vector4 n = u - vdash;
+
+            if (n != Vector4.zero)
+            {
+                float dots = Vector4.Dot(x, n) / Vector4.Dot(n, n);
+                Vector4 rotatedCoords4D = x - (2 * dots * n);
+                //FINAL REFLECTION REQUIRES MULTIPLICATION
+                //WITH DIAG D, WITH -1 WHERE FOR W COMPONENT (AS PREVIOUSLY FLIPPED)
+                rotatedCoords4D.w = -rotatedCoords4D.w;
+                ///////////////////////////////////////////////////////////// 
+                return rotatedCoords4D;
+            }
+            else return x;
+            
+        }
+
+        
         //public void TriggerUpL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         //{
         //  //  Debug.Log("Trigger is up L  "+ fromAction +" "+fromSource);
