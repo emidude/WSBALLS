@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
 
@@ -28,6 +29,8 @@ public class Info : MonoBehaviour {
     private Vector4 unitNormalParallelToZ = new Vector4(0f, 0f, 0f, 1f);
     public float minDis;
 
+    public bool changedToTempCols = false;
+
     public void setCoords4D(Vector4 c4d){
         coords4D = c4d;
     }
@@ -44,7 +47,7 @@ public class Info : MonoBehaviour {
         uniqueColorIdentifier = i/ (float)totalNumberOfSpheres; 
     }
 
-    public void createSlices()//////////////////////aggggggggg so bad
+    public void createSlices(Vector3 randColors)//////////////////////aggggggggg so bad
     {
         slicesOfD = new List<GameObject>();
         //Debug.Log("numberOfds = " + numberOfDs);
@@ -57,6 +60,9 @@ public class Info : MonoBehaviour {
             setShader shaderInfo = thisSlice.GetComponent<setShader>();
             shaderInfo.coords4D = coords4D;
             shaderInfo.sliceID = 1f - 2* (i / numberOfDs);
+            //shaderInfo.sliceIDINT = uniqueBallIdentifier * 10 + i; 
+            shaderInfo.randomCols = randColors;
+            
             //testing:
             //thisSlice.transform.localScale = new Vector3(1, 1, 1);
             //thisSlice.transform.localPosition = new Vector3(0, 0, 0);
@@ -123,8 +129,50 @@ public class Info : MonoBehaviour {
             coords4D = unrotatedSliceCentre - minDis * unitNormal;
             //Debug.Log("old coords4D=" + oldCoords4D + ", updated coords4D =" + coords4D + ", minDis="+ minDis + ", unitNormal=" + unitNormal);
 
-            slicingScript.checkIntersection(coords4D, uniqueBallIdentifier);
+            updateSlicesOfD();
+            
+            int state = slicingScript.checkIntersection(coords4D, uniqueBallIdentifier);
             //if intersecting - give haptic feedback and change colour of balls intersecting (like with highlighting)
+            if (state == 0)
+            {
+                //kissing
+                if (changedToTempCols)
+                {
+                    for (int i = 0; i < numberOfDs; i++)
+                    {
+                        slicesOfD[i].GetComponent<setShader>().setOriginalColors();
+                        changedToTempCols = false;
+                    }
+                    
+                }
+            }
+            else if (state == 1)
+            {
+                //intersecting
+                for (int i = 0; i < numberOfDs; i++)
+                {
+                    slicesOfD[i].GetComponent<setShader>().setShaderColorIntersecting();
+                    changedToTempCols = true;
+                }
+            }
+            else if (state == 2)
+            {
+                for (int i = 0; i < numberOfDs; i++)
+                {
+                    slicesOfD[i].GetComponent<setShader>().setOriginalColors();
+                    changedToTempCols = false;
+                }
+            }
+            
+
+        }
+    }
+
+    void updateSlicesOfD()
+    {
+        for (int i = 1; i < slicesOfD.Count; i++)
+        {
+            slicesOfD[i].transform.localPosition = slicesOfD[0].transform.position;
 
         }
     }

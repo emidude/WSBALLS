@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 //using Valve.VR.InteractionSystem;
 
@@ -36,6 +37,8 @@ namespace Valve.VR.InteractionSystem
 
         public float r = 1f; //r = radius of balls (some commented out code for accessing in script for potential differing radii
         //or to view for how to access vars from other scripts/objects)
+        //IF EVER CHANGE RADIUS - NEED TO CHANGE CHECKINTERSECTION() METHOD TO COMMENTED OUT CODE FOR ADJUSTABLE RADIUS, VALUE CURRENTLY
+        //HARDCODED AS 4, BASED ON RADIUS OF 1
 
 
         /////////////////
@@ -94,6 +97,7 @@ namespace Valve.VR.InteractionSystem
         float currentD;
         Vector4 currentUnitNormal;
 
+        float acceptableError = 0.000001f;
 
         void Awake()
         {
@@ -114,10 +118,12 @@ namespace Valve.VR.InteractionSystem
 
             //id mat used in rotation formula between vectors
             identityMatrix = createIdentityMatrix(numberOfDimensions);
-            numberOfDs = 1;
+            numberOfDs = 3;
             currentD = d;
             currentUnitNormal = unitNormal;
+
             
+
         }
 
         // Use this for initialization
@@ -177,7 +183,7 @@ namespace Valve.VR.InteractionSystem
             }
             
 
-
+            //UpdateSlice(); very bad balls disapper when put here
 
 
 
@@ -345,15 +351,60 @@ namespace Valve.VR.InteractionSystem
                 }
             }
         }
-        public void checkIntersection(Vector4 movingBall, int uniqueBallIdentifier) {
+        public int checkIntersection(Vector4 movingBall, int uniqueBallIdentifier) {
             for (int i = 0; i < numberOfSpheres; i++)
             {
+                //if balls are not the same ball, check if intersects...
                 if (spheres[i].GetComponent<Info>().uniqueBallIdentifier != uniqueBallIdentifier)
                 {
-                    //if balls are not the same ball, check if intersects...
+                    //radius = 1, 2*radius = 2, 2^2 = 4
+                    float squaredDist = calculateSquaredDistance(movingBall, spheres[i].GetComponent<Info>().coords4D); 
+                    if (squaredDist <= (4 + acceptableError) && squaredDist >= (4 - acceptableError))
+                    {
+                        //update material or bool to say material needs to be updated
+                        //glow would be nice but for later maybe
+                        return 0;
+                        //balls are kissing
+                        //maybe attach a color material or update shader value
+                    }
+                    else if (squaredDist < 4 - acceptableError)
+                    {
+                        //INTERSECTING!
+                        //attach color material 
+                        //give haptic feedback
+                        //prevent postioning here?
+                        return 1;
+
+                    }
+                    
                 }
             }
+
+            return 2;
         }
+
+        float calculateDistance(Vector4 a, Vector4 b)
+        {
+            float sumOfSquares = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                sumOfSquares += ((a[i] - b[i]) * (a[i] - b[i]));
+            }
+
+            return Mathf.Sqrt(sumOfSquares);
+        }
+        //maybe less costly than calculateDistance above since no squrt
+        float calculateSquaredDistance(Vector4 a, Vector4 b)
+        {
+            float sumOfSquares = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                sumOfSquares += ((a[i] - b[i]) * (a[i] - b[i]));
+            }
+
+            return sumOfSquares;
+        }
+
 
         void calculateNew4DCoords(Vector4 c) {
 
@@ -926,7 +977,9 @@ namespace Valve.VR.InteractionSystem
             sphereInfo.totalNumberOfSpheres = numberOfSpheres;
             sphereInfo.setUniqueColorIdentifier(which);
             sphereInfo.numberOfDs = numberOfDs;
-            sphereInfo.createSlices();
+            Random.seed = which;
+            Vector3 randomColorVals = new Vector3(Random.Range(0f,1f), Random.Range(0f,1f), Random.Range(0f,1f));
+            sphereInfo.createSlices(randomColorVals);
 
 
 

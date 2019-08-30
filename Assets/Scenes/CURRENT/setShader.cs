@@ -7,7 +7,11 @@ public class setShader : MonoBehaviour
 {
     public Vector4 coords4D;
     public float sliceID;
+
+    public int sliceIDINT;
     //public float metal;
+
+    public Vector3 randomCols;
 
     // Start is called before the first frame update
     void Start()
@@ -18,9 +22,28 @@ public class setShader : MonoBehaviour
         rend.material.SetVector("_FourDCoordinatesAtStart", coords4D);
         //rend.material.SetFloat("_BallColorID", uniqueColorIdentifier);
         rend.material.SetFloat("_SliceID", sliceID);
+        
+        //set random colours with seed
+        
+        Debug.Log(randomCols);
+        rend.material.SetVector("_RandColors", randomCols);
 
        // rend.material.SetFloat("_Metallic", metal);
     }
 
-   
+    public void setShaderColorIntersecting()
+    {
+        Renderer rend = GetComponent<Renderer>();
+        Vector3 intersectingCols = Vector3.zero;
+        rend.material.SetVector("_RandColors", intersectingCols);
+    }
+
+    public void setOriginalColors()
+    {
+        Renderer rend = GetComponent<Renderer>();
+        Vector3 intersectingCols = Vector3.zero;
+        rend.material.SetVector("_RandColors", randomCols);
+    }
+
+
 }
