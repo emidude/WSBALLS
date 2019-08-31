@@ -42,6 +42,7 @@ namespace Valve.VR.InteractionSystem
 
 
         /////////////////
+        //protected SteamVR_Input_Sources inputSource;
         public SteamVR_Input_Sources leftHand;
         public SteamVR_Input_Sources rightHand;
         public SteamVR_Behaviour_Pose controllerPoseL;
@@ -98,7 +99,15 @@ namespace Valve.VR.InteractionSystem
         Vector4 currentUnitNormal;
 
         float acceptableError = 0.000001f;
+        
+        public SteamVR_Action_Vibration hapticFlash = SteamVR_Input.GetAction<SteamVR_Action_Vibration>("Haptic");
 
+        private float startTime;
+        private float tickCount;
+        private bool intersecting;
+        private bool leftVibrating;
+        private bool rightVibrating;
+        
         void Awake()
         {
             spheres = new List<GameObject>();
@@ -122,7 +131,7 @@ namespace Valve.VR.InteractionSystem
             currentD = d;
             currentUnitNormal = unitNormal;
 
-            
+            intersecting = false;
 
         }
 
@@ -136,11 +145,11 @@ namespace Valve.VR.InteractionSystem
 
       
             ////////////////////////////////////////////////////////////////////////////////////////////////
-            //trigger.AddOnStateDownListener(TriggerDownR, rightHand);
-            //trigger.AddOnStateUpListener(TriggerUpR, rightHand);
+            trigger.AddOnStateDownListener(TriggerDownR, rightHand);
+            trigger.AddOnStateUpListener(TriggerUpR, rightHand);
             ////SteamVR_Actions.default_GrabPinch.AddOnStateDownListener(TriggerPressed, SteamVR_Input_Sources.Any);
-            //trigger.AddOnStateDownListener(TriggerDownL, leftHand);
-            //trigger.AddOnStateUpListener(TriggerUpL, leftHand);
+            trigger.AddOnStateDownListener(TriggerDownL, leftHand);
+            trigger.AddOnStateUpListener(TriggerUpL, leftHand);
             ///////////////////////////////////////////////////////////////////////////////////////////////
 
             //GameObject pm = Instantiate(positionMarker);
@@ -181,8 +190,35 @@ namespace Valve.VR.InteractionSystem
                 currentD = d;
                 UpdateSlice();
             }
-            
 
+
+            // if (intersecting)
+            // {
+            //     if (triggeredL)
+            //     {
+            //         leftVibrating = true;
+            //     }
+
+            //     if (triggeredR)
+            //     {
+            //         rightVibrating = true;
+            //     }
+            // }
+            // else {
+            //     stopHapticFeedback(leftHand);
+            //     stopHapticFeedback(rightHand);
+            // }
+
+            // if (leftVibrating)
+            // {
+            //     createHapticFeedback(leftHand);
+            // }
+
+            // if (rightVibrating)
+            // {
+            //     createHapticFeedback(rightHand);
+            // }
+            
             //UpdateSlice(); very bad balls disapper when put here
 
 
@@ -363,6 +399,7 @@ namespace Valve.VR.InteractionSystem
                     {
                         //update material or bool to say material needs to be updated
                         //glow would be nice but for later maybe
+                        intersecting = false;
                         return 0;
                         //balls are kissing
                         //maybe attach a color material or update shader value
@@ -372,7 +409,9 @@ namespace Valve.VR.InteractionSystem
                         //INTERSECTING!
                         //attach color material 
                         //give haptic feedback
+                       
                         //prevent postioning here?
+                        intersecting = true;
                         return 1;
 
                     }
@@ -380,9 +419,37 @@ namespace Valve.VR.InteractionSystem
                 }
             }
 
+            intersecting = false;
             return 2;
         }
 
+        void createHapticFeedback(SteamVR_Input_Sources inputSource)
+        {
+
+            // startTime = Time.realtimeSinceStartup - 0.1f;
+            // tickCount = 0.0f;
+            
+            // startTime = Time.realtimeSinceStartup;
+            // float flash = ( Time.realtimeSinceStartup - startTime ) * Mathf.PI * 2.0f;
+            // 				flash = Mathf.Cos( flash );
+            // 				flash = Util.RemapNumberClamped( flash, -1.0f, 1.0f, 0.0f, 1.0f );
+            
+            // 				float ticks = ( Time.realtimeSinceStartup - startTime );
+            // 				if ( ticks - tickCount > 1.0f )
+            // 				{
+            // 					tickCount += 1.0f;
+            //                     hapticFlash.Execute(0, 0.005f, 0.005f, 1, inputSource);
+            // 				}
+
+                            hapticFlash.Execute(0, 0.005f, 0.005f, 1, inputSource);
+        }
+        void stopHapticFeedback(SteamVR_Input_Sources inputSource){
+            hapticFlash.Execute(0f, 0f, 0f, 0f, inputSource);
+
+
+           //  hapticFlash.RemoveOnActiveBindingChangeListener(triggeredL, inputSource);
+            // RemoveOnActiveBindingChangeListener(SteamVR_Action_Vibration.ActiveChangeHandler functionToStopCalling, SteamVR_Input_Sources inputSource)
+        }
         float calculateDistance(Vector4 a, Vector4 b)
         {
             float sumOfSquares = 0;
@@ -1122,15 +1189,15 @@ namespace Valve.VR.InteractionSystem
         }
 
         
-        //public void TriggerUpL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        //{
-        //  //  Debug.Log("Trigger is up L  "+ fromAction +" "+fromSource);
-        //    triggeredL = false;
-        //    needToResetPositionL = true;
-        //}
+        public void TriggerUpL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+         //  Debug.Log("Trigger is up L  "+ fromAction +" "+fromSource);
+           triggeredL = false;
+          // needToResetPositionL = true;
+        }
 
-        //public void TriggerDownL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        //{
+        public void TriggerDownL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
         //    // Debug.Log("Trigger is down L");
         //    if (needToResetPositionL)
         //    {
@@ -1139,18 +1206,18 @@ namespace Valve.VR.InteractionSystem
         //        currentXZrot = controllerPoseL.transform.position.y;
         //        needToResetPositionL = false;
         //    }
-        //    triggeredL = true;
-        //}
-        //public void TriggerUpR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        //{
-        //    //  Debug.Log("Trigger is up Y");
-        //    triggeredR = false;
+           triggeredL = true;
+        }
+        public void TriggerUpR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+           //  Debug.Log("Trigger is up Y");
+           triggeredR = false;
         //    needToResetPositionR = true;
 
-        //}
-        //public void TriggerDownR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        //{
-        //    // Debug.Log("Trigger is down R");
+        }
+        public void TriggerDownR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+           // Debug.Log("Trigger is down R");
         //    if (needToResetPositionR)
         //    {
         //        YWrot = controllerPoseR.transform.position.z;
@@ -1158,9 +1225,9 @@ namespace Valve.VR.InteractionSystem
         //        ZWrot = controllerPoseR.transform.position.x;
         //        needToResetPositionR = false;
         //    }
-        //    triggeredR = true;
+           triggeredR = true;
 
-        //}
+        }
 
 
         ///

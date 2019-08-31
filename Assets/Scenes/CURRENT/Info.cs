@@ -152,11 +152,13 @@ public class Info : MonoBehaviour {
                 for (int i = 0; i < numberOfDs; i++)
                 {
                     slicesOfD[i].GetComponent<setShader>().setShaderColorIntersecting();
+                    
                     changedToTempCols = true;
                 }
             }
             else if (state == 2)
             {
+                //not touching
                 for (int i = 0; i < numberOfDs; i++)
                 {
                     slicesOfD[i].GetComponent<setShader>().setOriginalColors();
