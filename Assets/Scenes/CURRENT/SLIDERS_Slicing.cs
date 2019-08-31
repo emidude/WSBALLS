@@ -26,7 +26,7 @@ namespace Valve.VR.InteractionSystem
         ///////////////////////////////////
         //private float[] unitNormal = new float[4];
         //private Vector4 unitNormal = new Vector4(0.5f,0.5f,0.5f,0.5f);
-        public Vector4 unitNormal = new Vector4( 0f, 0f, 0f, 1f);
+        public Vector4 unitNormal = new Vector4( 1f, 0f, 0f, 0f);
         private Vector4 unitNormalParallelToZ = new Vector4(0f, 0f, 0f, 1f);
         private Vector4 reflectionParallelToZ = new Vector4(0f, 0f, 0f, -1f);
         // private double unitNormal = new double{0f, 1f, 0f, 0f};
@@ -122,7 +122,7 @@ namespace Valve.VR.InteractionSystem
             currentD = d;
             currentUnitNormal = unitNormal;
 
-            
+            Debug.Log("unitNormal" + unitNormal );
 
         }
 
@@ -156,6 +156,16 @@ namespace Valve.VR.InteractionSystem
             }
 
             UpdateSlice();
+            
+            ///////////////////////testing
+            /// 1. unit normal
+            /// 2. rotatexy(pi/4)
+            /// print new normal rotations
+            /// print 
+            ///
+            //for each of the rotaions... 
+            
+            //update d 
         }
 
 
@@ -1100,25 +1110,42 @@ namespace Valve.VR.InteractionSystem
             return rotatedCoords4D;
         }
 
+       // Vector4 unrotated = rotateXfromUtoV(rotated4D, unitNormalParallelToZ = (0,0,0,1), unitNormal);
         Vector4 rotateXfromUtoV(Vector4 x, Vector4 u, Vector4 v)
         {
             Vector4 vdash = v;
-            vdash.w = -v.w;
 
-            Vector4 n = u - vdash;
-
-            if (n != Vector4.zero)
+            //adjusted with for loop to incase problem when vdash.w = 0
+            //program is still behaving odly with no rotations for first 3 sliders (at first)
+            //but now for some reason (since adding in coord slice update, although should checkout older versions to identify when started accurately!
+            //the balls now on 4th slider tunnel downwards, indicate they are intersecting and eventually vanish from view permanently
+            //maybe (hopefully) made a silly error somewhere or else (also - go through code and write spec diagram on paint or prezi-better- to explain what is happenign
+            for (int i = numberOfDimensions - 1; i >= 0; i--)
             {
-                float dots = Vector4.Dot(x, n) / Vector4.Dot(n, n);
-                Vector4 rotatedCoords4D = x - (2 * dots * n);
-                //FINAL REFLECTION REQUIRES MULTIPLICATION
-                //WITH DIAG D, WITH -1 WHERE FOR W COMPONENT (AS PREVIOUSLY FLIPPED)
-                rotatedCoords4D.w = -rotatedCoords4D.w;
-                ///////////////////////////////////////////////////////////// 
-                return rotatedCoords4D;
+                if (v[i] >= 0.4f )
+                {
+
+                    vdash[i] = -v[i];
+
+                    Vector4 n = u - vdash;
+
+                    if (n != Vector4.zero)
+                    {
+                        float dots = Vector4.Dot(x, n) / Vector4.Dot(n, n);
+                        Vector4 rotatedCoords4D = x - (2 * dots * n);
+                        //FINAL REFLECTION REQUIRES MULTIPLICATION
+                        //WITH DIAG D, WITH -1 WHERE FOR W COMPONENT (AS PREVIOUSLY FLIPPED)
+                        rotatedCoords4D[i] = -rotatedCoords4D[i];
+                        ///////////////////////////////////////////////////////////// 
+                        return rotatedCoords4D;
+                    }
+                    else return x;
+                }
+               
             }
-            else return x;
-            
+            Debug.Log("unit normal not normal");
+            return x;
+
         }
 
         

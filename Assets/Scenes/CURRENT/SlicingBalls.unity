@@ -7959,6 +7959,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: testingPickup
       objectReference: {fileID: 0}
+    - target: {fileID: 89208716138491128, guid: a32d034ba0a05f549bf0af92acaa5762,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 89208716138491134, guid: a32d034ba0a05f549bf0af92acaa5762,
         type: 3}
       propertyPath: m_LocalPosition.x
