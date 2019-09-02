@@ -43,13 +43,14 @@ namespace Valve.VR.InteractionSystem.Sample
             //generalText.text = "No Hand Hovering";
             //hoveringText.text = "Hovering: False";
 
-            interactable = this.GetComponent<Interactable>();
+            interactable = GetComponent<Interactable>();
 
             //referenceObject = GameObject.FindWithTag("SLIDEY-SLICE");
             //slicingScript = referenceObject.GetComponent<SLIDERS_Slicing>();
 
           //  referenceObject = gameObject.GetComponentInParent<FourD>();
             //sphereInfo = this.GetComponentInParent<Info>();
+            //attached = GetComponent<>()
 
         }
 

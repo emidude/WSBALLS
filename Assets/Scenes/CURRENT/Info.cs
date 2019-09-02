@@ -34,7 +34,7 @@ public class Info : MonoBehaviour {
 
     //private Hand.AttachmentFlags attachmentFlags = Hand.defaultAttachmentFlags & ( ~Hand.AttachmentFlags.SnapOnAttach ) & (~Hand.AttachmentFlags.DetachOthers) & (~Hand.AttachmentFlags.VelocityMovement);
 
-    //public Interactable interactable;
+    public Interactable interactable;
 
     public bool attachedToThisBall = false;
     
@@ -93,12 +93,16 @@ public class Info : MonoBehaviour {
             //{
             //  //  shaderInfo.metal = 1f;
             //}
-            attachedToThisBall = thisSlice.GetComponent<UpdateSphereCoordinates>().attached;
+            //attachedToThisBall = thisSlice.GetComponent<UpdateSphereCoordinates>().attached;
             
             slicesOfD.Add(thisSlice);
+            if (i == 0)
+            {
+                attachedToThisBall = slicesOfD[0].GetComponent<UpdateSphereCoordinates>().attached;
             
+                interactable = slicesOfD[0].GetComponent<Interactable>();
+            }
             
-            //interactable = slicesOfD[0].GetComponent<Interactable>();
         }
 
     }
@@ -136,8 +140,19 @@ public class Info : MonoBehaviour {
 
     private void Update()
     {
-        Debug.Log(attachedToThisBall);
-        if (attachedToThisBall)
+//        Debug.Log(slicesOfD[0].GetComponent<Interactable>());
+//        Debug.Log(interactable);
+//       
+//        Debug.Log("attached to hand = " + interactable.attachedToHand);
+//
+//        if (interactable.attachedToHand != null)
+//        {
+//            Debug.Log("attached!");
+//        }
+//        else{ Debug.Log("NOT attached!");}
+//        
+//        Debug.Log(attachedToThisBall);
+        if (interactable.attachedToHand != null)
         {
              current3Dcoords = slicesOfD[0].transform.position ;
             //Debug.Log("slicesOfD[0].transform.position=" + slicesOfD[0].transform.position + ", current3Dcoords=" + current3Dcoords);
