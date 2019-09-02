@@ -31,6 +31,7 @@ public class Info : MonoBehaviour {
 
     public bool changedToTempCols = false;
 
+    private Interactable interactable;
     public void setCoords4D(Vector4 c4d){
         coords4D = c4d;
     }
@@ -84,6 +85,7 @@ public class Info : MonoBehaviour {
             //  //  shaderInfo.metal = 1f;
             //}
             slicesOfD.Add(thisSlice);
+            interactable = slicesOfD[0].GetComponent<Interactable>();
         }
 
     }
@@ -112,7 +114,7 @@ public class Info : MonoBehaviour {
 
     private void Update()
     {
-        if(current3Dcoords != slicesOfD[0].transform.position)
+        if(interactable.attachedToHand!=null)
         {
             current3Dcoords = slicesOfD[0].transform.position ;
             //Debug.Log("slicesOfD[0].transform.position=" + slicesOfD[0].transform.position + ", current3Dcoords=" + current3Dcoords);
