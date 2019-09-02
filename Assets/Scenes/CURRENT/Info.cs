@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
+using Valve.VR.InteractionSystem.Sample;
 
 public class Info : MonoBehaviour {
 
@@ -31,6 +32,12 @@ public class Info : MonoBehaviour {
 
     public bool changedToTempCols = false;
 
+    //private Hand.AttachmentFlags attachmentFlags = Hand.defaultAttachmentFlags & ( ~Hand.AttachmentFlags.SnapOnAttach ) & (~Hand.AttachmentFlags.DetachOthers) & (~Hand.AttachmentFlags.VelocityMovement);
+
+    //public Interactable interactable;
+
+    public bool attachedToThisBall = false;
+    
     public void setCoords4D(Vector4 c4d){
         coords4D = c4d;
     }
@@ -67,11 +74,14 @@ public class Info : MonoBehaviour {
             //thisSlice.transform.localScale = new Vector3(1, 1, 1);
             //thisSlice.transform.localPosition = new Vector3(0, 0, 0);
 
-            if (i != 0)
+//            if (i == 0)
+//            {
+//              //  interactable = thisSlice.GetComponent<Interactable>();
+//            }
+//            else
+            if(i!=0)
             {
-                
-
-                thisSlice.GetComponent<IgnoreHovering>();
+                //thisSlice.GetComponent<IgnoreHovering>();
                 Destroy(thisSlice.GetComponent<InteractableHoverEvents>());
                 //Destroy(thisSlice.GetComponent<UpdateSphereCoordinates>());
                 //Destroy(thisSlice.GetComponent<Interactable>());
@@ -83,10 +93,21 @@ public class Info : MonoBehaviour {
             //{
             //  //  shaderInfo.metal = 1f;
             //}
+            attachedToThisBall = thisSlice.GetComponent<UpdateSphereCoordinates>().attached;
+            
             slicesOfD.Add(thisSlice);
+            
+            
+            //interactable = slicesOfD[0].GetComponent<Interactable>();
         }
 
     }
+
+//    private bool OnAttachedToHand( Hand hand )
+//    {
+//        return true;
+//    }
+    
 
     private void Start()
     {
@@ -102,6 +123,9 @@ public class Info : MonoBehaviour {
 
         referenceObject = GameObject.FindWithTag("SLIDEY-SLICE");
         slicingScript = referenceObject.GetComponent<SLIDERS_Slicing>();
+
+        //there may be no slices of d here
+        //attachedToThisBall = slicesOfD[0].GetComponent<UpdateSphereCoordinates>().attached;
     }
 
     void calculateUnreflectedParalleltoWCoords(Vector4 unitNormal, Vector4 unityCoords) {
@@ -112,9 +136,10 @@ public class Info : MonoBehaviour {
 
     private void Update()
     {
-        if(current3Dcoords != slicesOfD[0].transform.position)
+        Debug.Log(attachedToThisBall);
+        if (attachedToThisBall)
         {
-            current3Dcoords = slicesOfD[0].transform.position ;
+             current3Dcoords = slicesOfD[0].transform.position ;
             //Debug.Log("slicesOfD[0].transform.position=" + slicesOfD[0].transform.position + ", current3Dcoords=" + current3Dcoords);
             rotated4d.x = current3Dcoords.x;
             rotated4d.y = current3Dcoords.y;

@@ -22,6 +22,7 @@
             <e p="setShader.cs" t="Include" />
             <e p="SlicingSpheres.cs" t="Include" />
             <e p="SLIDERS_Slicing.cs" t="Include" />
+            <e p="tellInfoAttachment.cs" t="Include" />
             <e p="test_createASphere.cs" t="Include" />
             <e p="Update4DBallPrefab.cs" t="Include" />
             <e p="UpdateBallPos.cs" t="Include" />

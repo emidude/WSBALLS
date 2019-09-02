@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -8680693036091157981}
   - component: {fileID: 7616233944493613462}
   - component: {fileID: 8192057853259208892}
+  - component: {fileID: 635119704058307826}
   m_Layer: 0
   m_Name: sliceObj
   m_TagString: Untagged
@@ -95,6 +96,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coords4D: {x: 0, y: 0, z: 0, w: 0}
   sliceID: 0
+  sliceIDINT: 0
+  randomCols: {x: 0, y: 0, z: 0}
 --- !u!114 &-8680693036091157981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,8 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bedf1bda82131c46841ec923b7ecc19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereInfo: {fileID: 0}
   ball: {fileID: 2331816610139722788}
+  attached: 0
 --- !u!114 &7616233944493613462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,3 +176,35 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &635119704058307826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200474404286184947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4153b26428ccf041950b92c057812a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onHandHoverBegin:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onHandHoverEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onAttachedToHand:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onDetachedFromHand:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null

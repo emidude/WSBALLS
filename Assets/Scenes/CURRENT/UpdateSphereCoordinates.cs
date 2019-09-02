@@ -27,9 +27,12 @@ namespace Valve.VR.InteractionSystem.Sample
 
         public Transform ball;
 
+        public bool attached;
+
         //-------------------------------------------------
         void Awake()
         {
+            attached = false;
             //var textMeshs = GetComponentsInChildren<TextMesh>();
             //generalText = textMeshs[0];
             //hoveringText = textMeshs[1];
@@ -106,12 +109,9 @@ namespace Valve.VR.InteractionSystem.Sample
         //-------------------------------------------------
         // Called when this GameObject becomes attached to the hand
         //-------------------------------------------------
-        private void OnAttachedToHand(Hand hand)
+        public void OnAttachedToHand(Hand hand)
         {
-            //    generalText.text = string.Format("Attached: {0}", hand.name);
-            //    attachTime = Time.time;
-            
-            //ball = hand.transform;
+            attached = true;
         }
 
 
@@ -119,9 +119,9 @@ namespace Valve.VR.InteractionSystem.Sample
         //-------------------------------------------------
         // Called when this GameObject is detached from the hand
         //-------------------------------------------------
-        private void OnDetachedFromHand(Hand hand)
+        public void OnDetachedFromHand(Hand hand)
         {
-            
+            attached = false;
         }
 
 
