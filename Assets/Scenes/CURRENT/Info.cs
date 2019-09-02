@@ -143,8 +143,8 @@ public class Info : MonoBehaviour {
                     for (int i = 0; i < numberOfDs; i++)
                     {
                         slicesOfD[i].GetComponent<setShader>().setOriginalColors();
-                        changedToTempCols = false;
                     }
+                    changedToTempCols = false;
                     
                 }
             }
@@ -154,20 +154,44 @@ public class Info : MonoBehaviour {
                 for (int i = 0; i < numberOfDs; i++)
                 {
                     slicesOfD[i].GetComponent<setShader>().setShaderColorIntersecting();
-                    changedToTempCols = true;
                 }
+                changedToTempCols = true;
             }
             else if (state == 2)
             {
                 for (int i = 0; i < numberOfDs; i++)
                 {
                     slicesOfD[i].GetComponent<setShader>().setOriginalColors();
-                    changedToTempCols = false;
                 }
+                changedToTempCols = false;
             }
-            
-
         }
+        else if (changedToTempCols)
+        {
+            int state = slicingScript.checkIntersection(coords4D, uniqueBallIdentifier);
+            if (state != 1)
+            {
+                setNormalColor();
+            }
+        }
+    }
+
+    public void setIntersectionColors()
+    {
+        for (int i = 0; i < numberOfDs; i++)
+        {
+            slicesOfD[i].GetComponent<setShader>().setShaderColorIntersecting();
+        }
+        changedToTempCols = true;
+    }
+
+    public void setNormalColor()
+    {
+        for (int i = 0; i < numberOfDs; i++)
+        {
+            slicesOfD[i].GetComponent<setShader>().setOriginalColors();
+        }
+        changedToTempCols = false;
     }
 
     void updateSlicesOfD()

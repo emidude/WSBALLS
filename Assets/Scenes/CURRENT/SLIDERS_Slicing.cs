@@ -381,6 +381,8 @@ namespace Valve.VR.InteractionSystem
                     {
                         //INTERSECTING!
                         //attach color material 
+                        spheres[i].GetComponent<Info>().setIntersectionColors();
+
                         //give haptic feedback
                         //prevent postioning here?
                         return 1;
