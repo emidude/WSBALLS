@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.inputs2.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "D:\\WSBALLS\\actions.json",
+      "action_manifest_path": "C:\\Users\\ICERM\\emily\\WSBALLS\\actions.json",
       "strings": {
         "en_us": {
           "name": "inputs2 [Testing]"
