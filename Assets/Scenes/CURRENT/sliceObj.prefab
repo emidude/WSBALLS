@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b66745b80f0f3eb43b72c25aa797855f, type: 2}
+  - {fileID: 2100000, guid: 82db00a562b1ade408f043b92c0b336c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -69,6 +69,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -95,6 +96,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coords4D: {x: 0, y: 0, z: 0, w: 0}
   sliceID: 0
+  sliceIDINT: 0
+  randomCols: {x: 0, y: 0, z: 0}
 --- !u!114 &-8680693036091157981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,7 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bedf1bda82131c46841ec923b7ecc19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereInfo: {fileID: 0}
   ball: {fileID: 2331816610139722788}
 --- !u!114 &7616233944493613462
 MonoBehaviour:

@@ -13,6 +13,8 @@ public class setShader : MonoBehaviour
 
     public Vector3 randomCols;
 
+    Vector3 intersectingCols = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,23 +27,26 @@ public class setShader : MonoBehaviour
         
         //set random colours with seed
         
-        Debug.Log(randomCols);
+       // Debug.Log(randomCols);
         rend.material.SetVector("_RandColors", randomCols);
 
-       // rend.material.SetFloat("_Metallic", metal);
+        // rend.material.SetFloat("_Metallic", metal);
+
+
+        intersectingCols = Vector3.zero;
     }
 
     public void setShaderColorIntersecting()
     {
         Renderer rend = GetComponent<Renderer>();
-        Vector3 intersectingCols = Vector3.zero;
+        
         rend.material.SetVector("_RandColors", intersectingCols);
     }
 
     public void setOriginalColors()
     {
         Renderer rend = GetComponent<Renderer>();
-        Vector3 intersectingCols = Vector3.zero;
+        
         rend.material.SetVector("_RandColors", randomCols);
     }
 
