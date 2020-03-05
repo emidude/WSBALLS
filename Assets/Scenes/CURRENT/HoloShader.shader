@@ -109,7 +109,7 @@
                 ////clip(col.r - _CutoutThresh); //this is equiv to:
                                               // if (col.r < _CutoutThresh) discard; (if pixel does not have enough red, discard it)
 				fixed4 col;
-				col.xyz = _RandColors + _SliceLayer*_TintColor;
+			col.xyz = _RandColors;// +_SliceLayer * _TintColor;
 				col.a = _Transparency * _SliceID;
 
 				return col;

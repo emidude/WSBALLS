@@ -89,9 +89,9 @@ public class Info : MonoBehaviour {
             //  //  shaderInfo.metal = 1f;
             //}
             slicesOfD.Add(thisSlice);
-            interactable = slicesOfD[0].GetComponent<Interactable>();
+           
         }
-
+        interactable = slicesOfD[0].GetComponent<Interactable>();
     }
 
     private void Start()
