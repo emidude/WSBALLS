@@ -25,8 +25,9 @@
 
 		//for setting colors of 3-sphere
 		//_FourDCoordinatesAtStart("FourDCoords", Vector) = (0,0,0,1)
-		//_SliceID("SliceID", Float) = 0.0
+		_SliceID("SliceID", Float) = 0.0
 		_RandColors("RandColors", Vector) = (0,0,0,0)
+		_SliceLayer("SliceLayer", Int) = 0
 
 		
     }
@@ -81,6 +82,8 @@
             
 			uniform float3 _RandColors;
 
+			int _SliceLayer;
+			float _SliceID;
 
             v2f vert (appdata v) //could pass in vertex and uv data directly in () but cleaner as a struct
             //returns v2f, with data structure for frag shader, defined above
@@ -106,8 +109,8 @@
                 ////clip(col.r - _CutoutThresh); //this is equiv to:
                                               // if (col.r < _CutoutThresh) discard; (if pixel does not have enough red, discard it)
 				fixed4 col;
-				col.xyz = _RandColors;
-				col.a = _Transparency;
+				col.xyz = _RandColors + _SliceLayer*_TintColor;
+				col.a = _Transparency * _SliceID;
 
 				return col;
             }

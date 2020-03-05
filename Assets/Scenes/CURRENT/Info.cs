@@ -52,6 +52,7 @@ public class Info : MonoBehaviour {
     {
         slicesOfD = new List<GameObject>();
         //Debug.Log("numberOfds = " + numberOfDs);
+        float twoTimesD = numberOfDs * 2;
         for (int i = 0; i < numberOfDs; i++)
         {
             GameObject thisSlice = Instantiate(sliceOfD);
@@ -60,13 +61,16 @@ public class Info : MonoBehaviour {
             //slice.transform.localScale = new Vector3(1, 1, 1); set transform when you calc slice centres
             setShader shaderInfo = thisSlice.GetComponent<setShader>();
             shaderInfo.coords4D = coords4D;
-            shaderInfo.sliceID = 1f - 2* (i / numberOfDs);
+            shaderInfo.sliceID = 1 - i / twoTimesD;
+
             //shaderInfo.sliceIDINT = uniqueBallIdentifier * 10 + i; 
             shaderInfo.randomCols = randColors;
-            
+
             //testing:
             //thisSlice.transform.localScale = new Vector3(1, 1, 1);
             //thisSlice.transform.localPosition = new Vector3(0, 0, 0);
+
+            shaderInfo.sliceLayer = i;
 
             if (i != 0)
             {

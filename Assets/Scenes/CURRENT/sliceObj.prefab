@@ -95,9 +95,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coords4D: {x: 0, y: 0, z: 0, w: 0}
-  sliceID: 0
+  sliceID: 3.93
   sliceIDINT: 0
   randomCols: {x: 0, y: 0, z: 0}
+  sliceLayer: 161
 --- !u!114 &-8680693036091157981
 MonoBehaviour:
   m_ObjectHideFlags: 0

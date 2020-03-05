@@ -15,13 +15,14 @@ public class setShader : MonoBehaviour
 
     Vector3 intersectingCols = Vector3.zero;
 
+    public int sliceLayer;
     // Start is called before the first frame update
     void Start()
     {
         //setting shader colors:
         //Fetch the Renderer from the GameObject
         Renderer rend = GetComponent<Renderer>();
-        rend.material.SetVector("_FourDCoordinatesAtStart", coords4D);
+       // rend.material.SetVector("_FourDCoordinatesAtStart", coords4D);
         //rend.material.SetFloat("_BallColorID", uniqueColorIdentifier);
         rend.material.SetFloat("_SliceID", sliceID);
         
@@ -31,6 +32,7 @@ public class setShader : MonoBehaviour
         rend.material.SetVector("_RandColors", randomCols);
 
         // rend.material.SetFloat("_Metallic", metal);
+        rend.material.SetInt("_SliceLayer", sliceLayer);
 
 
         intersectingCols = Vector3.zero;
