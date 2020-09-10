@@ -2,7 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c39ce41b-5282-4eff-aa6f-34f5f1baaded" name="Default Changelist" comment="">
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WSBALLS/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WSBALLS/.idea/workspace.xml" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.WSBALLS/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WSBALLS/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.WSBALLS/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WSBALLS/.idea/indexLayout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.WSBALLS/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WSBALLS/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/CURRENT/SlicingBalls.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/CURRENT/SlicingBalls.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unityProject.vrmanifest" beforeDir="false" afterPath="$PROJECT_DIR$/unityProject.vrmanifest" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -241,7 +252,11 @@
           </provider>
         </entry>
       </file>
+<<<<<<< Updated upstream
       <file pinned="false" current-in-tab="false">
+=======
+      <file pinned="false" current-in-tab="true">
+>>>>>>> Stashed changes
         <entry file="file://$PROJECT_DIR$/Assets/Quatz.cs">
           <provider selected="true" editor-type-id="text-editor">
             <state>
@@ -255,7 +270,11 @@
           </provider>
         </entry>
       </file>
+<<<<<<< Updated upstream
       <file pinned="false" current-in-tab="true">
+=======
+      <file pinned="false" current-in-tab="false">
+>>>>>>> Stashed changes
         <entry file="file://$PROJECT_DIR$/Assets/Scenes/scritps-old/UpdateOnVelocity.cs">
           <provider selected="true" editor-type-id="text-editor">
             <state>
@@ -433,12 +452,20 @@
       <workItem from="1595078710408" duration="1715000" />
       <workItem from="1595081794268" duration="84000" />
       <workItem from="1595082012939" duration="14000" />
+<<<<<<< Updated upstream
       <workItem from="1599574738962" duration="1198000" />
+=======
+      <workItem from="1599574738962" duration="379000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< Updated upstream
     <option name="totallyTimeSpent" value="28324000" />
+=======
+    <option name="totallyTimeSpent" value="27505000" />
+>>>>>>> Stashed changes
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1148,6 +1175,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/Assets/Scenes/scritps-old/UpdateOnLocalPosition.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1729">
@@ -1175,10 +1203,7 @@
             <marker date="1595108374449" expanded="true" signature="130:402" ph="{...}" />
             <marker date="1595108374449" expanded="true" signature="300:321" ph="{...}" />
             <marker date="1595108374449" expanded="true" signature="379:400" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+=======
     <entry file="file://$PROJECT_DIR$/Assets/Scenes/scritps-old/UpdateOnVelocity.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1191,6 +1216,53 @@
             <marker date="1584661622000" expanded="true" signature="1427:3017" ph="{...}" />
             <marker date="1584661622000" expanded="true" signature="1503:2623" ph="/* map to scalable number between 0 and 1... ... */" />
             <marker date="1584661622000" expanded="true" signature="2889:3011" ph="/* xArrow.position = new Vector3(velo.x,xArrow.localScale.y,xArrow.localScale.z); ... */" />
+>>>>>>> Stashed changes
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/Assets/Scenes/scritps-old/UpdateOnVelocity.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <marker date="1584661622000" expanded="false" signature="6:94" ph="..." />
+            <marker date="1584661622000" expanded="true" signature="141:3019" ph="{...}" />
+            <marker date="1584661622000" expanded="true" signature="381:478" ph="/* public GameObject xArrow, yArrow, zArrow; ... */" />
+            <marker date="1584661622000" expanded="true" signature="495:1362" ph="{...}" />
+            <marker date="1584661622000" expanded="true" signature="789:1190" ph="/* xArrow.localPosition = new Vector3(1f,1f,1f); ... */" />
+            <marker date="1584661622000" expanded="true" signature="1427:3017" ph="{...}" />
+            <marker date="1584661622000" expanded="true" signature="1503:2623" ph="/* map to scalable number between 0 and 1... ... */" />
+            <marker date="1584661622000" expanded="true" signature="2889:3011" ph="/* xArrow.position = new Vector3(velo.x,xArrow.localScale.y,xArrow.localScale.z); ... */" />
+=======
+    <entry file="file://$PROJECT_DIR$/Assets/Scenes/scritps-old/UpdateOnLocalPosition.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1729">
+          <caret line="97" column="1" selection-start-line="97" selection-start-column="1" selection-end-line="97" selection-end-column="1" />
+          <folding>
+            <marker date="1584661622000" expanded="true" signature="6:94" ph="..." />
+            <marker date="1584661622000" expanded="true" signature="146:3962" ph="{...}" />
+            <marker date="1584661622000" expanded="true" signature="543:1821" ph="{...}" />
+            <marker date="1584661622000" expanded="true" signature="1060:1529" ph="/* SteamVR_Behaviour_Pose headPose = gameObject.GetComponent&lt;&gt; ... */" />
+            <marker date="1584661622000" expanded="true" signature="1886:3960" ph="{...}" />
+            <marker date="1584661622000" expanded="true" signature="1973:2148" ph="/* map to scalable number between 0 and 1... ... */" />
+            <marker date="1584661622000" expanded="true" signature="2197:2596" ph="{...}" />
+            <marker date="1584661622000" expanded="true" signature="2602:3057" ph="/* xArrow.gameObject.transform.localScale = new Vector3(pos.x,xArrow.gameObject.transform.localScale.y,xArrow.gam ... */" />
+            <marker date="1584661622000" expanded="true" signature="3072:3217" ph="/* PROBLEMATIC ... */" />
+            <marker date="1584661622000" expanded="true" signature="3493:3784" ph="/* xArrow.position = new Vector3(pos.x,xArrow.localScale.y,xArrow.localScale.z); ... */" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Quatz.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <marker date="1595108374449" expanded="true" signature="6:94" ph="..." />
+            <marker date="1595108374449" expanded="true" signature="130:402" ph="{...}" />
+            <marker date="1595108374449" expanded="true" signature="300:321" ph="{...}" />
+            <marker date="1595108374449" expanded="true" signature="379:400" ph="{...}" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>

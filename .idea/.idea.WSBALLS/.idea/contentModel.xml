@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Users\MAT-VR03\.Rider2019.1\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\MAT-VR03\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_WSBALLS.-1539162712.00" t="ExcludeRecursive" />
-    <e p="D:\WSBALLS" t="IncludeRecursive">
+    <e p="C:\Users\MAT-VR03\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_WSBALLS.461549850.00" t="ExcludeRecursive" />
+    <e p="D:\emily\WSBALLS" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="ColoredPoint.shader" t="Include" />
@@ -12,11 +12,14 @@
         <e p="LaserPointer.cs" t="Include" />
         <e p="MeshDeformer.cs" t="Include" />
         <e p="MeshDeformerInput.cs" t="Include" />
+        <e p="QuatHandling.cs" t="Include" />
+        <e p="Quatz.cs" t="Include" />
         <e p="Rounded Cube Grid.shader" t="Include" />
         <e p="RoundedCube.cs" t="Include" />
         <e p="Scenes" t="Include">
           <e p="CURRENT" t="Include">
             <e p="colouredBalls.shader" t="Include" />
+            <e p="HoloShader.shader" t="Include" />
             <e p="Info.cs" t="Include" />
             <e p="PositionMarker.cs" t="Include" />
             <e p="setShader.cs" t="Include" />

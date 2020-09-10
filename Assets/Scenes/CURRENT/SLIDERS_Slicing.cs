@@ -173,7 +173,10 @@ namespace Valve.VR.InteractionSystem
         void Update()
         {
             //////////////////////////////////////////////////////////////
-            updateRotations();
+            //with slider bars:
+            //updateRotations();
+            
+            //
             
             updateD();
 
