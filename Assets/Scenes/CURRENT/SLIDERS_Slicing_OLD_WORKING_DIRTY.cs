@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
-    public class SLIDERS_Slicing : MonoBehaviour
+    public class SLIDERS_Slicing_OLD_WORKING_DIRTY : MonoBehaviour
     {
         private int numberOfDimensions = 4;
         public GameObject sphere;

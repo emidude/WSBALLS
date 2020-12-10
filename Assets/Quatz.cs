@@ -24,8 +24,7 @@ public class Quatz : MonoBehaviour
         referenceObject = GameObject.FindWithTag("SLIDEY-SLICE");
         slicingScript = referenceObject.GetComponent<SLIDERS_Slicing>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         //checking controller updates, it does but does not pass by reference if set Quat newVar = LeftControllerPose.transform.rotation
