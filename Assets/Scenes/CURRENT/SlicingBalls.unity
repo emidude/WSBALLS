@@ -3165,7 +3165,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &763916827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3180,6 +3180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftControllerPose: {fileID: 606458102}
   RightControllerPose: {fileID: 2137898703}
+  normVec4Origin2Hyperplane: {x: 0, y: 0, z: 0, w: 0}
 --- !u!4 &763916828
 Transform:
   m_ObjectHideFlags: 0
@@ -5928,25 +5929,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sphere: {fileID: 1297244721400112859, guid: 4e45c870c99936e4883735cffc9fb357, type: 3}
-  locatons: []
-  numberOfSpheres: 16
+  numberOfSpheres: 17
   spheres: []
   all4Dcoords: []
   wSlice: 0
-  testVec4: {x: 0, y: 0, z: 0, w: 0}
   linearMapping: {fileID: 1219782511}
   unitNormal: {x: 0, y: 0, z: 0, w: 1}
   d: -1
   r: 1
-  leftHand: 1
-  rightHand: 2
-  controllerPoseL: {fileID: 606458102}
-  controllerPoseR: {fileID: 2137898703}
+  leftHand: 0
+  rightHand: 0
+  controllerPoseL: {fileID: 0}
+  controllerPoseR: {fileID: 0}
   trigger:
-    actionPath: /actions/default/in/GrabPinch
+    actionPath: 
     needsReinit: 0
   clicked:
-    actionPath: /actions/default/in/Teleport
+    actionPath: 
     needsReinit: 0
   pm: {fileID: 700672360}
   startingPosition: {x: 0, y: 0, z: 0}

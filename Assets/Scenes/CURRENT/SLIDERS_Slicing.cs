@@ -14,7 +14,7 @@ namespace Valve.VR.InteractionSystem
         //public List<Vector3> locatons;
         //public Vector4 testVec4;
         
-        public int numberOfSpheres = 16;
+        public int numberOfSpheres = 17;
         public List<GameObject> spheres;
         public List<Vector4> all4Dcoords;
         public float wSlice;
@@ -107,8 +107,9 @@ namespace Valve.VR.InteractionSystem
             spheres = new List<GameObject>();
             wSlice = 0f;
             all4Dcoords = new List<Vector4>();
-            CalculateCoordinates();
-
+            //CalculateCoordinatesInFormationForTesting();
+            CalculateCoordinatesRandom();
+            
             //locatons = new List<Vector3> { Vector3.one, Vector3.one * 2f, Vector3.one * 3f };
 
             if (linearMapping == null)
@@ -367,6 +368,23 @@ namespace Valve.VR.InteractionSystem
                 }
             }
         }
+
+
+        public bool randomCoordsCheckIntersecting(Vector4 currentCoords, List<Vector4> coordsSoFar)
+        {
+            for (int i = 0; i < coordsSoFar.Count; i++)
+            {
+                float squaredDist = calculateSquaredDistance(currentCoords, coordsSoFar[i]);
+
+                if (squaredDist < 4)
+                {
+                    //INTERSECTING!
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         public int checkIntersection(Vector4 movingBall, int uniqueBallIdentifier) {
             for (int i = 0; i < numberOfSpheres; i++)
             {
@@ -1008,11 +1026,11 @@ namespace Valve.VR.InteractionSystem
             //s.transform.localPosition = new Vector3(coords.x, coords.y, coords.z);
 
             //if sphere is in subDims, set postion and radius
-            if (isSphereInSubDim(s))
-            {
-                s.transform.localScale = CalculateDiameter(s);
-            }
-            else { s.transform.localScale = Vector3.zero; }
+//            if (isSphereInSubDim(s))
+//            {
+//                s.transform.localScale = CalculateDiameter(s);
+//            }
+//            else { s.transform.localScale = Vector3.zero; }
 
 
             spheres.Add(s);
@@ -1045,7 +1063,22 @@ namespace Valve.VR.InteractionSystem
             else return false;
         }
 
-        void CalculateCoordinates()
+        void CalculateCoordinatesRandom()
+        {
+            for (int i = 0; i < numberOfSpheres; i++)
+            {
+                Vector4 coords = Vector4.zero;
+                bool coordsOverlapping = true;
+                while (coordsOverlapping)
+                {
+                    coords = new Vector4(Random.Range(-3f, 3f),Random.Range(0, 2f),Random.Range(-3f, 3f),Random.Range(-3f, 3f));
+                    coordsOverlapping = randomCoordsCheckIntersecting(coords, all4Dcoords);
+                }
+                Debug.Log("cords: " + coords);
+                all4Dcoords.Add(coords);
+            }
+        }
+        void CalculateCoordinatesInFormationForTesting()
         {
             List<float> numbers = new List<float>();
             float[] options = { 1f, -1f };
@@ -1074,6 +1107,9 @@ namespace Valve.VR.InteractionSystem
                 Vector4 v = new Vector4(numbers[i], numbers[i + 1], numbers[i + 2], numbers[i + 3]);
                 all4Dcoords.Add(v);
             }
+            
+            //final ball in the middle
+            all4Dcoords.Add(new Vector4(0.5f,0.5f,0.5f,0.5f));
 
             for (int i = 0; i < all4Dcoords.Count; i++)
             {
