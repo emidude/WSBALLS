@@ -14,7 +14,7 @@ namespace Valve.VR.InteractionSystem
         //public List<Vector3> locatons;
         //public Vector4 testVec4;
         
-        public int numberOfSpheres = 17;
+        public int numberOfSpheres = 16;
         public List<GameObject> spheres;
         public List<Vector4> all4Dcoords;
         public float wSlice;
@@ -107,8 +107,8 @@ namespace Valve.VR.InteractionSystem
             spheres = new List<GameObject>();
             wSlice = 0f;
             all4Dcoords = new List<Vector4>();
-            //CalculateCoordinatesInFormationForTesting();
-            CalculateCoordinatesRandom();
+            CalculateCoordinatesInFormationForTesting();
+            //CalculateCoordinatesRandom();
             
             //locatons = new List<Vector3> { Vector3.one, Vector3.one * 2f, Vector3.one * 3f };
 
@@ -1109,7 +1109,7 @@ namespace Valve.VR.InteractionSystem
             }
             
             //final ball in the middle
-            all4Dcoords.Add(new Vector4(0.5f,0.5f,0.5f,0.5f));
+            all4Dcoords.Add(new Vector4(0f,0f,0f,0f));
 
             for (int i = 0; i < all4Dcoords.Count; i++)
             {
@@ -1121,16 +1121,13 @@ namespace Valve.VR.InteractionSystem
         //from previous version where no rotations
         Vector3 CalculateDiameter(GameObject s)
         {
-
             float wCoord = s.GetComponent<Info>().Get4DCoords().w;
-            //Debug.Log("w coord =" + wCoord);
+            Debug.Log("w coord =" + wCoord);
 
             //update scale (diamter) based on distance of wslice from center of w coordinate
             float distanceFromCentre = Mathf.Sqrt(1 - (wSlice - wCoord) * (wSlice - wCoord)); //want it to be smallest at max distancwe
             return Vector3.one * 2 * distanceFromCentre;
             //       Debug.Log("diameter = " + s.transform.localScale);
-
-
         }
         ///end////////////////////////////////////////////////////////////////////////
 

@@ -21,6 +21,7 @@
             <e p="colouredBalls.shader" t="Include" />
             <e p="HoloShader.shader" t="Include" />
             <e p="Info.cs" t="Include" />
+            <e p="PlanarRotations.cs" t="Include" />
             <e p="PositionMarker.cs" t="Include" />
             <e p="setShader.cs" t="Include" />
             <e p="SlicingSpheres.cs" t="Include" />
