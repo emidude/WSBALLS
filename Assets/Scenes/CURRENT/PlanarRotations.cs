@@ -15,6 +15,7 @@ public class PlanarRotations : MonoBehaviour
     SLIDERS_Slicing slicingScript;
     //Quaternion startingUnitNormal;
    
+    private const float TwoPi = Mathf.PI * 2;
         
     void Start()
     {
@@ -27,47 +28,24 @@ public class PlanarRotations : MonoBehaviour
     
     void Update()
     {
-        //checking controller updates, it does but does not pass by reference if set Quat newVar = LeftControllerPose.transform.rotation
-        //Debug.Log("actal controrller var = " + LeftControllerPose.transform.rotation);
 
-        // checking is unit quaternion: it is!:)
-        /*Vector4 testV4 = quat2Vec4(LeftControllerPose.transform.rotation);
-        checkUnit(testV4);*/
-        
-        RotationIn4D(LeftControllerPose.transform.rotation, RightControllerPose.transform.rotation, startingUnitNormal);
-        
-    }
+        slicingScript.XYrot = getRotationValue(LeftControllerPose, 0);
+        slicingScript.YZrot = getRotationValue(LeftControllerPose, 1);
+        slicingScript.ZWrot = getRotationValue(LeftControllerPose, 2);
 
-    void RotationIn4D(Quaternion qL, Quaternion qR, Quaternion p)
-    {
-        //checking * operator works for quaternions as expected with matrix mutiplication as specified from wiki, 
-        //only checked left multiplication but it seems to work ok :)
-        /*Quaternion newRot = qL * p
-        Debug.Log("quat star = "+Time.time + " " + newRot);
-        //wikipedia code:
-        Quaternion newRot2 = QuatLeftMultiply(qL, p);
-        Debug.Log("quat left multiply = "+Time.time + " "  + newRot2);*/
+        slicingScript.YWrot = getRotationValue(RightControllerPose, 0);
+        slicingScript.XWrot = getRotationValue(RightControllerPose, 1);
+        slicingScript.XZrot = getRotationValue(RightControllerPose, 2);
 
-        Quaternion hyperPlaneDirection = qL * p * qR;
-        slicingScript.unitNormal = quat2Vec4(hyperPlaneDirection);
-    }
-
-    Quaternion QuatLeftMultiply(Quaternion qL, Quaternion p)
-    {
-        float w = qL.w * p.w - qL.x * p.x - qL.y * p.y - qL.z * p.z;
-        float x = qL.x * p.w + qL.w * p.x - qL.z * p.y + qL.y * p.z;
-        float y = qL.y * p.w + qL.z * p.x + qL.w * p.y - qL.x * p.z;
-        float z = qL.z * p.w - qL.y * p.x + qL.x * p.y + qL.w * p.z;
-        Quaternion newQuat = new Quaternion(x,y,z,w);
-        return newQuat;
     }
     
-    Vector4 quat2Vec4(Quaternion quat)
+    //TODO: maybe put rotation of unit normal in here, not in sliders script
+
+    float getRotationValue(SteamVR_Behaviour_Pose controller, int dof)
     {
-     return new Vector4(quat.x,quat.y,quat.z,quat.w);
+        return Mathf.Deg2Rad * controller.transform.eulerAngles[dof];
     }
-    void checkUnit(Vector4 vec)
-    {
-        Debug.Log("mag= "+vec.magnitude);
-    }
+    
+   
+   
 }
