@@ -50,7 +50,7 @@ namespace Valve.VR.InteractionSystem
         public SteamVR_Behaviour_Pose controllerPoseL;
         public SteamVR_Behaviour_Pose controllerPoseR;
         public SteamVR_Action_Boolean trigger;
-        public SteamVR_Action_Boolean clicked;
+        public SteamVR_Action_Boolean clickedTopButton;
         private bool triggeredL = false;
         private bool triggeredR = false;
 
@@ -102,6 +102,9 @@ namespace Valve.VR.InteractionSystem
 
         float acceptableError = 0.000001f;
 
+        private PauseMenuLogic PauseMenuLogic;
+        private bool paused = false;
+        
         void Awake()
         {
             spheres = new List<GameObject>();
@@ -128,6 +131,9 @@ namespace Valve.VR.InteractionSystem
 
             Debug.Log("unitNormal" + unitNormal );
 
+            PauseMenuLogic = GetComponent<PauseMenuLogic>();
+            
+            
         }
 
         // Use this for initialization
@@ -142,11 +148,13 @@ namespace Valve.VR.InteractionSystem
             ////////////////////////////////////////////////////////////////////////////////////////////////
             //trigger.AddOnStateDownListener(TriggerDownR, rightHand);
             //trigger.AddOnStateUpListener(TriggerUpR, rightHand);
-            ////SteamVR_Actions.default_GrabPinch.AddOnStateDownListener(TriggerPressed, SteamVR_Input_Sources.Any);
+            //SteamVR_Actions.default_GrabPinch.AddOnStateDownListener(TriggerPressed, SteamVR_Input_Sources.Any);
             //trigger.AddOnStateDownListener(TriggerDownL, leftHand);
             //trigger.AddOnStateUpListener(TriggerUpL, leftHand);
             ///////////////////////////////////////////////////////////////////////////////////////////////
 
+            clickedTopButton.AddOnStateDownListener(TopButtonClicked,SteamVR_Input_Sources.Any);
+            
             //GameObject pm = Instantiate(positionMarker);
             //testVec4 = new Vector4(1f, 0f, 0f, 0f);
             //testRotor(testVec4);
@@ -1197,18 +1205,18 @@ namespace Valve.VR.InteractionSystem
         //    needToResetPositionL = true;
         //}
 
-        //public void TriggerDownL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        //{
-        //    // Debug.Log("Trigger is down L");
-        //    if (needToResetPositionL)
-        //    {
-        //        currentXYrot = controllerPoseL.transform.position.z;
-        //        currentYZrot = controllerPoseL.transform.position.x;
-        //        currentXZrot = controllerPoseL.transform.position.y;
-        //        needToResetPositionL = false;
-        //    }
-        //    triggeredL = true;
-        //}
+     //   public void TriggerDownL(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+//        {
+//            // Debug.Log("Trigger is down L");
+//            if (needToResetPositionL)
+//            {
+//                currentXYrot = controllerPoseL.transform.position.z;
+//                currentYZrot = controllerPoseL.transform.position.x;
+//                currentXZrot = controllerPoseL.transform.position.y;
+//                needToResetPositionL = false;
+//            }
+//            triggeredL = true;
+//        }
         //public void TriggerUpR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         //{
         //    //  Debug.Log("Trigger is up Y");
@@ -1216,24 +1224,34 @@ namespace Valve.VR.InteractionSystem
         //    needToResetPositionR = true;
 
         //}
-        //public void TriggerDownR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        //{
-        //    // Debug.Log("Trigger is down R");
-        //    if (needToResetPositionR)
-        //    {
-        //        YWrot = controllerPoseR.transform.position.z;
-        //        XWrot = controllerPoseR.transform.position.y;
-        //        ZWrot = controllerPoseR.transform.position.x;
-        //        needToResetPositionR = false;
-        //    }
-        //    triggeredR = true;
+//        public void TriggerDownR(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+//        {
+//             Debug.Log("Trigger is down R");
+//             if (paused)
+//             {
+//                 //do stuff in menu panel with if raycast hit the button or something
+//             }
+//        }
 
-        //}
+        public void TopButtonClicked(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            Debug.Log("Top Button Clicked");
+            if (paused)
+            {
+                paused = false;
+                //TODO: once paused do things in paused logic menu like turn on canvas and make responsive
+            }
+            else paused = true;
+        }
 
 
         ///
 
-        // private void TriggerPressed(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource){}
+        private void TriggerPressed(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            
+            Debug.Log("Trigger is down R");
+        }
 
         //public void testRotor(Vector4 v){
         //    // float xyRotH = xyRot/2;
