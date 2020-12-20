@@ -12,7 +12,10 @@ namespace Valve.VR.InteractionSystem
 {
 	//-------------------------------------------------------------------------
 	public class Teleport : MonoBehaviour
-    {
+	{
+		public Vector3 pauseLocation;
+		public Vector3 currentGameLocation;
+	    
         public SteamVR_Action_Boolean teleportAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Teleport");
 
         public LayerMask traceLayerMask;
@@ -850,6 +853,15 @@ namespace Valve.VR.InteractionSystem
 
 
 		//-------------------------------------------------
+		public void TeleportOnPause()
+		{
+			SteamVR_Fade.Start( Color.clear, currentFadeTime );
+			//TeleportPoint teleportPoint = teleportingToMarker as TeleportPoint;
+			Vector3 teleportPosition = pauseLocation;
+			player.trackingOriginTransform.position = pauseLocation;
+		}
+		
+		
 		private void TeleportPlayer()
 		{
 			teleporting = false;

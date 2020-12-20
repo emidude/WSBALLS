@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: e5d6c1729c67068469c501d417d4da79
+timeCreated: 1502400211
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Colwell
+  fontNames:
+  - Colwell
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

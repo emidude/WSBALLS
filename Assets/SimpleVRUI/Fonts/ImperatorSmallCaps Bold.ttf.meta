@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 5582390c41ce1a9479ac2b5bb4175dd8
+timeCreated: 1502400210
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: ImperatorSmallCaps
+  fontNames:
+  - ImperatorSmallCaps
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

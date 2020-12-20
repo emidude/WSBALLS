@@ -36,7 +36,7 @@ namespace Valve.VR.InteractionSystem
         // private double unitNormalParallelToZ = new double{0f, 0f, 0f, 1f};
         // private double reflectionParallelToZ = new double{0f, 0f, 0f, -1f};
 
-        public float d = -1f; //d = distance of hyperplane from origin
+        public float d = 1f; //d = distance of hyperplane from origin
 
         public float r = 1f; //r = radius of balls (some commented out code for accessing in script for potential differing radii
         //or to view for how to access vars from other scripts/objects)
@@ -122,7 +122,7 @@ namespace Valve.VR.InteractionSystem
 
             //id mat used in rotation formula between vectors
             identityMatrix = createIdentityMatrix(numberOfDimensions);
-            numberOfDs = 3;
+            numberOfDs = 1;
             currentD = d;
             currentUnitNormal = unitNormal;
 
