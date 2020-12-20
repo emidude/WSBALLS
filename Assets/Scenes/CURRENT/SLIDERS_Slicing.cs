@@ -36,7 +36,7 @@ namespace Valve.VR.InteractionSystem
         // private double unitNormalParallelToZ = new double{0f, 0f, 0f, 1f};
         // private double reflectionParallelToZ = new double{0f, 0f, 0f, -1f};
 
-        public float d = 1f; //d = distance of hyperplane from origin
+        public float d = -1f; //d = distance of hyperplane from origin
 
         public float r = 1f; //r = radius of balls (some commented out code for accessing in script for potential differing radii
         //or to view for how to access vars from other scripts/objects)
@@ -131,6 +131,7 @@ namespace Valve.VR.InteractionSystem
 
             Debug.Log("unitNormal" + unitNormal );
 
+            //THIS NEEDS TO BE ATTACHED TO SAME OBJECT TO WROK
             PauseMenuLogic = GetComponent<PauseMenuLogic>();
             
             
@@ -153,7 +154,9 @@ namespace Valve.VR.InteractionSystem
             //trigger.AddOnStateUpListener(TriggerUpL, leftHand);
             ///////////////////////////////////////////////////////////////////////////////////////////////
 
+            //clickedTopButton.AddOnActiveChangeListener(TopButtonClicked,SteamVR_Input_Sources.Any);
             clickedTopButton.AddOnStateDownListener(TopButtonClicked,SteamVR_Input_Sources.Any);
+            
             
             //GameObject pm = Instantiate(positionMarker);
             //testVec4 = new Vector4(1f, 0f, 0f, 0f);
@@ -1235,11 +1238,14 @@ namespace Valve.VR.InteractionSystem
 
         public void TopButtonClicked(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
+            
             Debug.Log("Top Button Clicked");
             if (paused)
             {
                 paused = false;
+                PauseMenuLogic.TeleportOnPause();
                 //TODO: once paused do things in paused logic menu like turn on canvas and make responsive
+            
             }
             else paused = true;
         }
@@ -1435,6 +1441,8 @@ namespace Valve.VR.InteractionSystem
         public Vector4 getUnitNormal() {
             return unitNormal;
         }
+        
+        
     }
 
 }

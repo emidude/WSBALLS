@@ -37,8 +37,12 @@ public class PauseMenuLogic : MonoBehaviour
 
     public void TeleportOnPause()
     {
+        Debug.Log("MADEIT!");
         SteamVR_Fade.Start( Color.clear, currentFadeTime );
         //TeleportPoint teleportPoint = teleportingToMarker as TeleportPoint;
+        
+        //THIS DOES NOT WORK-but we dont need to teleport on pause so its ok
+        //TODO: need to investigate player transform and tracking origin transform for hyperplane tings
         player.trackingOriginTransform = pauseLocation;
     }
     
