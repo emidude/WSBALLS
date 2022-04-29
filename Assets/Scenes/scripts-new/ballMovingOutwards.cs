@@ -6,14 +6,18 @@ public class ballMovingOutwards : MonoBehaviour
 {
     public Transform t;
     // Start is called before the first frame update
+    public float born;
     void Start()
     {
-        
+        born = Time.fixedTime;
     }
 
     // Update is called once per frame
     void Update()
     {
-      //  t.position += t.rotation * Vector3.one * 0.2f;
+       // if(Vector3.Distance(t.position, )...more calucaltions, try lighterweihgt first
+        if(Time.fixedTime>=born + 1){ Object.Destroy(this.gameObject); };
+        t.position += t.rotation * Vector3.one * 0.2f; 
+        
     }
 }
