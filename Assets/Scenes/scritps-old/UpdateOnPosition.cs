@@ -86,7 +86,9 @@ public class UpdateOnPosition : MonoBehaviour
     // transform.rotation = Quaternion.Euler(eulerRotation);
 
  //Debug.Log("contoller pose rotation z "+controllerPose.transform.eulerAngles.z);
- testRotation.rotation = Quaternion.Euler(controllerPose.transform.eulerAngles.x,controllerPose.transform.eulerAngles.y,controllerPose.transform.eulerAngles.z);
-    //Debug.Log("test z rptatopm "+testRotation.eulerAngles.z);
+        //testRotation.rotation = Quaternion.Euler(controllerPose.transform.eulerAngles.x,controllerPose.transform.eulerAngles.y,controllerPose.transform.eulerAngles.z);
+        testRotation.rotation = controllerPose.transform.rotation;
+        
+        //Debug.Log("test z rptatopm "+testRotation.eulerAngles.z);
         }
 }

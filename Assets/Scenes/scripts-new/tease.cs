@@ -44,7 +44,7 @@ public class tease : MonoBehaviour
 
     void LaunchProjectile()
     {
-        GameObject instance = (GameObject)Instantiate(pf, hand.position, hand.rotation);
+        GameObject instance = Instantiate(pf, hand.position, hand.rotation);
     }
 
     //very bad gets too big and crashes fast

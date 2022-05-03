@@ -44,7 +44,8 @@ public class UpdateOnLocalPosition : MonoBehaviour
 
        testRotation.localScale =new Vector3(0.2f,0.2f,0.2f);
 
-       controllerPose.transform.parent = head.transform;
+        //TODO: commented belwo out without checking...
+     ///  controllerPose.transform.parent = head.transform;
     }
 
     // Update is called once per frame
