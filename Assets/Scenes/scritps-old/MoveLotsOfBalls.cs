@@ -25,6 +25,7 @@ public class MoveLotsOfBalls : MonoBehaviour
 
     Transform[] points1, points2, points3;
 
+	public GameObject testBallPrefab;
 // /////////////////////////////////////////
     private Vector3[] vertices;
 	private Vector3[] normals;
@@ -44,9 +45,9 @@ public class MoveLotsOfBalls : MonoBehaviour
 		//float rad = maxRadius/ numberOfLayers;
 
 		
-		CreateSphereOfBalls(offset, radius, pointPrefab1, ref points1);
-		CreateSphereOfBalls(offset*2, radius, pointPrefab2, ref points2);
-		CreateSphereOfBalls(offset*3, radius, pointPrefab3, ref points3);
+		CreateSphereOfBalls(offset, radius, pointPrefab1, ref points1, false, controllerPoseLeft);
+		CreateSphereOfBalls(offset*2, radius, pointPrefab2, ref points2, false, controllerPoseLeft);
+		CreateSphereOfBalls(offset*3, radius, pointPrefab3, ref points3, false, controllerPoseLeft);
 
 
 		//FOR SQUARE BALL
@@ -62,6 +63,9 @@ public class MoveLotsOfBalls : MonoBehaviour
 
 		controllerPoseLeft.transform.parent = head.transform;
 		controllerPoseRight.transform.parent = head.transform;
+
+		InvokeRepeating("LaunchProjectiles", 2.0f, 0.4f);
+		
 
     }
 
@@ -89,13 +93,15 @@ public class MoveLotsOfBalls : MonoBehaviour
 		 for(int i = 0 ; i < points1.Length; i++){
 			// points1[i].localScale = new Vector3(posR.x, points1[i].localScale.y, points1[i].localScale.z);
 			points1[i].localScale = new Vector3(posR.x, posR.x, posR.x);
+
 			
 		 }
         
 
         }
 
-	private void CreateSphereOfBalls(float offset, float radius, Transform prefab, ref Transform[] points){
+	private void CreateSphereOfBalls(float offset, float radius, Transform prefab, ref Transform[] points, bool moving, SteamVR_Behaviour_Pose whichHand)
+	{
 		float greatCircumference = 2 * pi * radius;
 		float ratioOfBallsToCircumferenceSize = greatCircumference / granularity;
 		float angleOfRotationPerBall = 360 / granularity;
@@ -157,9 +163,23 @@ public class MoveLotsOfBalls : MonoBehaviour
 					location.z = yRadius * Mathf.Sin((xRadians * j) + offset) + centre.z;
 
 					location.x =  yRadius * Mathf.Cos((xRadians * j) +offset ) + centre.x;
-					
-					Transform point = Instantiate(prefab, location , Quaternion.identity);
+
+                if (moving) {
+					//location += 2*whichHand.GetVelocity();
+					location +=  whichHand.transform.localPosition;
+					Quaternion rot = Quaternion.LookRotation(location);
+					Transform point = Instantiate(prefab, head.position, rot);
+					//Transform point = Instantiate(prefab, location, rot);
 					points[index] = point;
+				}
+                else
+                { Transform point = Instantiate(prefab, location, Quaternion.identity);
+					points[index] = point;
+
+				}
+				
+				
+					
 					index++;
 					
 
@@ -167,6 +187,14 @@ public class MoveLotsOfBalls : MonoBehaviour
 			
 
 			}
+
+	}
+
+	void LaunchProjectiles()
+    {
+		float rad = 3;
+		CreateSphereOfBalls(0, rad, testBallPrefab.transform, ref points2, true, controllerPoseLeft);
+		CreateSphereOfBalls(0, rad, testBallPrefab.transform, ref points3, true, controllerPoseRight);
 
 	}
 
