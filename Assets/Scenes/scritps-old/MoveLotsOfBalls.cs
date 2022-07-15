@@ -50,17 +50,6 @@ public class MoveLotsOfBalls : MonoBehaviour
 		CreateSphereOfBalls(offset*3, radius, pointPrefab3, ref points3, false, controllerPoseLeft);
 
 
-		//FOR SQUARE BALL
-        // CreateVertices();
-        // Vector3 scale = Vector3.one * 0.5f;
-        // points = new Transform[vertices.Length];
-        // for(int i = 0 ; i < points.Length; i++){
-        // Transform point = Instantiate(pointPrefab,vertices[i], Quaternion.identity);
-        // point.localScale = scale;
-        // point.SetParent(transform,false);
-        // points[i] = point;
-        // }
-
 		controllerPoseLeft.transform.parent = head.transform;
 		controllerPoseRight.transform.parent = head.transform;
 
@@ -168,8 +157,8 @@ public class MoveLotsOfBalls : MonoBehaviour
 					//location += 2*whichHand.GetVelocity();
 					location +=  whichHand.transform.localPosition;
 					Quaternion rot = Quaternion.LookRotation(location);
-					Transform point = Instantiate(prefab, head.position, rot);
-					//Transform point = Instantiate(prefab, location, rot);
+					//Transform point = Instantiate(prefab, head.position, rot);
+					Transform point = Instantiate(prefab, location, rot);
 					points[index] = point;
 				}
                 else
@@ -192,7 +181,7 @@ public class MoveLotsOfBalls : MonoBehaviour
 
 	void LaunchProjectiles()
     {
-		float rad = 3;
+		float rad = 2;
 		CreateSphereOfBalls(0, rad, testBallPrefab.transform, ref points2, true, controllerPoseLeft);
 		CreateSphereOfBalls(0, rad, testBallPrefab.transform, ref points3, true, controllerPoseRight);
 
