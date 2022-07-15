@@ -18,13 +18,14 @@ public class Grid : MonoBehaviour
     }
 
     void LinearGrid(int size) {
+        float translateToCentre = size / 2;
         for (int i = 0; i<size; i++)
         {
-          for (int j = 0; j < size; j++)
+          for (int j = 0; j < size +5; j++)
             {
                 for (int k = 0; k < size; k++)
                 {
-                    Transform point = Instantiate(GridBlock.transform, new Vector3(i,j,k), Quaternion.identity);
+                    Transform point = Instantiate(GridBlock.transform, new Vector3(i-translateToCentre,j-translateToCentre,k-translateToCentre), Quaternion.identity);
                 }
             }
         }
