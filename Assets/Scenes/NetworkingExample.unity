@@ -221,9 +221,6 @@ GameObject:
   m_Component:
   - component: {fileID: 780410299}
   - component: {fileID: 780410300}
-  - component: {fileID: 780410303}
-  - component: {fileID: 780410302}
-  - component: {fileID: 780410301}
   m_Layer: 0
   m_Name: ScriptsGameObject
   m_TagString: Untagged
@@ -260,76 +257,6 @@ MonoBehaviour:
   controllerPoseLeft: {fileID: 998532703}
   controllerPoseRight: {fileID: 998532701}
   boxPrefab: {fileID: 530228403041426349, guid: 387c65a7575bd104bbd993703514cbff,
-    type: 3}
---- !u!114 &780410301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 780410298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13d6c522af31447398568cc65334232b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TransformSyncMode: 1
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_SyncSpin: 0
-  m_MovementTheshold: 0.001
-  m_VelocityThreshold: 0.0001
-  m_SnapThreshold: 5
-  m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
---- !u!114 &780410302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 780410298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 1
---- !u!114 &780410303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 780410298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15f6cc8e3dd26604fab6287d9d1c8580, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerPoseLeft: {fileID: 998532703}
-  networkCube: {fileID: 530228403041426349, guid: 387c65a7575bd104bbd993703514cbff,
     type: 3}
 --- !u!1 &802756346
 GameObject:
