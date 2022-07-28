@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
@@ -53,7 +54,7 @@ public class MoveLotsOfBalls : MonoBehaviour
 		controllerPoseLeft.transform.parent = head.transform;
 		controllerPoseRight.transform.parent = head.transform;
 
-		InvokeRepeating("LaunchProjectiles", 2.0f, 0.4f);
+		//InvokeRepeating("LaunchProjectiles", 2.0f, 0.4f);
 		
 
     }
@@ -82,14 +83,15 @@ public class MoveLotsOfBalls : MonoBehaviour
 		 for(int i = 0 ; i < points1.Length; i++){
 			// points1[i].localScale = new Vector3(posR.x, points1[i].localScale.y, points1[i].localScale.z);
 			points1[i].localScale = new Vector3(posR.x, posR.x, posR.x);
-
-			
 		 }
+
+		RotateFromControllerRotation(controllerPoseRight, points1, (float)Time.time);
         
 
         }
 
-	private void CreateSphereOfBalls(float offset, float radius, Transform prefab, ref Transform[] points, bool moving, SteamVR_Behaviour_Pose whichHand)
+
+    private void CreateSphereOfBalls(float offset, float radius, Transform prefab, ref Transform[] points, bool moving, SteamVR_Behaviour_Pose whichHand)
 	{
 		float greatCircumference = 2 * pi * radius;
 		float ratioOfBallsToCircumferenceSize = greatCircumference / granularity;
@@ -163,6 +165,16 @@ public class MoveLotsOfBalls : MonoBehaviour
 				}
                 else
                 { Transform point = Instantiate(prefab, location, Quaternion.identity);
+
+                    GameObject pivot = new GameObject();
+                    pivot.transform.position = Vector3.zero;
+                    pivot.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    pivot.transform.localScale = Vector3.one;
+
+                    point.transform.SetParent(pivot.transform);
+
+                  
+
 					points[index] = point;
 
 				}
@@ -186,6 +198,14 @@ public class MoveLotsOfBalls : MonoBehaviour
 		CreateSphereOfBalls(0, rad, testBallPrefab.transform, ref points3, true, controllerPoseRight);
 
 	}
+
+	void RotateFromControllerRotation(SteamVR_Behaviour_Pose controller, Transform[] points, float angle) {
+	for(int i = 0; i < points.Length; i++)
+        {
+			points[i].rotation = Quaternion.AngleAxis(angle,controller.transform.rotation.eulerAngles);
+		}
+	}
+
 
 	public float map(float from, float fromMin, float fromMax, float toMin, float toMax){
 		float fromAbs = from - fromMin;
