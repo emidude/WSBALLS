@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR;
 
 public class treeGenerator : MonoBehaviour
 {
@@ -31,6 +32,9 @@ public class treeGenerator : MonoBehaviour
     }
 
     FractalPart[][] parts;
+
+    public SteamVR_Behaviour_Pose controllerPoseL, controllerPoseR;
+    public Transform head;
 
     private void Awake()
     {
@@ -64,11 +68,7 @@ public class treeGenerator : MonoBehaviour
             return;
         }
 
-       /* treeGenerator childA = CreateChild(Vector3.up, Quaternion.identity);
-        treeGenerator childB = CreateChild(Vector3.right, Quaternion.Euler(0f, 0f, -90f));
 
-        childA.transform.SetParent(transform, false);
-        childB.transform.SetParent(transform, false);*/
     }
 
     void Update()
@@ -76,6 +76,7 @@ public class treeGenerator : MonoBehaviour
         Quaternion deltaRotation = Quaternion.Euler(0f, 22.5f * Time.deltaTime, 0f);
         FractalPart rootPart = parts[0][0];
         rootPart.rotation *= deltaRotation;
+        //rootPart.rotation = controllerPoseR.transform.rotation;
         rootPart.transform.localRotation = rootPart.rotation;
         parts[0][0] = rootPart;
 
@@ -88,6 +89,7 @@ public class treeGenerator : MonoBehaviour
                 Transform parentTransform = parentParts[fpi / 5].transform; //TODO: CHANGE THE 5 to however many children had per level
                 FractalPart part = levelParts[fpi];
                 part.rotation *= deltaRotation;
+                //part.rotation = controllerPoseR.transform.rotation;
                 part.transform.localRotation = parentTransform.localRotation * part.rotation;
                 part.transform.localPosition =
                     parentTransform.localPosition +
