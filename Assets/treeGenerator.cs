@@ -18,6 +18,9 @@ public class treeGenerator : MonoBehaviour
         Vector3.up, Vector3.right, Vector3.left, Vector3.forward, Vector3.back
     };
 
+    static Vector3[] directions2 = new Vector3[2];
+    static Quaternion[] rotations2 = new Quaternion[2];
+
     static Quaternion[] rotations = {
         Quaternion.identity,
         Quaternion.Euler(0f, 0f, -90f), Quaternion.Euler(0f, 0f, 90f),
@@ -35,11 +38,15 @@ public class treeGenerator : MonoBehaviour
 
     public SteamVR_Behaviour_Pose controllerPoseL, controllerPoseR;
     public Transform head;
+    int numberOfChildren = 2;
 
     private void Awake()
     {
+        directions2[0] = GetDirections(controllerPoseL, controllerPoseR);
+        directions2[1] = -1f* directions2[0];
+
         parts = new FractalPart[depth][];
-        for (int i = 0, length = 1; i < parts.Length; i++, length *= 5)
+        for (int i = 0, length = 1; i < parts.Length; i++, length *= numberOfChildren)
         {
             parts[i] = new FractalPart[length];
         }
@@ -50,9 +57,9 @@ public class treeGenerator : MonoBehaviour
         {
             scale *= 0.5f;
             FractalPart[] levelParts = parts[li];
-            for (int fpi = 0; fpi < levelParts.Length; fpi += 5)
+            for (int fpi = 0; fpi < levelParts.Length; fpi += numberOfChildren)
             {
-                for (int ci = 0; ci < 5; ci++)
+                for (int ci = 0; ci < numberOfChildren; ci++)
                 {
                     levelParts[fpi + ci] = CreatePart(li, ci, scale);
                 }
@@ -86,7 +93,7 @@ public class treeGenerator : MonoBehaviour
             FractalPart[] levelParts = parts[li];
             for (int fpi = 0; fpi < levelParts.Length; fpi++)
             {
-                Transform parentTransform = parentParts[fpi / 5].transform; //TODO: CHANGE THE 5 to however many children had per level
+                Transform parentTransform = parentParts[fpi / numberOfChildren].transform; 
                 FractalPart part = levelParts[fpi];
                 part.rotation *= deltaRotation;
                 //part.rotation = controllerPoseR.transform.rotation;
@@ -124,5 +131,12 @@ public class treeGenerator : MonoBehaviour
             rotation = rotations[childIndex],
             transform = go.transform
         };
+    }
+
+    Vector3 GetDirections(SteamVR_Behaviour_Pose L, SteamVR_Behaviour_Pose R)
+    {
+        Vector3 diff = L.transform.localPosition - R.transform.localPosition;
+        return diff;
+
     }
 }
