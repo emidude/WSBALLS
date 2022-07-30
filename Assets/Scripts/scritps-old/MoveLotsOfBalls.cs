@@ -40,6 +40,11 @@ public class MoveLotsOfBalls : MonoBehaviour
 
 	public int numberOfLayers = 3;
 
+	[SerializeField]
+	Transform PivotTrans;
+
+	float angle;
+
     void Awake(){
 		
 		float offset = 2 * pi / numberOfLayers;
@@ -55,7 +60,7 @@ public class MoveLotsOfBalls : MonoBehaviour
 		controllerPoseRight.transform.parent = head.transform;
 
 		//InvokeRepeating("LaunchProjectiles", 2.0f, 0.4f);
-		
+		angle = 0;
 
     }
 
@@ -85,7 +90,9 @@ public class MoveLotsOfBalls : MonoBehaviour
 			points1[i].localScale = new Vector3(posR.x, posR.x, posR.x);
 		 }
 
-		RotateFromControllerRotation(controllerPoseRight, points1, (float)Time.time);
+		Debug.Log(Time.time);
+		RotateFromControllerRotation(controllerPoseRight, points1,angle);
+		angle++;
         
 
         }
@@ -166,12 +173,12 @@ public class MoveLotsOfBalls : MonoBehaviour
                 else
                 { Transform point = Instantiate(prefab, location, Quaternion.identity);
 
-                    GameObject pivot = new GameObject();
+                    /*GameObject pivot = new GameObject();
                     pivot.transform.position = Vector3.zero;
                     pivot.transform.rotation = Quaternion.Euler(0, 0, 0);
-                    pivot.transform.localScale = Vector3.one;
+                    pivot.transform.localScale = Vector3.one;*/
 
-                    point.transform.SetParent(pivot.transform);
+                    point.transform.SetParent(PivotTrans);
 
                   
 
@@ -199,15 +206,19 @@ public class MoveLotsOfBalls : MonoBehaviour
 
 	}
 
-	void RotateFromControllerRotation(SteamVR_Behaviour_Pose controller, Transform[] points, float angle) {
-	for(int i = 0; i < points.Length; i++)
-        {
-			points[i].rotation = Quaternion.AngleAxis(angle,controller.transform.rotation.eulerAngles);
-		}
+	void RotateFromControllerRotation(SteamVR_Behaviour_Pose controller, Transform[] points, float anngle)
+	{
+		/*for(int i = 0; i < points.Length; i++)
+			{
+
+				points[i].localRotation = Quaternion.AngleAxis(angle,controller.transform.rotation.eulerAngles);
+				Debug.Log("angle="+angle+" controller="+controller.transform.rotation.eulerAngles + " rotation="+ points[i].rotation);
+			}
+		*/
+		PivotTrans.localRotation = Quaternion.AngleAxis(angle, controller.transform.rotation.eulerAngles);
 	}
 
-
-	public float map(float from, float fromMin, float fromMax, float toMin, float toMax){
+		public float map(float from, float fromMin, float fromMax, float toMin, float toMax){
 		float fromAbs = from - fromMin;
 		float fromMaxAbs = fromMax - fromMin;
 		float normal = fromAbs / fromMaxAbs;
