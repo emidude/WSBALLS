@@ -141,6 +141,9 @@ MonoBehaviour:
   mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   material: {fileID: 2100000, guid: 62811f1f498b99248a593956266589e4, type: 2}
   depth: 4
+  controllerPoseL: {fileID: 1160397868}
+  controllerPoseR: {fileID: 1160397866}
+  head: {fileID: 1160397864}
 --- !u!1 &1109790056
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,6 +632,57 @@ MonoBehaviour:
     needsReinit: 0
   laserPrefab: {fileID: 6293514716517454984, guid: 2c26fe9d70814fd40864996a17a17084,
     type: 3}
+--- !u!1 &1673867929
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1673867931}
+  - component: {fileID: 1673867930}
+  m_Layer: 0
+  m_Name: BinaryTree
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1673867930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673867929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c64a5a2b11df54c8e3842cd58bcfaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 2100000, guid: 875afa0ae12dce24284b45376b8dd0de, type: 2}
+  depth: 5
+  numberOfChildren: 2
+  controllerPoseL: {fileID: 1160397868}
+  controllerPoseR: {fileID: 1160397866}
+  head: {fileID: 1160397864}
+  radius: 1
+--- !u!4 &1673867931
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673867929}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2003003590
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -640,6 +694,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Sphere
+      objectReference: {fileID: 0}
+    - target: {fileID: 2978657295619652982, guid: b7b900a762f0c5942847eb8522b92a62,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3061986593323016365, guid: b7b900a762f0c5942847eb8522b92a62,
         type: 3}

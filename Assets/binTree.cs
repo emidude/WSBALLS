@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 
-public class treeGenerator : MonoBehaviour
+public class binTree : MonoBehaviour
 {
     [SerializeField]
     Mesh mesh;
@@ -14,13 +14,18 @@ public class treeGenerator : MonoBehaviour
     [SerializeField, Range(1, 8)]
     int depth = 4;
 
-    static Vector3[] directions = {
-        Vector3.up, Vector3.right, Vector3.left, Vector3.forward, Vector3.back
-    };
+    [SerializeField, Range(1,5)]
+    int numberOfChildren = 2;
 
-    static Vector3[] directions2 = new Vector3[3];
-    static Quaternion[] rotations2 = new Quaternion[2];
+    static Vector3[] directions;
 
+    public SteamVR_Behaviour_Pose controllerPoseL, controllerPoseR;
+    public Transform head;
+
+    [SerializeField]
+    float radius = 2;
+
+    float angle = 90f;
     static Quaternion[] rotations = {
         Quaternion.identity,
         Quaternion.Euler(0f, 0f, -90f), Quaternion.Euler(0f, 0f, 90f),
@@ -37,18 +42,12 @@ public class treeGenerator : MonoBehaviour
 
     FractalPart[][] parts;
 
-    public SteamVR_Behaviour_Pose controllerPoseL, controllerPoseR;
-    public Transform head;
-    int numberOfChildren = 2;
-
     private void Awake()
     {
-        float dist = Vector3.Distance(controllerPoseL.transform.localPosition, controllerPoseR.transform.localPosition);
-        Vector3 dir = Vector3.Normalize(new Vector3(Mathf.Sin(dist), Mathf.Cos(dist), 0));
-        directions2[0]= Vector3.up + dir;
-        directions2[1] = Vector3.up -dir;
-        directions2[2] = Vector3.Normalize(new Vector3(0, Mathf.Sin(dist), Mathf.Cos(dist)));
-
+        directions = new Vector3[numberOfChildren];
+        float dist = calcDistanceBetweenControllers(controllerPoseL, controllerPoseR);
+        SetDirections(controllerPoseL, controllerPoseR, radius, dist);
+        SetRotations(directions, dist);
 
         parts = new FractalPart[depth][];
         for (int i = 0, length = 1; i < parts.Length; i++, length *= numberOfChildren)
@@ -56,8 +55,8 @@ public class treeGenerator : MonoBehaviour
             parts[i] = new FractalPart[length];
         }
 
-        float scale = 1f;
-        parts[0][0] = CreatePart(0, 0, scale);
+        float scale = 0.6f;
+        parts[0][0] = CreatePart(0, 0, scale, false);
         for (int li = 1; li < parts.Length; li++)
         {
             scale *= 0.5f;
@@ -66,37 +65,25 @@ public class treeGenerator : MonoBehaviour
             {
                 for (int ci = 0; ci < numberOfChildren; ci++)
                 {
-                    levelParts[fpi + ci] = CreatePart(li, ci, scale);
+                    levelParts[fpi + ci] = CreatePart(li, ci, scale, li >1); //ci>0 => dont display first child layer
                 }
             }
         }
     }
+
     void Start()
     {
-        name = "Fractal " + depth;
-
-        if (depth <= 1)
-        {
-            return;
-        }
-
-
+        
     }
 
+    // Update is called once per frame
     void Update()
     {
-        /*  directions2[0] = GetDirections(controllerPoseL, controllerPoseR);
-          directions2[1] = -1f * directions2[0];*/
-        float dist = Vector3.Distance(controllerPoseL.transform.position, controllerPoseR.transform.position);
-
-        Vector3 dir = new Vector3(Mathf.Sin(dist), Mathf.Cos(dist), 0);
-
-        directions2[0] = dir;
-        directions2[1] = new Vector3(-Mathf.Sin(dist), Mathf.Cos(dist), 0);
-        directions2[2] = Vector3.Normalize(new Vector3(0, Mathf.Sin(dist), Mathf.Cos(dist)));
-
+        float dist = calcDistanceBetweenControllers(controllerPoseL, controllerPoseR);
+        SetDirections(controllerPoseL, controllerPoseR, radius, dist);
+        SetRotations(directions, dist);
         Quaternion deltaRotation = Quaternion.Euler(0f, 22.5f * Time.deltaTime, 0f);
-        //Quaternion deltaRotation = Quaternion.identity;
+
         FractalPart rootPart = parts[0][0];
         rootPart.rotation *= deltaRotation;
         //rootPart.rotation = controllerPoseR.transform.rotation;
@@ -110,50 +97,66 @@ public class treeGenerator : MonoBehaviour
             for (int fpi = 0; fpi < levelParts.Length; fpi++)
             {
                 Debug.Log("fpi=" + fpi);
-                Transform parentTransform = parentParts[fpi / numberOfChildren].transform; 
+                Transform parentTransform = parentParts[fpi / numberOfChildren].transform;
                 FractalPart part = levelParts[fpi];
-                part.direction = directions2[part.childIndx];
+                part.direction = directions[part.childIndx];
                 part.rotation *= deltaRotation;
                 //part.rotation = controllerPoseR.transform.rotation;
                 part.transform.localRotation = parentTransform.localRotation * part.rotation;
                 part.transform.localPosition =
                     parentTransform.localPosition +
                     parentTransform.localRotation *
-                        //(3* dist * part.transform.localScale.x * part.direction);
-                (3  * part.transform.localScale.x * part.direction);
+                //(3* dist * part.transform.localScale.x * part.direction);
+                (3 * part.transform.localScale.x * part.direction);
                 levelParts[fpi] = part;
                 Debug.Log("direction=" + part.direction);
             }
         }
     }
 
-    /*treeGenerator CreateChild(Vector3 direction, Quaternion rotation)
+    Vector3 calcDirectionsInZPlane(float angle, float radius)
     {
-        treeGenerator child = Instantiate(this);
-        child.depth = depth - 1;
-        child.transform.localPosition = 0.75f * direction;
-        child.transform.localRotation = rotation;
-        child.transform.localScale = 0.5f * Vector3.one;
-        return child;
-    }*/
+        return new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
+    }
 
-        FractalPart CreatePart(int levelIndex, int childIndex, float scale)
+    float calcDistanceBetweenControllers(SteamVR_Behaviour_Pose L, SteamVR_Behaviour_Pose R)
+    {
+        return Vector3.Distance(L.transform.localPosition, R.transform.localPosition);
+    }
+
+    void SetDirections(SteamVR_Behaviour_Pose L, SteamVR_Behaviour_Pose R, float radius, float dist) {        
+        //float dist = calcDistanceBetweenControllers(L, R);
+        directions[0] = calcDirectionsInZPlane(dist, radius);
+        directions[1] = new Vector3(-directions[0].x, directions[1].y, 0);
+    }
+
+    void SetRotations(Vector3[] directions, float angle)
+    {
+        for (int i = 0; i < directions.Length; i++)
+        {
+            rotations[i] = Quaternion.AngleAxis(angle, directions[i]);
+        }
+
+    }
+
+    FractalPart CreatePart(int levelIndex, int childIndex, float scale, bool visible)
     {
         var go = new GameObject("Fractal Part L" + levelIndex + " C" + childIndex);
         go.transform.localScale = scale * Vector3.one;
         go.transform.SetParent(transform, false);
-        go.AddComponent<MeshFilter>().mesh = mesh;
-        go.AddComponent<MeshRenderer>().material = material;
+        if (visible)
+        {
+            go.AddComponent<MeshFilter>().mesh = mesh;
+            go.AddComponent<MeshRenderer>().material = material;
+        }
+        
 
         return new FractalPart
         {
-            //direction = directions[childIndex],
-            direction = directions2[childIndex],
+            direction = directions[childIndex],
             rotation = rotations[childIndex],
             transform = go.transform,
             childIndx = childIndex
         };
     }
-
-    
 }
