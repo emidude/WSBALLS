@@ -663,7 +663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   material: {fileID: 2100000, guid: 875afa0ae12dce24284b45376b8dd0de, type: 2}
-  depth: 5
+  depth: 6
   numberOfChildren: 2
   controllerPoseL: {fileID: 1160397868}
   controllerPoseR: {fileID: 1160397866}
