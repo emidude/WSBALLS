@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Graph : MonoBehaviour {
+public class Graph1 : MonoBehaviour {
 
 	public Transform pointPrefab;
 

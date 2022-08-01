@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grid : MonoBehaviour
+public class Grid1 : MonoBehaviour
 {
     public GameObject GridBlock;
     // Start is called before the first frame update
