@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Valve.VR;
 
 public class Graph : MonoBehaviour {
 
@@ -9,9 +10,12 @@ public class Graph : MonoBehaviour {
 
 	public GraphFunctionName function;
 
+	public GraphFunctionNameSteamInputs fsteam;
+
 	Transform[] points;
 
 	public Transform head;
+	public SteamVR_Behaviour_Pose controllerL, controllerR;
 
 	public float size = 6;
 
@@ -19,10 +23,6 @@ public class Graph : MonoBehaviour {
 
 		float step = 2f / resolution;
 		Vector3 scale = Vector3.one * step ;
-		/*Vector3 position;
-		position.y = 0f;
-		position.z = 0f;*/
-		//Vector3 headpos = head.position;
 		transform.position = head.position;
 
 		points = new Transform[resolution * resolution];
@@ -37,12 +37,14 @@ public class Graph : MonoBehaviour {
 	void Update () {
 		float t = Time.time;
 		GraphFunction f = functions[(int)function];
+		//GraphFunctionSteamInputs f = fSteams[(int)fsteam]; 
 		float step = 2f / resolution;
 		for (int i = 0, z = 0; z < resolution; z++) {
 			float v = (z + 0.5f) * step - 1f;
 			for (int x = 0; x < resolution; x++, i++) {
 				float u = (x + 0.5f) * step - 1f;
 				points[i].localPosition = f(u, v, t) * 5;
+				//points[i].localPosition = f(controllerL, controllerR, u, v, t) * 5;
 			}
 		}
 	}
@@ -52,7 +54,20 @@ public class Graph : MonoBehaviour {
 		Ripple, Cylinder, Sphere, Torus
 	};
 
+	static GraphFunctionSteamInputs[] fSteams = { SimpleSin };
+
 	const float pi = Mathf.PI;
+
+	static Vector3 SimpleSin(SteamVR_Behaviour_Pose cL, SteamVR_Behaviour_Pose cR, float u, float v, float t)
+    {
+		Vector3 p;
+		p.x = u;
+		//p.y = Mathf.Sin(pi * (cL.transform.position.y*u + t));
+		p.y = Mathf.Sin(pi * (cL.GetVelocity().y * u + t));
+		//p.y *= cL.GetVelocity().z;
+		p.z = v;
+		return p;
+    }
 
 	static Vector3 SineFunction (float x, float z, float t) {
 		Vector3 p;
@@ -133,6 +148,8 @@ public class Graph : MonoBehaviour {
 		p.z = s * Mathf.Cos(pi * u);
 		return p;
 	}
+
+	
 
 
 }
