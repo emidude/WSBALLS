@@ -19,6 +19,8 @@ public class Graph : MonoBehaviour {
 
 	public float size = 6;
 
+	public bool inputFunction;
+
 	void Awake () {
 
 		float step = 2f / resolution;
@@ -36,15 +38,27 @@ public class Graph : MonoBehaviour {
 
 	void Update () {
 		float t = Time.time;
+
+		GraphFunctionSteamInputs fI = fSteams[(int)fsteam];
 		GraphFunction f = functions[(int)function];
-		//GraphFunctionSteamInputs f = fSteams[(int)fsteam]; 
+		
+		
 		float step = 2f / resolution;
 		for (int i = 0, z = 0; z < resolution; z++) {
 			float v = (z + 0.5f) * step - 1f;
 			for (int x = 0; x < resolution; x++, i++) {
 				float u = (x + 0.5f) * step - 1f;
-				points[i].localPosition = f(u, v, t) * 5;
-				//points[i].localPosition = f(controllerL, controllerR, u, v, t) * 5;
+
+				if (inputFunction)
+				{
+					points[i].localPosition = fI(controllerL, controllerR, u, v, t) * 5;
+				}
+				else
+				{
+					points[i].localPosition = f(u, v, t) * 5;
+				}
+				
+				
 			}
 		}
 	}
@@ -54,20 +68,32 @@ public class Graph : MonoBehaviour {
 		Ripple, Cylinder, Sphere, Torus
 	};
 
-	static GraphFunctionSteamInputs[] fSteams = { SimpleSin };
+	static GraphFunctionSteamInputs[] fSteams = { SimpleSin, MultiSineFunctionSI };
 
 	const float pi = Mathf.PI;
 
 	static Vector3 SimpleSin(SteamVR_Behaviour_Pose cL, SteamVR_Behaviour_Pose cR, float u, float v, float t)
     {
 		Vector3 p;
-		p.x = u;
-		//p.y = Mathf.Sin(pi * (cL.transform.position.y*u + t));
-		p.y = Mathf.Sin(pi * (cL.GetVelocity().y * u + t));
+		p.x = Mathf.Sin(cL.transform.position.x*u );
+		p.y = Mathf.Sin(pi * (cL.transform.position.y*u ));
+		//p.y = Mathf.Sin(pi * (cL.GetVelocity().y * u + t));
 		//p.y *= cL.GetVelocity().z;
-		p.z = v;
+		p.z = Mathf.Sin(cL.transform.position.z * v);
 		return p;
     }
+
+	static Vector3 MultiSineFunctionSI(SteamVR_Behaviour_Pose cL, SteamVR_Behaviour_Pose cR, float x, float z, float t)
+	{
+		Vector3 p;
+		p.x = x;
+		p.y = Mathf.Sin(pi * (cL.GetVelocity().x*x ));
+		//p.y += Mathf.Sin(2f * pi * (x + 2f * t)) / 2f;
+		p.y += Mathf.Sin(pi*(2f * cR.GetVelocity().x * x +t  )/2f);
+		p.y *= 2f / 3f;
+		p.z = z;
+		return p;
+	}
 
 	static Vector3 SineFunction (float x, float z, float t) {
 		Vector3 p;

@@ -670,12 +670,13 @@ MonoBehaviour:
   pointPrefab: {fileID: 4085835571985460, guid: 236e6397286437a40b12c8d100bd786e,
     type: 3}
   resolution: 43
-  function: 6
-  fsteam: 0
+  function: 1
+  fsteam: 1
   head: {fileID: 126617366}
   controllerL: {fileID: 1160397868}
   controllerR: {fileID: 1160397866}
   size: 6
+  inputFunction: 0
 --- !u!4 &1484811465
 Transform:
   m_ObjectHideFlags: 0
