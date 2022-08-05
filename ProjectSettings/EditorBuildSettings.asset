@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DancingWithBalls.unity
     guid: c02d280f18a7fb14481c1685988f2c22
+  - enabled: 1
+    path: Assets/Scenes/BinaryTree.unity
+    guid: eb6c2ae05c2bc034b92c4f2fd3e0f0e9
   m_configObjects: {}
