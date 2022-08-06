@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Valve.VR;
-
-public class Graph : MonoBehaviour {
+using UnityEngine.Networking;
+public class Graph : NetworkBehaviour {
 
 	public Transform pointPrefab;
 
@@ -37,6 +37,12 @@ public class Graph : MonoBehaviour {
 	}
 
 	void Update () {
+
+		if (!isLocalPlayer)
+        {
+			return;
+        }
+
 		float t = Time.time;
 
 		GraphFunctionSteamInputs fI = fSteams[(int)fsteam];
@@ -68,11 +74,12 @@ public class Graph : MonoBehaviour {
 		Ripple, Cylinder, Sphere, Torus
 	};
 
-	static GraphFunctionSteamInputs[] fSteams = { SimpleSin, MultiSineFunctionSI };
+	static GraphFunctionSteamInputs[] fSteams = { CmdSimpleSin, MultiSineFunctionSI };
 
 	const float pi = Mathf.PI;
 
-	static Vector3 SimpleSin(SteamVR_Behaviour_Pose cL, SteamVR_Behaviour_Pose cR, float u, float v, float t)
+	[Command]
+	static Vector3 CmdSimpleSin(SteamVR_Behaviour_Pose cL, SteamVR_Behaviour_Pose cR, float u, float v, float t)
     {
 		Vector3 p;
 		p.x = Mathf.Sin(cL.transform.position.x*u );

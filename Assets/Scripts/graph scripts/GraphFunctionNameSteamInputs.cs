@@ -1,4 +1,4 @@
 ﻿public enum GraphFunctionNameSteamInputs
 {
-	SimpleSin, MultiSineFunctionSI
+	CmdSimpleSin, MultiSineFunctionSI
 }

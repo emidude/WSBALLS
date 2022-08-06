@@ -9,6 +9,9 @@ TagManager:
   - pm
   - slice
   - SLIDEY-SLICE
+  - lefty
+  - righty
+  - head
   layers:
   - Default
   - TransparentFX
