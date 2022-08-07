@@ -66,13 +66,13 @@ public class Graph : NetworkBehaviour {
 			}
 		}*/
     
-			CmdUpdateCubePositions(t, fI);
+			CmdUpdateCubePositions(t);
 
 		
 	}
 
 	[Command]
-	void CmdUpdateCubePositions(float t, GraphFunctionSteamInputs f)
+	void CmdUpdateCubePositions(float t)
     {
 		float step = 2f / resolution;
 		for (int i = 0, z = 0; z < resolution; z++)
@@ -83,7 +83,7 @@ public class Graph : NetworkBehaviour {
 				float u = (x + 0.5f) * step - 1f;
 
 					
-				points[i].localPosition = f(controllerL, controllerR, u, v, t) * 5;
+				points[i].localPosition = SimpleSin(controllerL, controllerR, u, v, t) * 5;
 				
 
 			}
