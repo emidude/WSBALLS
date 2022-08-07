@@ -43,13 +43,13 @@ public class Graph : NetworkBehaviour {
 			return;
         }
 
-		float t = Time.time;
+		float t = Time.time; 
 
 		GraphFunctionSteamInputs fI = fSteams[(int)fsteam];
 		GraphFunction f = functions[(int)function];
-		
-		
-		float step = 2f / resolution;
+
+
+        /*float step = 2f / resolution;
 		for (int i = 0, z = 0; z < resolution; z++) {
 			float v = (z + 0.5f) * step - 1f;
 			for (int x = 0; x < resolution; x++, i++) {
@@ -63,8 +63,29 @@ public class Graph : NetworkBehaviour {
 				{
 					points[i].localPosition = f(u, v, t) * 5;
 				}
+			}
+		}*/
+    
+			CmdUpdateCubePositions(t, fI);
+
+		
+	}
+
+	[Command]
+	void CmdUpdateCubePositions(float t, GraphFunctionSteamInputs f)
+    {
+		float step = 2f / resolution;
+		for (int i = 0, z = 0; z < resolution; z++)
+		{
+			float v = (z + 0.5f) * step - 1f;
+			for (int x = 0; x < resolution; x++, i++)
+			{
+				float u = (x + 0.5f) * step - 1f;
+
+					
+				points[i].localPosition = f(controllerL, controllerR, u, v, t) * 5;
 				
-				
+
 			}
 		}
 	}
@@ -74,12 +95,12 @@ public class Graph : NetworkBehaviour {
 		Ripple, Cylinder, Sphere, Torus
 	};
 
-	static GraphFunctionSteamInputs[] fSteams = { CmdSimpleSin, MultiSineFunctionSI };
+	static GraphFunctionSteamInputs[] fSteams = { SimpleSin,  MultiSineFunctionSI };
 
 	const float pi = Mathf.PI;
 
-	[Command]
-	static Vector3 CmdSimpleSin(SteamVR_Behaviour_Pose cL, SteamVR_Behaviour_Pose cR, float u, float v, float t)
+	//[Command]
+	 static Vector3 SimpleSin(SteamVR_Behaviour_Pose cL, SteamVR_Behaviour_Pose cR, float u, float v, float t)
     {
 		Vector3 p;
 		p.x = Mathf.Sin(cL.transform.position.x*u );

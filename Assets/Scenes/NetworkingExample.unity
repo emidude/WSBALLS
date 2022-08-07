@@ -273,7 +273,7 @@ MonoBehaviour:
   m_OfflineScene: test2
   m_OnlineScene: BinaryTree
   m_SpawnPrefabs:
-  - {fileID: 530228403041426349, guid: 387c65a7575bd104bbd993703514cbff, type: 3}
+  - {fileID: 1223016012747116, guid: 5be7b046f5fd4465bb77b9c434da9ad2, type: 3}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
