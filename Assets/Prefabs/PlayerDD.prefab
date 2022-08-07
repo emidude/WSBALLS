@@ -813,7 +813,6 @@ GameObject:
   - component: {fileID: 4692510996782802488}
   - component: {fileID: 4692510996782802471}
   - component: {fileID: 4692510996782802470}
-  - component: {fileID: 4692510996782802469}
   - component: {fileID: 4692510996782802468}
   - component: {fileID: 4692510996782802467}
   m_Layer: 0
@@ -1035,18 +1034,6 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!114 &4692510996782802469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4692510996782802478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 921ceb7939c624969a567b4c88e17315, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4692510996782802468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1074,7 +1061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64b8c4f065bd72745b58bad12c77e1c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointPrefab: {fileID: 4085835571985460, guid: 236e6397286437a40b12c8d100bd786e,
+  pointPrefab: {fileID: 1223016012747116, guid: 5be7b046f5fd4465bb77b9c434da9ad2,
     type: 3}
   resolution: 10
   function: 0
