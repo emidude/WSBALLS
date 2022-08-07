@@ -56,7 +56,7 @@ public class Graph : NetworkBehaviour {
 		GraphFunction f = functions[(int)function];
 
 
-        float step = 2f / resolution;
+       /* float step = 2f / resolution;
         for (int i = 0, z = 0; z < resolution; z++)
         {
             float v = (z + 0.5f) * step - 1f;
@@ -73,9 +73,9 @@ public class Graph : NetworkBehaviour {
                     points[i].transform.localPosition = f(u, v, t) * 5;
                 }
             }
-        }
+        }*/
 
-        //CmdUpdateCubePositions(t);
+        CmdUpdateCubePositions(t);
 
 
     }
