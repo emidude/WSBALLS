@@ -3,7 +3,8 @@ using Valve.VR;
 using UnityEngine.Networking;
 public class Graph : NetworkBehaviour {
 
-	public Transform pointPrefab;
+	//public Transform pointPrefab;
+	public GameObject pointPrefab;
 
 	[Range(10, 100)]
 	public int resolution = 10;
@@ -12,7 +13,8 @@ public class Graph : NetworkBehaviour {
 
 	public GraphFunctionNameSteamInputs fsteam;
 
-	Transform[] points;
+	//Transform[] points;
+	GameObject[] points;
 
 	public Transform head;
 	public SteamVR_Behaviour_Pose controllerL, controllerR;
@@ -23,7 +25,7 @@ public class Graph : NetworkBehaviour {
 
 	void Awake () {
 
-		float step = 2f / resolution;
+		/*float step = 2f / resolution;
 		Vector3 scale = Vector3.one * step ;
 		transform.position = head.position;
 
@@ -33,10 +35,15 @@ public class Graph : NetworkBehaviour {
 			point.localScale = scale;
 			point.SetParent(transform, false);
 			points[i] = point;
-		}
+		}*/
 	}
 
-	void Update () {
+    void Start()
+    {
+		CmdSpawnCubes();
+    }
+
+    void Update () {
 
 		if (!isLocalPlayer)
         {
@@ -49,26 +56,47 @@ public class Graph : NetworkBehaviour {
 		GraphFunction f = functions[(int)function];
 
 
-        /*float step = 2f / resolution;
-		for (int i = 0, z = 0; z < resolution; z++) {
-			float v = (z + 0.5f) * step - 1f;
-			for (int x = 0; x < resolution; x++, i++) {
-				float u = (x + 0.5f) * step - 1f;
+        float step = 2f / resolution;
+        for (int i = 0, z = 0; z < resolution; z++)
+        {
+            float v = (z + 0.5f) * step - 1f;
+            for (int x = 0; x < resolution; x++, i++)
+            {
+                float u = (x + 0.5f) * step - 1f;
 
-				if (inputFunction)
-				{
-					points[i].localPosition = fI(controllerL, controllerR, u, v, t) * 5;
-				}
-				else
-				{
-					points[i].localPosition = f(u, v, t) * 5;
-				}
-			}
-		}*/
-    
-			CmdUpdateCubePositions(t);
+                if (inputFunction)
+                {
+                    points[i].transform.localPosition = fI(controllerL, controllerR, u, v, t) * 5;
+                }
+                else
+                {
+                    points[i].transform.localPosition = f(u, v, t) * 5;
+                }
+            }
+        }
 
-		
+        //CmdUpdateCubePositions(t);
+
+
+    }
+	[Command]
+	void CmdSpawnCubes()
+    {
+		float step = 2f / resolution;
+		Vector3 scale = Vector3.one * step;
+		transform.position = head.position;
+
+		//points = new Transform[resolution * resolution];
+		points = new GameObject[resolution * resolution];
+		for (int i = 0; i < points.Length; i++)
+		{
+			GameObject point = Instantiate(pointPrefab);
+			point.transform.localScale = scale;
+			point.transform.SetParent(transform, false);
+			points[i] = point;
+			NetworkServer.Spawn(point);
+
+		}
 	}
 
 	[Command]
@@ -83,7 +111,7 @@ public class Graph : NetworkBehaviour {
 				float u = (x + 0.5f) * step - 1f;
 
 					
-				points[i].localPosition = SimpleSin(controllerL, controllerR, u, v, t) * 5;
+				points[i].transform.localPosition = SimpleSin(controllerL, controllerR, u, v, t) * 5;
 				
 
 			}
